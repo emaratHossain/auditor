@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spring launch — pricing page — landing page audit</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #1c1917; font-size: 11pt; line-height: 1.5; margin: 0; }
+  h1 { font-size: 21pt; margin: 0 0 4px; }
+  h2 { font-size: 13pt; margin: 26px 0 10px; border-bottom: 1px solid #d6d3d1; padding-bottom: 4px; }
+  .muted { color: #78716c; font-size: 9.5pt; }
+  .score { display: flex; align-items: baseline; gap: 12px; margin: 14px 0 6px; }
+  .score b { font-size: 40pt; line-height: 1; }
+  .cats { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 9.5pt; }
+  .cats td { padding: 4px 6px; border-bottom: 1px solid #e7e5e4; }
+  .fix { border-left: 3px solid #a8a29e; padding: 6px 0 6px 12px; margin-bottom: 14px; page-break-inside: avoid; }
+  .fix.high { border-left-color: #b91c1c; }
+  .fix.medium { border-left-color: #b45309; }
+  .fix.low { border-left-color: #15803d; }
+  .fix h3 { font-size: 11.5pt; margin: 0 0 5px; }
+  .fix p { margin: 0 0 3px; }
+  .tag { font-size: 8pt; text-transform: uppercase; letter-spacing: .06em; color: #57534e; }
+  .label { font-weight: bold; color: #57534e; }
+  .shot { page-break-inside: avoid; margin-bottom: 16px; }
+  .shot img { width: 100%; border: 1px solid #d6d3d1; }
+</style>
+</head>
+<body>
+
+<h1>Spring launch — pricing page</h1>
+<p class="muted">https://demo.example.com/pricing-launch · audited 2 Aug 2026, 11:49</p>
+
+<div class="score">
+  <b>48</b>
+  <span class="muted">out of 100 · six weighted categories</span>
+</div>
+
+<table class="cats">
+            <tr>
+        <td>Main button effectiveness <span class="muted">· 25%</span></td>
+        <td align="right">34</td>
+        <td class="muted"></td>
+      </tr>
+                <tr>
+        <td>User experience <span class="muted">· 20%</span></td>
+        <td align="right">36</td>
+        <td class="muted"></td>
+      </tr>
+                <tr>
+        <td>Visual design <span class="muted">· 20%</span></td>
+        <td align="right">59</td>
+        <td class="muted"></td>
+      </tr>
+                <tr>
+        <td>Trust <span class="muted">· 15%</span></td>
+        <td align="right">40</td>
+        <td class="muted"></td>
+      </tr>
+                <tr>
+        <td>Speed <span class="muted">· 10%</span></td>
+        <td align="right">74</td>
+        <td class="muted">Based on a single page load, not a full performance audit.</td>
+      </tr>
+                <tr>
+        <td>Accessibility <span class="muted">· 10%</span></td>
+        <td align="right">71</td>
+        <td class="muted">An AI estimate based on contrast and font size — not a real accessibility audit.</td>
+      </tr>
+      </table>
+
+<h2>What to fix, in order</h2>
+  <div class="fix high">
+    <span class="tag">high · Hero</span>
+    <h3>1. The main button sits on a background of almost the same tone, so it does not read as the thing to press</h3>
+    <p><span class="label">Evidence:</span> Cta click rate in Hero: 2.1%. 97% of visitors see this section.</p>
+    <p><span class="label">Do this:</span> Raise the button contrast to at least 4.5:1 against its background and increase its height to 48px.</p>
+    <p><span class="label">If it works:</span> Button clicks 2.1% → 4.2-6.3%</p>
+  </div>
+  <div class="fix high">
+    <span class="tag">high · Footer</span>
+    <h3>2. The heading states a feature rather than an outcome the reader wants</h3>
+    <p><span class="label">Evidence:</span> Section reach in Footer: 9%. Footer starts 91% of the way down the page.</p>
+    <p><span class="label">Do this:</span> Rewrite the heading as the result the visitor gets, in their own words.</p>
+    <p><span class="label">If it works:</span> More visitors reaching Footer, which is the precondition for it converting at all</p>
+  </div>
+  <div class="fix medium">
+    <span class="tag">medium · Hero</span>
+    <h3>3. On a phone the headline renders around 11px and the button falls below the first screenful</h3>
+    <p><span class="label">Evidence:</span> Mobile bounce rate in Hero: 81%. 17 percentage points worse than the 64% overall bounce rate.</p>
+    <p><span class="label">Do this:</span> Set body text to at least 16px on small screens and pull the button above the fold.</p>
+    <p><span class="label">If it works:</span> Phone bounce 81% → closer to the 64% you see overall</p>
+  </div>
+  <div class="fix medium">
+    <span class="tag">medium · Hero</span>
+    <h3>4. There is no testimonial, customer logo or security badge anywhere in the first screenful</h3>
+    <p><span class="label">Evidence:</span> Bounce rate in Hero: 64%. No proof of any kind in Hero, the first thing visitors see.</p>
+    <p><span class="label">Do this:</span> Move two recognisable customer logos and one short quote above the fold.</p>
+    <p><span class="label">If it works:</span> Bounce 64% → 54-59%</p>
+  </div>
+
+<h2>The page, section by section</h2>
+  <div class="shot">
+    <p>
+      <b>Hero</b>
+      <span class="muted">
+        · 0% down the page
+         · scored 51/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5IZXJvPC90ZXh0PgogIDx0ZXh0IHg9IjUwJSIgeT0iNTYlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE1IiBmaWxsPSIjNzc4MTdjIj5kZXNrdG9wIMK3IHBsYWNlaG9sZGVyPC90ZXh0Pgo8L3N2Zz4=" alt="Hero">
+              <p style="font-size:10pt">— The main button sits on a background of almost the same tone, so it does not read as the thing to press. <span class="muted">Raise the button contrast to at least 4.5:1 against its background and increase its height to 48px.</span></p>
+          <p style="font-size:10pt">— There is no testimonial, customer logo or security badge anywhere in the first screenful. <span class="muted">Move two recognisable customer logos and one short quote above the fold.</span></p>
+          <p style="font-size:10pt">— On a phone the headline renders around 11px and the button falls below the first screenful. <span class="muted">Set body text to at least 16px on small screens and pull the button above the fold.</span></p>
+      </div>
+  <div class="shot">
+    <p>
+      <b>Features</b>
+      <span class="muted">
+        · 16% down the page
+         · scored 72/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5GZWF0dXJlczwvdGV4dD4KICA8dGV4dCB4PSI1MCUiIHk9IjU2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxNSIgZmlsbD0iIzc3ODE3YyI+ZGVza3RvcCDCtyBwbGFjZWhvbGRlcjwvdGV4dD4KPC9zdmc+" alt="Features">
+              <p style="font-size:10pt">— The heading states a feature rather than an outcome the reader wants. <span class="muted">Rewrite the heading as the result the visitor gets, in their own words.</span></p>
+      </div>
+  <div class="shot">
+    <p>
+      <b>Testimonials</b>
+      <span class="muted">
+        · 38% down the page
+         · scored 62/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5UZXN0aW1vbmlhbHM8L3RleHQ+CiAgPHRleHQgeD0iNTAlIiB5PSI1NiUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM3NzgxN2MiPmRlc2t0b3AgwrcgcGxhY2Vob2xkZXI8L3RleHQ+Cjwvc3ZnPg==" alt="Testimonials">
+              <p style="font-size:10pt">— The heading states a feature rather than an outcome the reader wants. <span class="muted">Rewrite the heading as the result the visitor gets, in their own words.</span></p>
+      </div>
+  <div class="shot">
+    <p>
+      <b>Pricing</b>
+      <span class="muted">
+        · 56% down the page
+         · scored 48/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5QcmljaW5nPC90ZXh0PgogIDx0ZXh0IHg9IjUwJSIgeT0iNTYlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE1IiBmaWxsPSIjNzc4MTdjIj5kZXNrdG9wIMK3IHBsYWNlaG9sZGVyPC90ZXh0Pgo8L3N2Zz4=" alt="Pricing">
+              <p style="font-size:10pt">— The plans are readable, but this section sits a long way down the page. <span class="muted">Move pricing above the testimonials, or repeat the main button just before it.</span></p>
+      </div>
+  <div class="shot">
+    <p>
+      <b>FAQ</b>
+      <span class="muted">
+        · 76% down the page
+         · scored 73/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5GQVE8L3RleHQ+CiAgPHRleHQgeD0iNTAlIiB5PSI1NiUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM3NzgxN2MiPmRlc2t0b3AgwrcgcGxhY2Vob2xkZXI8L3RleHQ+Cjwvc3ZnPg==" alt="FAQ">
+              <p style="font-size:10pt">— The heading states a feature rather than an outcome the reader wants. <span class="muted">Rewrite the heading as the result the visitor gets, in their own words.</span></p>
+      </div>
+  <div class="shot">
+    <p>
+      <b>Footer</b>
+      <span class="muted">
+        · 91% down the page
+         · scored 48/100       </span>
+    </p>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDE0NDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVmMWVjIi8+CiAgPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNjM2M5YmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iOCA2IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOCwtOCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQ2JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjM0IiBmaWxsPSIjNGE1NDUwIj5Gb290ZXI8L3RleHQ+CiAgPHRleHQgeD0iNTAlIiB5PSI1NiUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM3NzgxN2MiPmRlc2t0b3AgwrcgcGxhY2Vob2xkZXI8L3RleHQ+Cjwvc3ZnPg==" alt="Footer">
+              <p style="font-size:10pt">— The heading states a feature rather than an outcome the reader wants. <span class="muted">Rewrite the heading as the result the visitor gets, in their own words.</span></p>
+      </div>
+
+<p class="muted" style="margin-top:24px">
+  Every recommendation above names a real metric, a real number and a real section.
+  Anything that could not do so was discarded rather than shown.
+</p>
+
+</body>
+</html>

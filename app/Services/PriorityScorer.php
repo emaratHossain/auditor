@@ -33,6 +33,26 @@ class PriorityScorer
         return round(($share * $severity * $confidence) / $effort, 4);
     }
 
+    /**
+     * Which audience the traffic-share term should represent, for a given rule.
+     *
+     * For nearly every rule it is the people who reach the section, because that
+     * is who meets the problem. `drop_off_before_section` is the exception: its
+     * finding IS the low reach, so multiplying by that same number would rank a
+     * badly buried section below a mildly buried one. The audience that matters
+     * there is the share being lost.
+     */
+    public function audienceFor(string $ruleKey, ?float $reach): ?float
+    {
+        if ($reach === null) {
+            return null;
+        }
+
+        return $ruleKey === 'drop_off_before_section'
+            ? round(1.0 - $reach, 4)
+            : $reach;
+    }
+
     /** Three buckets only. More would be noise. */
     public function bucket(float $score): string
     {
