@@ -1,59 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AI Landing Page UX Auditor — V1
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Google Analytics tells you 62% of people leave. It never tells you why.
 
-## About Laravel
+Paste a landing page address, type in seven numbers from your analytics, and get
+back a ranked list of fixes where **every single item names a real metric, a real
+number, and a real section of the page**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+An insight that cannot do that is discarded, not shown with a caveat. That one
+rule is what separates this from a generic design-tips generator.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Run it
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+composer install && npm install
+cp .env.example .env && php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
 
-## Learning Laravel
+npm run build                 # or: npm run dev
+php artisan serve             # http://127.0.0.1:8000
+php artisan queue:work        # in a second terminal — the audit runs here
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Then add a page, click **Run audit**, fill in the numbers.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**A ready-made audit for demoing**, so nothing depends on the network:
 
-## Laravel Sponsors
+```bash
+php artisan db:seed --class=DemoAuditSeeder
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Which AI it uses
 
-### Premium Partners
+One request per audit — every section picture, the numbers and the section
+positions together. Not one request per section. Set `AI_DRIVER` in `.env`:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| `AI_DRIVER` | What it does | Cost per audit |
+|---|---|---|
+| `stub` *(default)* | Believable findings generated locally. No network, no key. | $0 |
+| `gemini` | Gemini 2.5 Flash. Free tier — good for the build week. | ~$0 |
+| `claude` | Claude Sonnet 5. Best critique quality. | ~$0.055 |
 
-## Contributing
+`CAPTURE_DRIVER=stub` invents a page shape without opening a browser;
+`CAPTURE_DRIVER=playwright` photographs the real page.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Both stubs exist so the whole pipeline runs end to end with no key and no
+network — which is also the safety net if the wifi dies during a demo.
 
-## Code of Conduct
+## Tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan test          # 54 unit + feature tests
+npx playwright test       # 6 browser tests, desktop and 390px
+```
 
-## Security Vulnerabilities
+The four correlation rules and the evidence guarantee are pure functions over
+plain value objects with no database in sight, which is why they run in 60ms.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## How it works
 
-## License
+```
+Run audit → photograph the page → ONE AI request over everything
+          → four rules join numbers to visual causes
+          → rank by (reach x severity x confidence) / effort
+          → score six weighted categories → report
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Four background stages in one `Bus::chain`, because each needs the rows the
+previous one wrote and a failure must stop the rest. Starting an audit returns
+`201 pending` immediately; the browser polls every 5 seconds.
+
+## What V1 deliberately does not do
+
+No login (**do not deploy this publicly as-is** — see `#113`), no Google
+Analytics or Clarity integration, no score history, no weekly schedule.
+
+Full reasoning: `docs/superpowers/specs/2026-08-02-landing-page-auditor-v1-design.md`
+Feature docs and the build dashboard: `docs/features/`
+Board: `kanban-md board --compact`

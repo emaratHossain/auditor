@@ -56,6 +56,7 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
       <div className="mt-1 flex items-center gap-2">
         <input
           type="number" step="any" inputMode="decimal"
+          name={f.key}
           className="w-full rounded-md border border-stone-300 px-3 py-2 text-sm"
           value={values[f.key] ?? ''}
           onChange={(e) => set(f.key, e.target.value)}
@@ -69,7 +70,12 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
   )
 
   return (
-    <div className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-stone-900/40 p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Run an audit on ${page.name}`}
+      className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-stone-900/40 p-4"
+    >
       <form onSubmit={submit} className="my-8 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
         <h3 className="text-lg font-semibold">Run an audit on {page.name}</h3>
         <p className="mt-1 text-sm text-stone-500">
@@ -91,6 +97,7 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
                   How far down people get <span className="font-normal text-stone-400">— optional</span>
                 </span>
                 <input
+                  name="section_reach"
                   className="mt-1 w-full rounded-md border border-stone-300 px-3 py-2 text-sm"
                   placeholder="Hero: 96, Features: 71, Pricing: 20"
                   value={reach}
