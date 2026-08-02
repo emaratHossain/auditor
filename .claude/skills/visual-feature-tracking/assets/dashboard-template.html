@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  ============================================================================
+  FEATURE DASHBOARD TEMPLATE  —  fill in DATA ONLY, leave the CSS/JS structure.
+  1. Set the <title>.
+  2. Edit the MASTHEAD block in the HTML (eyebrow, h1, .sub, .meta-row tags).
+  3. Edit the data in <script>: CAUSE (fix runs only), STEPS, SHOTS, DOD, TRACK.
+     CAUSE = null and SHOTS = [] simply remove those sections; numbering re-stamps itself.
+  4. Save as docs/features/<slug>.dashboard.html and open it in a browser
+     (SendUserFile with display:"render" to surface it). NOT published anywhere.
+  Complete standalone document: inline CSS/JS, light+dark themes, no external assets.
+  ============================================================================
+-->
+<title>REPLACE — Feature Control Panel</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: #f6f2e9; --paper-2: #fffdf7;
+    --ink: #23262f; --ink-soft: #5a5e6b; --ink-faint: #8b8f9c;
+    --line: #ded6c4; --line-2: #ebe4d5;
+    --accent: #0f766e; --accent-soft: #d7ebe8;
+    --ok: #2f8f4e; --ok-soft: #dbeee0;
+    --warn: #b5771f; --warn-soft: #f4e6cc;
+    --crit: #c0392b; --crit-soft: #f3d9d5;
+    --shadow: 0 1px 2px rgba(35,38,47,.06), 0 8px 24px rgba(35,38,47,.06);
+    --stamp: rgba(15,118,110,.10);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Charter, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16181f; --paper-2: #1d2029;
+      --ink: #e9e7e0; --ink-soft: #a9adba; --ink-faint: #71757f;
+      --line: #2f333e; --line-2: #262a33;
+      --accent: #4fd1c5; --accent-soft: #16302e;
+      --ok: #58c47a; --ok-soft: #17301f;
+      --warn: #e0a94a; --warn-soft: #34281291;
+      --crit: #e8776a; --crit-soft: #351d1a;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+      --stamp: rgba(79,209,197,.09);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #f6f2e9; --paper-2: #fffdf7;
+    --ink: #23262f; --ink-soft: #5a5e6b; --ink-faint: #8b8f9c;
+    --line: #ded6c4; --line-2: #ebe4d5;
+    --accent: #0f766e; --accent-soft: #d7ebe8;
+    --ok: #2f8f4e; --ok-soft: #dbeee0;
+    --warn: #b5771f; --warn-soft: #f4e6cc;
+    --crit: #c0392b; --crit-soft: #f3d9d5;
+    --shadow: 0 1px 2px rgba(35,38,47,.06), 0 8px 24px rgba(35,38,47,.06);
+    --stamp: rgba(15,118,110,.10);
+  }
+  :root[data-theme="dark"] {
+    --paper: #16181f; --paper-2: #1d2029;
+    --ink: #e9e7e0; --ink-soft: #a9adba; --ink-faint: #71757f;
+    --line: #2f333e; --line-2: #262a33;
+    --accent: #4fd1c5; --accent-soft: #16302e;
+    --ok: #58c47a; --ok-soft: #17301f;
+    --warn: #e0a94a; --warn-soft: #34281291;
+    --crit: #e8776a; --crit-soft: #351d1a;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    --stamp: rgba(79,209,197,.09);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 22px 64px; }
+
+  .masthead { border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2); padding: 26px 28px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+  .masthead::after { content: "STAMP"; position: absolute; right: 20px; top: 18px; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; color: var(--accent); border: 2px solid var(--accent); border-radius: 8px; padding: 8px 12px; transform: rotate(-9deg); opacity: .55; background: var(--stamp); }
+  .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 4vw, 38px); margin: 0 0 6px; letter-spacing: -.01em; text-wrap: balance; max-width: 22ch; }
+  .sub { color: var(--ink-soft); margin: 0; max-width: 62ch; font-size: 15.5px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); background: var(--paper); }
+  .tag.warnpill { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); background: var(--warn-soft); }
+
+  section { margin-top: 34px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; }
+  .sec-head h2 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 12px; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 1px 7px; }
+  .sec-sub { color: var(--ink-faint); font-size: 13.5px; margin: 2px 0 18px; }
+
+  .flow { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 14px; }
+  .step { flex: 1 0 155px; min-width: 155px; text-align: left; cursor: pointer; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); padding: 13px 13px 12px; position: relative; transition: transform .12s, border-color .12s, box-shadow .12s; font: inherit; color: inherit; }
+  .step:hover, .step:focus-visible { transform: translateY(-2px); border-color: var(--accent); box-shadow: var(--shadow); outline: none; }
+  .step[aria-expanded="true"] { border-color: var(--accent); box-shadow: var(--shadow); }
+  .step .num { font-family: var(--mono); font-size: 11px; color: var(--accent); display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 6px; background: var(--accent-soft); margin-bottom: 8px; }
+  .step h3 { font-size: 14px; margin: 0 0 3px; font-weight: 650; letter-spacing: -.005em; }
+  .step .who { font-size: 12px; color: var(--ink-soft); margin: 0; }
+  .step .arrow { position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--line); z-index: 2; }
+  .step:last-child .arrow { display: none; }
+  .detail { display: none; margin-top: 34px; border: 1px dashed var(--line); border-radius: 12px; background: var(--paper-2); padding: 16px 18px; }
+  .detail.open { display: block; }
+  .detail h4 { margin: 0 0 6px; font-size: 15px; font-family: var(--serif); }
+  .detail p { margin: 0 0 8px; color: var(--ink-soft); font-size: 14px; }
+  code, .file { font-family: var(--mono); font-size: 12.5px; }
+  .file { color: var(--accent); background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; }
+  .stamp-note { margin-top: 10px; font-size: 12.5px; color: var(--warn); background: var(--warn-soft); border-radius: 8px; padding: 8px 11px; border: 1px solid color-mix(in srgb, var(--warn) 30%, var(--line)); }
+
+  /* ---- root-cause block (bug/fix runs) ---- */
+  .cause { border: 1px solid var(--line); border-left: 3px solid var(--crit); border-radius: 14px; background: var(--paper-2); padding: 6px 22px 18px; box-shadow: var(--shadow); }
+  .cause-l { display: block; padding: 14px 0 0; border-top: 1px solid var(--line-2); }
+  .cause-l:first-child { border-top: none; }
+  .cause-k { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .cause-l p { margin: 0; font-size: 14.5px; color: var(--ink); }
+  .cause-l ol { margin: 0; padding-left: 20px; }
+  .cause-l ol li { font-size: 14.5px; color: var(--ink); margin-bottom: 6px; }
+
+  /* ---- screenshot evidence ---- */
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  figure.shot { margin: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); overflow: hidden; box-shadow: var(--shadow); }
+  figure.shot a { display: block; }
+  figure.shot img { display: block; width: 100%; height: auto; background: var(--paper); border-bottom: 1px solid var(--line-2); }
+  figure.shot figcaption { padding: 12px 14px 14px; }
+  .shot .kind { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; display: inline-block; margin-bottom: 7px; }
+  .shot .kind.bad { color: #fff; background: var(--crit); }
+  .shot .kind.good { color: var(--ok); background: var(--ok-soft); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); }
+  .shot .kind.info { color: var(--accent); background: var(--accent-soft); }
+  .shot .t { font-size: 13.5px; font-weight: 640; margin: 0 0 4px; }
+  .shot .d { font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+  .shot .missing { padding: 26px 14px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--warn); background: var(--warn-soft); border-bottom: 1px solid var(--line-2); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 780px) { .cols { grid-template-columns: 1fr; } .masthead::after { display: none; } }
+  .panel { border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2); padding: 20px 20px 8px; box-shadow: var(--shadow); }
+
+  .check { display: flex; gap: 11px; padding: 11px 2px; border-top: 1px solid var(--line-2); align-items: flex-start; }
+  .check:first-of-type { border-top: none; }
+  .box { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 6px; margin-top: 1px; border: 1.5px solid var(--ink-faint); display: grid; place-items: center; transition: background .12s, border-color .12s; cursor: pointer; }
+  .box svg { width: 12px; height: 12px; opacity: 0; transition: opacity .12s; }
+  .check.done .box { background: var(--ok); border-color: var(--ok); }
+  .check.done .box svg { opacity: 1; }
+  .check .txt { font-size: 14px; flex: 1; min-width: 0; }
+  .check .title { cursor: pointer; display: block; }
+  .check .txt b { font-weight: 640; }
+  .check.done .txt b { text-decoration: line-through; text-decoration-color: var(--ink-faint); color: var(--ink-soft); }
+  .check .eg { display: block; color: var(--ink-faint); font-size: 12.5px; margin-top: 2px; font-family: var(--mono); }
+  .expander { margin-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); border: none; border-radius: 6px; padding: 3px 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .expander .chev { transition: transform .15s; }
+  .check.expanded .expander .chev { transform: rotate(90deg); }
+  .subtests { list-style: none; margin: 9px 0 2px; padding: 0; display: none; }
+  .check.expanded .subtests { display: block; }
+  .subtests li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px dashed var(--line-2); }
+  .subtests li:first-child { border-top: none; }
+  .subtests .tname { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); word-break: break-word; }
+  .subtests .tref { font-family: var(--mono); font-size: 12px; color: var(--accent); flex: 0 0 auto; }
+
+  .track-group { margin-bottom: 6px; }
+  .track-group h5 { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin: 14px 0 8px; display: flex; align-items: center; gap: 8px; }
+  .track-group h5::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
+  .card { display: flex; gap: 11px; align-items: flex-start; padding: 11px 12px; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); border-left-width: 3px; }
+  .card.p-critical { border-left-color: var(--crit); }
+  .card.p-high { border-left-color: var(--warn); }
+  .card.p-medium { border-left-color: var(--accent); }
+  .card .id { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); flex: 0 0 auto; padding-top: 1px; }
+  .card .body { flex: 1; }
+  .card .body .t { font-size: 13.5px; font-weight: 600; margin: 0 0 3px; }
+  .card .body .d { font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+  .pri { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; flex: 0 0 auto; align-self: center; }
+  .pri.critical { color: #fff; background: var(--crit); }
+  .pri.high { color: var(--warn); background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
+  .pri.medium { color: var(--accent); background: var(--accent-soft); }
+
+  .progress { font-size: 12.5px; color: var(--ink-faint); font-family: var(--mono); margin: 2px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tasklink { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 3px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .tasklink:hover { text-decoration: underline; }
+  .card .id.tasklink { align-self: center; }
+  .card .id.plain { text-decoration: none; }
+  .foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 12.5px; font-family: var(--mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 9px; height: 9px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ========= MASTHEAD: edit these five lines ========= -->
+  <header class="masthead">
+    <p class="eyebrow">Feature Control Panel · branch REPLACE</p>
+    <h1>REPLACE — Feature Name</h1>
+    <p class="sub">REPLACE — one sentence on what this feature does, in the user's language.</p>
+    <div class="meta-row">
+      <span class="tag">commit REPLACE</span>
+      <span class="tag">REPLACE stack tag</span>
+      <span class="tag warnpill">⚠ REPLACE caveat</span>
+    </div>
+  </header>
+
+  <!-- Root cause — auto-removed unless CAUSE is set (fix/bug runs only) -->
+  <section id="cause-sec">
+    <div class="sec-head"><span class="n"></span><h2>What's going wrong</h2></div>
+    <p class="sec-sub">The problem, why it happens, and what to do about it — in plain words.</p>
+    <div class="cause" id="cause"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n"></span><h2>How it flows</h2></div>
+    <p class="sec-sub">Click any step to see, in plain words, what's happening.</p>
+    <div class="flow" id="flow"></div>
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <!-- Screenshots — auto-removed unless SHOTS has entries -->
+  <section id="shots-sec">
+    <div class="sec-head"><span class="n"></span><h2>What it looks like</h2></div>
+    <p class="sec-sub">Real screens, each with what to look at. Click any image to open it full size.</p>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <div class="cols">
+    <section>
+      <div class="sec-head"><span class="n"></span><h2>What "done" means</h2></div>
+      <p class="sec-sub">The feature is successful when every line is true. Tick as you verify — saved in your browser.</p>
+      <div class="panel"><p class="progress" id="progress"></p><div id="checklist"></div></div>
+    </section>
+    <section>
+      <div class="sec-head"><span class="n"></span><h2>What's left &amp; what's owed</h2></div>
+      <p class="sec-sub">Live from the kanban board — pending build, test gaps, and technical debt.</p>
+      <div class="panel" id="tracker"></div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span class="legend">
+      <span><span class="dot" style="background:var(--crit)"></span>critical</span>
+      <span><span class="dot" style="background:var(--warn)"></span>high</span>
+      <span><span class="dot" style="background:var(--accent)"></span>medium</span>
+    </span>
+    <span>Source of truth: <code>kanban/tasks/</code> · docs/features/REPLACE.md</span>
+  </div>
+</div>
+
+<script>
+/* ======================= EDIT ONLY THE CONFIG + DATA BELOW ======================
+   REPO_ABS  — absolute path to the repo (the repo's `pwd`); powers vscode:// task links.
+   DOD_TASK  — the single QA kanban card holding the DoD checklist ({id, file} or null).
+   CAUSE  — FIX RUNS ONLY. {sym, why, fix:[…]} — leave `null` for plan/explain runs and
+            the whole section disappears. Plain English; `why` may cite <span class='file'>.
+   STEPS  — the flow, left→right. PLAIN ENGLISH: `t` = self-explaining name of what happens
+            ("We send it"), not a class/layer name ("Persist"). `who` = plain actor ("Postmark").
+            `h` = one jargon-free sentence shown first on click. `d`/`f` carry the file:line.
+            `note` (optional) shows a highlighted caveat.
+   SHOTS  — screenshots. `src` is relative to this file (evidence/<slug>-*.png), `kind` is
+            "bad" | "good" | "info", `t` names the screen, `d` says what to look at.
+            Leave `[]` and the section disappears.
+   DOD    — the Definition of Done / test areas. `eg` is a concrete example;
+            `tests` (optional) makes the item expandable to its test methods.
+   TRACK  — kanban cards grouped; pri is "critical" | "high" | "medium".
+            each item's `file` (optional, repo-relative) becomes a vscode:// open-in-editor link.
+   Wrap file:line refs in <span class='file'>…</span> and code in <code>…</code>.
+   Section numbers (01, 02, …) are stamped automatically over whatever sections remain.
+================================================================================ */
+const REPO_ABS = "/ABSOLUTE/PATH/TO/REPO";                        // e.g. /Users/you/Projects/app
+const DOD_TASK = { id:"#00", file:"kanban/tasks/NNN-qa-card.md" }; // QA card holding the DoD checklist, or null
+
+const CAUSE = null;  /* fix runs only, e.g.
+const CAUSE = {
+  sym: "Plain sentence: what the person actually sees going wrong.",
+  why: "Plain sentence: the proven cause. <span class='file'>path/File.php:120</span> does X, so Y.",
+  fix: [ "First concrete step.", "Second concrete step.", "Add the regression test that would have caught it." ],
+}; */
+
+const STEPS = [
+  // `t` names what happens in plain words; `h` is the one plain sentence shown first on click.
+  { n:1, t:"Someone kicks it off", who:"in the app", h:"A person starts the action",
+    d:"REPLACE — what happens here, in plain words. <span class='file'>path/File.php:12</span>",
+    f:"path/File.php:12" },
+  { n:2, t:"We save it", who:"the database", h:"The information is stored so nothing is lost",
+    d:"REPLACE — plain sentence, then the code ref.", f:"path/Repo.php:34",
+    note:"Optional caveat / linked debt shows here." },
+  { n:3, t:"We tell the customer", who:"email", h:"The result goes out to the customer",
+    d:"REPLACE — plain sentence, then the code ref.", f:"path/Other.php:56" },
+];
+
+const SHOTS = [
+  // Delete these two and leave [] if the run has no screenshots.
+  { src:"evidence/REPLACE-slug-before.png", kind:"bad", t:"REPLACE — the screen where it goes wrong",
+    d:"REPLACE — what to look at in this image, in plain words." },
+  { src:"evidence/REPLACE-slug-after.png", kind:"good", t:"REPLACE — the same screen once fixed",
+    d:"REPLACE — what changed and how you can tell." },
+];
+
+const DOD = [
+  // `tests` (optional) makes the item expandable to reveal the individual test methods backing it.
+  { t:"REPLACE criterion", eg:"concrete example of the pass condition",
+    tests:[ { n:"test_method_name", f:"SomeTest.php:42" }, { n:"another_test", f:"SomeTest.php:88" } ] },
+  { t:"REPLACE criterion", eg:"another concrete example" },  // no `tests` → just a checkbox
+];
+
+const TRACK = [
+  { group:"Pending to build", items:[
+    { id:"#00", pri:"high", t:"REPLACE title", d:"REPLACE one-line detail.", file:"kanban/tasks/NNN-....md" },
+  ]},
+  { group:"Test gaps", items:[
+    { id:"#00", pri:"high", t:"REPLACE title", d:"REPLACE.", file:"kanban/tasks/NNN-....md" },
+  ]},
+  { group:"Technical debt", items:[
+    { id:"#00", pri:"critical", t:"REPLACE title", d:"REPLACE.", file:"kanban/tasks/NNN-....md" },
+  ]},
+];
+
+/* ======================= structure below — do not edit ======================= */
+const causeSec = document.getElementById('cause-sec');
+if (CAUSE) {
+  document.getElementById('cause').innerHTML =
+      `<div class="cause-l"><span class="cause-k">What you see</span><p>${CAUSE.sym}</p></div>`
+    + `<div class="cause-l"><span class="cause-k">Why it happens</span><p>${CAUSE.why}</p></div>`
+    + `<div class="cause-l"><span class="cause-k">What to do</span><ol>${(CAUSE.fix||[]).map(f=>`<li>${f}</li>`).join('')}</ol></div>`;
+} else { causeSec.remove(); }
+
+const shotsSec = document.getElementById('shots-sec');
+if (SHOTS.length) {
+  const shots = document.getElementById('shots');
+  SHOTS.forEach(s => {
+    const fig = document.createElement('figure');
+    fig.className = 'shot';
+    fig.innerHTML = `<a href="${s.src}" target="_blank" rel="noopener"><img src="${s.src}" alt="${s.t}"></a>`
+      + `<figcaption><span class="kind ${s.kind||'info'}">${s.kind||'info'}</span>`
+      + `<p class="t">${s.t}</p><p class="d">${s.d}</p></figcaption>`;
+    const img = fig.querySelector('img');
+    img.onerror = () => {
+      const miss = document.createElement('p');
+      miss.className = 'missing';
+      miss.textContent = 'screenshot not found: ' + s.src;
+      fig.replaceChild(miss, fig.firstElementChild);
+    };
+    shots.appendChild(fig);
+  });
+} else { shotsSec.remove(); }
+
+document.querySelectorAll('.sec-head .n').forEach((n,i) => { n.textContent = String(i+1).padStart(2,'0'); });
+
+const CHEV = '<svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const flow = document.getElementById('flow');
+const detail = document.getElementById('detail');
+let openStep = null;
+STEPS.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'step'; b.setAttribute('aria-expanded','false');
+  b.innerHTML = `<span class="num">${s.n}</span><h3>${s.t}</h3><p class="who">${s.who}</p>${CHEV}`;
+  b.onclick = () => {
+    if (openStep === s.n) { detail.classList.remove('open'); b.setAttribute('aria-expanded','false'); openStep=null; return; }
+    document.querySelectorAll('.step').forEach(x=>x.setAttribute('aria-expanded','false'));
+    b.setAttribute('aria-expanded','true'); openStep = s.n;
+    detail.className = 'detail open';
+    detail.innerHTML = `<h4>${s.n}. ${s.h}</h4><p>${s.d}</p><p><span class="file">${s.f}</span></p>${s.note?`<div class="stamp-note">⚠ ${s.note}</div>`:''}`;
+  };
+  flow.appendChild(b);
+});
+
+const CHECK_SVG = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2l2.6 2.6L10 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const KEY = 'feat-dod-' + (document.title || 'x').replace(/\W+/g,'-').toLowerCase();
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){}
+const list = document.getElementById('checklist');
+const prog = document.getElementById('progress');
+const vscodeHref = (file) => `vscode://file${REPO_ABS}/${file}`;
+const dodLinkHtml = (DOD_TASK && DOD_TASK.file)
+  ? `<a class="tasklink" href="${vscodeHref(DOD_TASK.file)}" title="Open ${DOD_TASK.file} in your editor">◆ tracked as ${DOD_TASK.id} ↗</a>` : '';
+function paint(){ prog.innerHTML = `<span>${DOD.filter((_,i)=>state[i]).length} / ${DOD.length} verified</span>${dodLinkHtml}`; }
+const CHEV_SM = '<svg class="chev" width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+DOD.forEach((d,i) => {
+  const el = document.createElement('div');
+  el.className = 'check' + (state[i] ? ' done' : '');
+  const tests = d.tests || [];
+  const sub = tests.length
+    ? `<button class="expander" type="button">${CHEV_SM}${tests.length} test${tests.length>1?'s':''}</button>`
+      + `<ul class="subtests">${tests.map(t=>`<li><span class="tname">${t.n}</span><span class="tref">${t.f}</span></li>`).join('')}</ul>`
+    : '';
+  el.innerHTML = `<span class="box">${CHECK_SVG}</span><div class="txt"><span class="title"><b>${d.t}</b><span class="eg">${d.eg}</span></span>${sub}</div>`;
+  const toggleDone = () => { state[i] = !state[i]; el.classList.toggle('done'); try{localStorage.setItem(KEY, JSON.stringify(state));}catch(e){} paint(); };
+  el.querySelector('.box').onclick = toggleDone;
+  el.querySelector('.title').onclick = toggleDone;
+  const exp = el.querySelector('.expander');
+  if (exp) exp.onclick = (e) => { e.stopPropagation(); el.classList.toggle('expanded'); };
+  list.appendChild(el);
+});
+paint();
+
+const tracker = document.getElementById('tracker');
+TRACK.forEach(g => {
+  const wrap = document.createElement('div'); wrap.className='track-group';
+  wrap.innerHTML = `<h5>${g.group}</h5>`;
+  g.items.forEach(it => {
+    const c = document.createElement('div'); c.className = `card p-${it.pri}`;
+    const idHtml = it.file
+      ? `<a class="id tasklink" href="${vscodeHref(it.file)}" title="Open ${it.file} in your editor">${it.id} ↗</a>`
+      : `<span class="id">${it.id}</span>`;
+    c.innerHTML = `${idHtml}<div class="body"><p class="t">${it.t}</p><p class="d">${it.d}</p></div><span class="pri ${it.pri}">${it.pri}</span>`;
+    wrap.appendChild(c);
+  });
+  tracker.appendChild(wrap);
+});
+</script>
+</body>
+</html>

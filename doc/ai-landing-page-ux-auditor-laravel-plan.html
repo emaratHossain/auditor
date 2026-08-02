@@ -1,0 +1,1617 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Landing Page UX Auditor — Laravel Build Plan</title>
+
+<style>
+/* ============ tokens ============ */
+:root{
+  --ground:#EDEFEA;
+  --panel:#FFFFFF;
+  --panel-2:#F7F8F5;
+  --ink:#171C1A;
+  --ink-2:#4A5450;
+  --ink-3:#77817C;
+  --rule:#D6DAD2;
+  --rule-2:#C3C9BE;
+  --blue:#24407F;
+  --blue-soft:#E4E8F3;
+  --high:#C7361F;
+  --high-soft:#F8E4E0;
+  --med:#B07400;
+  --med-soft:#FAEFD8;
+  --good:#1C7A5E;
+  --good-soft:#DFF0E9;
+  --shadow:0 1px 0 var(--rule), 0 10px 24px -18px rgba(23,28,26,.5);
+
+  --display:"Avenir Next","Avenir",Futura,"Century Gothic","Trebuchet MS",system-ui,sans-serif;
+  --body:Charter,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+
+  --wrap:1080px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#101413; --panel:#181D1B; --panel-2:#1E2422;
+    --ink:#E7EBE7; --ink-2:#A8B2AD; --ink-3:#7C867F;
+    --rule:#2B322F; --rule-2:#3A423E;
+    --blue:#93AAE4; --blue-soft:#1D2637;
+    --high:#F0806A; --high-soft:#33201C;
+    --med:#E0A93B; --med-soft:#2E2517;
+    --good:#5FC7A3; --good-soft:#16302A;
+    --shadow:0 1px 0 var(--rule), 0 10px 24px -18px #000;
+  }
+}
+:root[data-theme="light"]{
+  --ground:#EDEFEA; --panel:#FFFFFF; --panel-2:#F7F8F5;
+  --ink:#171C1A; --ink-2:#4A5450; --ink-3:#77817C;
+  --rule:#D6DAD2; --rule-2:#C3C9BE;
+  --blue:#24407F; --blue-soft:#E4E8F3;
+  --high:#C7361F; --high-soft:#F8E4E0;
+  --med:#B07400; --med-soft:#FAEFD8;
+  --good:#1C7A5E; --good-soft:#DFF0E9;
+}
+:root[data-theme="dark"]{
+  --ground:#101413; --panel:#181D1B; --panel-2:#1E2422;
+  --ink:#E7EBE7; --ink-2:#A8B2AD; --ink-3:#7C867F;
+  --rule:#2B322F; --rule-2:#3A423E;
+  --blue:#93AAE4; --blue-soft:#1D2637;
+  --high:#F0806A; --high-soft:#33201C;
+  --med:#E0A93B; --med-soft:#2E2517;
+  --good:#5FC7A3; --good-soft:#16302A;
+}
+
+/* ============ base ============ */
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  padding:0 20px 100px;
+}
+.wrap{max-width:var(--wrap); margin:0 auto;}
+p{margin:0 0 .85em;}
+strong{font-weight:700;}
+a{color:var(--blue);}
+
+h1,h2,h3,h4,.disp{font-family:var(--display); font-weight:600;}
+h2{font-size:clamp(26px,3.6vw,36px); line-height:1.12; letter-spacing:-.02em; margin:0 0 6px;}
+h3{font-size:20px; line-height:1.25; letter-spacing:-.01em; margin:0;}
+h4{font-size:15px; letter-spacing:.01em; margin:0 0 8px;}
+
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 10px;
+}
+.lede{font-size:19px; color:var(--ink-2);}
+.tiny{font-size:14px; color:var(--ink-2);}
+.mono{font-family:var(--mono); font-size:13px;}
+
+/* ============ header ============ */
+.masthead{padding:72px 0 40px; border-bottom:2px solid var(--ink);}
+.masthead h1{
+  font-size:clamp(38px,7vw,72px); line-height:.98; letter-spacing:-.035em;
+  margin:0 0 20px; max-width:14ch;
+}
+.masthead h1 em{font-style:normal; color:var(--ink-3);}
+.thesis{font-size:20px; line-height:1.55; max-width:60ch; color:var(--ink-2);}
+
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(150px,45%),1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule);
+  margin-top:34px;
+}
+.facts > div{background:var(--panel); padding:16px 18px;}
+.facts b{
+  display:block; font-family:var(--display); font-size:28px;
+  letter-spacing:-.02em; line-height:1;
+}
+.facts span{
+  display:block; margin-top:7px; font-family:var(--mono);
+  font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+}
+
+/* ============ section shell ============ */
+.sec{padding:64px 0 0;}
+.sec-head{margin-bottom:26px; max-width:62ch;}
+.sec-head p{margin-bottom:0;}
+
+/* ============ THE PIPELINE (signature) ============ */
+.track-shell{
+  border:1px solid var(--rule); background:var(--panel);
+  box-shadow:var(--shadow); padding:0;
+}
+.track-bar{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:12px 18px; border-bottom:1px solid var(--rule);
+  background:var(--panel-2); flex-wrap:wrap;
+}
+.track-bar .mono{color:var(--ink-3); letter-spacing:.1em; text-transform:uppercase; font-size:10.5px;}
+.scroll-note{font-family:var(--mono); font-size:10.5px; color:var(--ink-3);}
+.track-scroll{overflow-x:auto; padding:30px 18px 26px;}
+.track{display:flex; align-items:stretch; min-width:min-content;}
+
+.station{width:172px; flex:0 0 172px; display:flex; flex-direction:column;}
+.station-num{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  color:var(--blue); margin-bottom:7px;
+}
+.station-box{
+  border:1.5px solid var(--ink); background:var(--panel);
+  padding:12px 12px 13px; flex:1;
+}
+.station-box h4{font-size:15px; margin-bottom:5px; letter-spacing:-.01em;}
+.station-box p{font-size:13px; line-height:1.45; color:var(--ink-2); margin:0;}
+.station-where{
+  margin-top:10px; padding-top:9px; border-top:1px dashed var(--rule-2);
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+
+.link{
+  flex:0 0 92px; width:92px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding-top:26px;
+}
+.chip{
+  font-family:var(--mono); font-size:10px; line-height:1.35; text-align:center;
+  background:var(--blue-soft); color:var(--blue);
+  border:1px solid var(--blue); border-radius:2px;
+  padding:4px 6px; margin-bottom:8px; max-width:88px;
+}
+.rail{
+  width:100%; height:2px; background:var(--rule-2); position:relative;
+}
+.rail::after{
+  content:""; position:absolute; right:-1px; top:-4px;
+  border-left:8px solid var(--rule-2);
+  border-top:5px solid transparent; border-bottom:5px solid transparent;
+}
+
+/* ============ mini strip ============ */
+.strip{display:flex; align-items:center; gap:4px; flex-wrap:wrap; max-width:100%; justify-content:flex-end;}
+.strip i{
+  width:16px; height:5px; background:var(--rule-2); display:block; border-radius:1px;
+}
+.strip i.on{background:var(--ink);}
+.strip i.done{background:var(--ink-3);}
+
+/* ============ swimlanes ============ */
+.lanes-shell{overflow-x:auto; border:1px solid var(--rule); background:var(--panel); box-shadow:var(--shadow);}
+.lanes{min-width:920px; display:grid; grid-template-columns:168px repeat(7,1fr);}
+.lane-h{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); padding:11px 8px; border-bottom:1.5px solid var(--ink);
+  background:var(--panel-2); text-align:center;
+}
+.lane-h.first{text-align:left; padding-left:16px;}
+.lane-name{
+  font-family:var(--display); font-size:13px; font-weight:600;
+  padding:14px 16px; border-bottom:1px solid var(--rule); background:var(--panel-2);
+  display:flex; align-items:center; line-height:1.25;
+}
+.cell{
+  border-bottom:1px solid var(--rule); border-left:1px solid var(--rule);
+  padding:10px 7px; min-height:62px; display:flex; align-items:center; justify-content:center;
+}
+.dot{
+  font-family:var(--mono); font-size:10.5px; line-height:1.3; text-align:center;
+  padding:6px 7px; border-radius:2px; width:100%;
+}
+.dot.app{background:var(--blue-soft); color:var(--blue); border:1px solid var(--blue);}
+.dot.job{background:var(--good-soft); color:var(--good); border:1px solid var(--good);}
+.dot.ext{background:var(--med-soft); color:var(--med); border:1px solid var(--med);}
+.dot.db{background:var(--panel-2); color:var(--ink-2); border:1px dashed var(--rule-2);}
+
+.legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:14px;}
+.legend span{display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; color:var(--ink-2);}
+.legend b{width:13px; height:13px; display:block; border-radius:2px;}
+
+/* ============ phases ============ */
+.phase{
+  border:1px solid var(--rule); background:var(--panel);
+  box-shadow:var(--shadow); margin-bottom:16px;
+}
+.phase-top{
+  display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;
+  padding:20px 22px 18px; border-bottom:1px solid var(--rule);
+}
+.phase-id{
+  font-family:var(--mono); font-size:12px; letter-spacing:.1em; color:var(--blue);
+  padding-top:5px; flex:0 0 auto;
+}
+.phase-title{flex:1 1 240px; min-width:0;}
+.phase-title h3{margin-bottom:5px;}
+.phase-plain{font-size:15px; color:var(--ink-2); margin:0;}
+.phase-meta{flex:0 1 auto; max-width:100%; text-align:right; padding-top:3px;}
+.phase-meta .mono{display:block; font-size:11px; color:var(--ink-3); margin-bottom:7px; letter-spacing:.06em;}
+
+.phase-body{display:grid; grid-template-columns:minmax(0,1fr) 300px;}
+.phase-main{padding:20px 22px 22px; min-width:0;}
+.phase-side{
+  padding:20px 22px 22px; background:var(--panel-2);
+  border-left:1px solid var(--rule); min-width:0;
+}
+@media (max-width:760px){
+  .phase-body{grid-template-columns:minmax(0,1fr);}
+  .phase-side{border-left:0; border-top:1px solid var(--rule);}
+  .phase-meta{text-align:left; flex:1 1 100%;}
+  .strip{justify-content:flex-start;}
+}
+.phase-main ul{margin:0 0 4px; padding-left:20px;}
+.phase-main li{margin-bottom:7px;}
+.phase-main li:last-child{margin-bottom:0;}
+
+.label{
+  font-family:var(--mono); font-size:10px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 9px;
+}
+.files{list-style:none; margin:0 0 18px; padding:0;}
+.files li{
+  font-family:var(--mono); font-size:12px; line-height:1.5;
+  padding:5px 0; border-bottom:1px dotted var(--rule-2); color:var(--ink-2);
+  word-break:break-word;
+}
+.files li:last-child{border-bottom:0;}
+.files li b{color:var(--ink); font-weight:400;}
+
+.done{
+  border-left:3px solid var(--good); background:var(--good-soft);
+  padding:11px 13px; font-size:14px; line-height:1.5;
+}
+.done .label{margin-bottom:4px; color:var(--good);}
+
+/* ============ generic cards ============ */
+.grid{display:grid; gap:14px;}
+.grid > *{min-width:0;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));}
+.card{
+  border:1px solid var(--rule); background:var(--panel);
+  padding:18px 20px; box-shadow:var(--shadow);
+}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:19px; font-size:15px;}
+.card li{margin-bottom:6px;}
+
+/* ============ tables ============ */
+.tbl-shell{overflow-x:auto; border:1px solid var(--rule); background:var(--panel); box-shadow:var(--shadow);}
+table{border-collapse:collapse; width:100%; min-width:600px; font-size:14.5px;}
+th{
+  font-family:var(--mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-3); text-align:left; padding:12px 16px;
+  border-bottom:1.5px solid var(--ink); background:var(--panel-2); white-space:nowrap;
+}
+td{padding:12px 16px; border-bottom:1px solid var(--rule); vertical-align:top;}
+tr:last-child td{border-bottom:0;}
+td.m, th.m{font-family:var(--mono); font-size:12.5px;}
+
+/* ============ db map ============ */
+.tables{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(min(238px,100%),1fr));}
+.tables > *{min-width:0;}
+.facts > div{min-width:0;}
+.tbox{border:1.5px solid var(--ink); background:var(--panel);}
+.tbox h4{
+  font-family:var(--mono); font-size:12.5px; letter-spacing:.04em; font-weight:400;
+  padding:9px 13px; margin:0; border-bottom:1.5px solid var(--ink); background:var(--panel-2);
+}
+.tbox ul{list-style:none; margin:0; padding:9px 13px 11px;}
+.tbox li{
+  font-family:var(--mono); font-size:11.5px; line-height:1.75; color:var(--ink-2);
+}
+.tbox li b{color:var(--blue); font-weight:400;}
+.rels{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
+.rels code{
+  font-family:var(--mono); font-size:11px; background:var(--panel);
+  border:1px solid var(--rule); padding:5px 9px; color:var(--ink-2);
+}
+
+/* ============ priority ============ */
+.pri{display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; padding:3px 8px; border-radius:2px; white-space:nowrap;}
+.pri.h{background:var(--high-soft); color:var(--high); border:1px solid var(--high);}
+.pri.m{background:var(--med-soft); color:var(--med); border:1px solid var(--med);}
+.pri.l{background:var(--good-soft); color:var(--good); border:1px solid var(--good);}
+
+/* ============ timeline ============ */
+.gantt-shell{overflow-x:auto; border:1px solid var(--rule); background:var(--panel); box-shadow:var(--shadow);}
+.gantt{min-width:760px; padding:6px 0 14px;}
+.grow{display:grid; grid-template-columns:210px repeat(7,1fr); align-items:center;}
+.grow.head{border-bottom:1.5px solid var(--ink); background:var(--panel-2);}
+.grow.head > div{
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); padding:11px 8px; text-align:center;
+}
+.grow.head > div:first-child{text-align:left; padding-left:16px;}
+.gname{
+  font-size:14px; padding:9px 16px 9px 16px; border-bottom:1px solid var(--rule);
+  font-family:var(--display); font-weight:600;
+}
+.gcell{height:100%; border-bottom:1px solid var(--rule); border-left:1px solid var(--rule); padding:9px 4px;}
+.gbar{height:16px; background:var(--blue); border-radius:2px;}
+.gbar.alt{background:var(--good);}
+.gbar.warm{background:var(--med);}
+
+/* ============ glossary ============ */
+.gloss{border-top:1.5px solid var(--ink); margin-top:8px;}
+.gloss dl{margin:0;}
+.gloss .row{display:grid; grid-template-columns:210px 1fr; gap:20px; padding:13px 0; border-bottom:1px solid var(--rule);}
+.gloss dt{font-family:var(--mono); font-size:12.5px; color:var(--ink); padding-top:2px;}
+.gloss dd{margin:0; font-size:15px; color:var(--ink-2);}
+@media (max-width:620px){ .gloss .row{grid-template-columns:1fr; gap:4px;} }
+
+/* ============ decisions ============ */
+.qs{counter-reset:q; list-style:none; margin:0; padding:0;}
+.qs li{
+  counter-increment:q; position:relative; padding:14px 0 14px 46px;
+  border-bottom:1px solid var(--rule); font-size:15.5px;
+}
+.qs li::before{
+  content:"Q" counter(q); position:absolute; left:0; top:15px;
+  font-family:var(--mono); font-size:11px; color:var(--blue); letter-spacing:.06em;
+}
+.qs li b{display:block; font-family:var(--display); font-size:16px; margin-bottom:3px;}
+.qs li span{color:var(--ink-2);}
+
+footer{
+  margin-top:70px; padding-top:22px; border-top:2px solid var(--ink);
+  display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:11px; color:var(--ink-3); letter-spacing:.06em;
+}
+
+@media print{
+  body{background:#fff; padding:0;}
+  .phase,.card,.track-shell,.tbl-shell,.lanes-shell,.gantt-shell{box-shadow:none; break-inside:avoid;}
+  .sec{padding-top:34px;}
+}
+</style>
+
+<div class="wrap">
+
+<!-- ============ MASTHEAD ============ -->
+<header class="masthead">
+  <p class="eyebrow">Build plan · Version 1 · Laravel</p>
+  <h1>AI Landing Page <em>UX Auditor</em></h1>
+  <p class="thesis">
+    Google Analytics tells you <strong>62% of people leave</strong>. It never tells you why.
+    This tool looks at your landing page the way a person does — it takes pictures of every
+    section, reads them with an AI that understands design, then lines those pictures up
+    against your real visitor numbers. The result is a short, ranked list of things to fix.
+  </p>
+
+  <div class="facts">
+    <div><b>8</b><span>Pipeline stages</span></div>
+    <div><b>10</b><span>Build phases</span></div>
+    <div><b>10</b><span>Database tables</span></div>
+    <div><b>4</b><span>React screens</span></div>
+    <div><b>7</b><span>Weeks to V1</span></div>
+  </div>
+</header>
+
+<!-- ============ WHAT IT DOES ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Read this first</p>
+    <h2>What the tool actually does</h2>
+    <p class="lede">Four sentences, no jargon.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h4>The problem today</h4>
+      <p>A marketer opens Google Analytics and sees numbers: bounce rate 62%, CTA clicks 2%,
+      scroll depth 35%. Those numbers describe <strong>what happened</strong>. Nobody can tell
+      them <strong>what to change on the page</strong> on Monday morning.</p>
+    </div>
+    <div class="card">
+      <h4>What we build</h4>
+      <p>A React dashboard on top of a Laravel backend. You paste a landing page URL once. Every
+      week the app photographs the page,
+      pulls your visitor numbers, asks an AI to judge both together, and hands you a to-do list
+      sorted by how much money each fix is likely to make.</p>
+    </div>
+    <div class="card">
+      <h4>The one clever bit</h4>
+      <p>The AI never looks at a screenshot alone. Each picture arrives with its own numbers
+      attached — "82% of visitors saw this section, only 2% clicked the button." That pairing is
+      what turns a design opinion into evidence.</p>
+    </div>
+    <div class="card">
+      <h4>Who uses it</h4>
+      <p>Marketing and product people who do not write code. So the finished screen must be
+      readable in two minutes with no training. That constraint drives every design decision
+      later in this plan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE PIPELINE — SIGNATURE ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">The full visual workflow</p>
+    <h2>One audit, start to finish</h2>
+    <p>Everything below is one journey. A request goes in at the left. A ranked to-do list comes
+    out at the right. The blue tags on the track show <strong>what is handed from one stage to
+    the next</strong>.</p>
+  </div>
+
+  <div class="track-shell">
+    <div class="track-bar">
+      <span class="mono">Audit pipeline · runs in the background · 2–4 minutes</span>
+      <span class="scroll-note">scroll sideways →</span>
+    </div>
+    <div class="track-scroll">
+      <div class="track">
+
+        <div class="station">
+          <div class="station-num">01</div>
+          <div class="station-box">
+            <h4>Start</h4>
+            <p>Someone clicks "Run audit" in React, or the weekly timer fires.</p>
+            <div class="station-where">React → API</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">audit_id<br>page URL</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">02</div>
+          <div class="station-box">
+            <h4>Collect numbers</h4>
+            <p>Pull visitors, bounce, scroll depth and clicks from GA4 and Clarity.</p>
+            <div class="station-where">FetchAnalyticsJob</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">metrics<br>per section</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">03</div>
+          <div class="station-box">
+            <h4>Take pictures</h4>
+            <p>A robot browser opens the page and photographs each section, on phone and desktop.</p>
+            <div class="station-where">Playwright</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">6–10 PNG<br>files</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">04</div>
+          <div class="station-box">
+            <h4>AI looks</h4>
+            <p>Each picture goes to a vision AI with its own numbers attached. It scores and lists problems.</p>
+            <div class="station-where">AnalyzeSectionJob</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">score +<br>problems</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">05</div>
+          <div class="station-box">
+            <h4>Join the dots</h4>
+            <p>Match every number to a visual cause. "Seen but not clicked" becomes "button has no contrast".</p>
+            <div class="station-where">CorrelationService</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">insights<br>+ evidence</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">06</div>
+          <div class="station-box">
+            <h4>Write advice</h4>
+            <p>Turn each insight into a fix: what to do, why, expected result.</p>
+            <div class="station-where">RecommendJob</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">ranked<br>fixes</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">07</div>
+          <div class="station-box">
+            <h4>Give a score</h4>
+            <p>Six category scores roll up into one number out of 100.</p>
+            <div class="station-where">ScoreJob</div>
+          </div>
+        </div>
+        <div class="link"><div class="chip">health<br>score</div><div class="rail"></div></div>
+
+        <div class="station">
+          <div class="station-num">08</div>
+          <div class="station-box">
+            <h4>Show it</h4>
+            <p>React polls the API, sees "done", draws the report. Email goes out too.</p>
+            <div class="station-where">React dashboard</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <p class="tiny" style="margin-top:14px;">
+    Stages 02 and 03 can run at the same time — they do not need each other. Everything after
+    stage 04 must wait its turn. In Laravel that is one <span class="mono">Bus::chain()</span> with
+    a <span class="mono">Bus::batch()</span> inside it.
+  </p>
+</section>
+
+<!-- ============ SWIMLANES ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Same journey, different view</p>
+    <h2>Who is doing the work at each stage</h2>
+    <p>The pipeline above says <em>what</em> happens. This says <em>where</em> it happens. Notice
+    that almost nothing runs while the user is waiting — the browser is free after stage 01.</p>
+  </div>
+
+  <div class="lanes-shell">
+    <div class="lanes">
+      <div class="lane-h first">Who</div>
+      <div class="lane-h">01 Start</div>
+      <div class="lane-h">02 Numbers</div>
+      <div class="lane-h">03 Pictures</div>
+      <div class="lane-h">04 AI</div>
+      <div class="lane-h">05 Join</div>
+      <div class="lane-h">06 Advice</div>
+      <div class="lane-h">07+08 Show</div>
+
+      <div class="lane-name">Person<br>(marketer)</div>
+      <div class="cell"><span class="dot app">Clicks<br>Run audit</span></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><span class="dot app">Reads<br>dashboard</span></div>
+
+      <div class="lane-name">React app<br><span class="tiny">(in the browser)</span></div>
+      <div class="cell"><span class="dot app">POST<br>/api/audits</span></div>
+      <div class="cell"><span class="dot app">polls status<br>every 5s</span></div>
+      <div class="cell"><span class="dot app">shows<br>progress bar</span></div>
+      <div class="cell"><span class="dot app">polls</span></div>
+      <div class="cell"><span class="dot app">polls</span></div>
+      <div class="cell"><span class="dot app">polls</span></div>
+      <div class="cell"><span class="dot app">GET report,<br>draws screens</span></div>
+
+      <div class="lane-name">Laravel API<br><span class="tiny">(instant)</span></div>
+      <div class="cell"><span class="dot app">Creates audit<br>row, queues chain</span></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><span class="dot app">Returns<br>JSON resources</span></div>
+
+      <div class="lane-name">Queue workers<br><span class="tiny">(background)</span></div>
+      <div class="cell"></div>
+      <div class="cell"><span class="dot job">FetchAnalytics<br>Job</span></div>
+      <div class="cell"><span class="dot job">CaptureScreens<br>Job</span></div>
+      <div class="cell"><span class="dot job">AnalyzeSection<br>Job ×6</span></div>
+      <div class="cell"><span class="dot job">Correlate<br>Job</span></div>
+      <div class="cell"><span class="dot job">Recommend<br>+ Score Job</span></div>
+      <div class="cell"><span class="dot job">Notify<br>Job</span></div>
+
+      <div class="lane-name">Outside services</div>
+      <div class="cell"></div>
+      <div class="cell"><span class="dot ext">GA4 API<br>Clarity API</span></div>
+      <div class="cell"><span class="dot ext">Playwright<br>(Node)</span></div>
+      <div class="cell"><span class="dot ext">Vision AI<br>API</span></div>
+      <div class="cell"><span class="dot ext">Vision AI<br>(text pass)</span></div>
+      <div class="cell"></div>
+      <div class="cell"><span class="dot ext">Email /<br>Slack</span></div>
+
+      <div class="lane-name">Storage</div>
+      <div class="cell"><span class="dot db">audits</span></div>
+      <div class="cell"><span class="dot db">analytics_<br>reports</span></div>
+      <div class="cell"><span class="dot db">S3 files +<br>screenshot_sections</span></div>
+      <div class="cell"><span class="dot db">ai_findings</span></div>
+      <div class="cell"><span class="dot db">insights</span></div>
+      <div class="cell"><span class="dot db">recommendations</span></div>
+      <div class="cell"><span class="dot db">audits.<br>overall_score</span></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><b style="background:var(--blue-soft); border:1px solid var(--blue);"></b> Front end / instant response</span>
+    <span><b style="background:var(--good-soft); border:1px solid var(--good);"></b> Runs in the background</span>
+    <span><b style="background:var(--med-soft); border:1px solid var(--med);"></b> Someone else's server</span>
+    <span><b style="background:var(--panel-2); border:1px dashed var(--rule-2);"></b> Where it is saved</span>
+  </div>
+</section>
+
+<!-- ============ PHASES ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Step by step</p>
+    <h2>The build, in the order you build it</h2>
+    <p>Ten phases. Each one ends with something you can open in a browser and show to somebody.
+    Do not start a phase until the previous "Done when" is true — that rule is what keeps the
+    project from turning into seven weeks of invisible progress.</p>
+  </div>
+
+  <!-- P0 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P0</div>
+      <div class="phase-title">
+        <h3>Set up the workshop</h3>
+        <p class="phase-plain">Install everything, wire React to Laravel, prove the empty app runs.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">4 days</span>
+        <span class="strip"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li>Start a fresh <strong>Laravel 12</strong> project on PHP 8.3.</li>
+          <li>Add <strong>PostgreSQL</strong> for data and <strong>Redis</strong> for the queue.
+            A queue is just a to-do list the server works through on its own.</li>
+          <li>Add <strong>Laravel Sanctum</strong> for login. Sanctum lets a React app log in with
+            a normal secure cookie — no token juggling, no refresh-token code to write.</li>
+          <li>Add a <strong>plain React 19 app</strong> in the same repo under
+            <span class="mono">resources/js</span>, built by <strong>Vite</strong> (already in
+            Laravel). Add React Router for the four screens, Axios for API calls, TanStack Query
+            for loading and polling, and Tailwind for styling.</li>
+          <li>Install <strong>Node and Playwright</strong> on the server. Playwright is the robot
+            browser that will take our screenshots.</li>
+          <li>Install <strong>Laravel Horizon</strong> so you can watch background jobs succeed
+            or fail on a real screen.</li>
+        </ul>
+        <p class="tiny" style="margin-top:14px;"><strong>One repo, two apps.</strong> Laravel does
+        only two jobs — serve JSON at <span class="mono">/api/*</span>, and serve the React
+        <span class="mono">index.html</span> for every other URL. React does all the screens.
+        Keeping both in one repo means one deploy, one login and one place to look when something
+        breaks; you still get a real React codebase you could split out later. Skip Inertia — it
+        ties React back to Laravel routing, and you asked for a basic React app.</p>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will touch</p>
+        <ul class="files">
+          <li><b>composer.json</b> sanctum, horizon</li>
+          <li><b>package.json</b> react, react-router,<br>axios, @tanstack/react-query, playwright</li>
+          <li><b>vite.config.js</b> @vitejs/plugin-react</li>
+          <li><b>resources/js/app.jsx</b> React root</li>
+          <li><b>routes/web.php</b> catch-all → React</li>
+          <li><b>routes/api.php</b> the JSON API</li>
+          <li><b>config/queue.php</b> redis</li>
+          <li><b>config/cors.php</b> + SANCTUM_STATEFUL_DOMAINS</li>
+          <li><b>.env</b> DB, REDIS, API keys</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          You log in through a React form, land on an empty React dashboard that fetched
+          <span class="mono">/api/user</span>, and Horizon reports zero jobs.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P1 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P1</div>
+      <div class="phase-title">
+        <h3>Save the pages you want to audit</h3>
+        <p class="phase-plain">Somewhere to paste a URL and its analytics IDs.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">3 days</span>
+        <span class="strip"><i class="done"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li>Tables: <span class="mono">projects</span> (a brand or client) and
+            <span class="mono">pages</span> (one landing page URL).</li>
+          <li>A React form: page name, URL, GA4 property ID, Clarity project ID, and the section
+            names you care about (Hero, Features, Pricing, Testimonials, FAQ, Footer).</li>
+          <li>Validate in Laravel with a FormRequest, and show those errors in React by reading the
+            <span class="mono">422</span> response body. Do not write the same rules twice — the
+            server is the only place validation is real.</li>
+          <li>Store API keys with Laravel's <span class="mono">encrypted</span> cast. Keys must
+            never appear in logs or in the database in plain text.</li>
+          <li>A "Run audit" button that, for now, only creates an <span class="mono">audits</span>
+            row with status <span class="mono">pending</span>.</li>
+        </ul>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>Models</b> Project, Page, Audit</li>
+          <li><b>Controllers</b> PageController, AuditController</li>
+          <li><b>Resources</b> PageResource, AuditResource</li>
+          <li><b>Migrations</b> projects, pages, audits</li>
+          <li><b>Policies</b> so users only see their own pages</li>
+          <li><b>React</b> pages/PageList.jsx, pages/PageForm.jsx</li>
+          <li><b>React</b> api/client.js — one Axios instance</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          You add a landing page in React, see it in the list, and clicking Run audit creates a
+          pending audit you can see in the database.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P2 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P2</div>
+      <div class="phase-title">
+        <h3>Collect the numbers</h3>
+        <p class="phase-plain">Pull real visitor data from Google Analytics and Clarity.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">1 week</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li><strong>GoogleAnalyticsService</strong> — uses the GA4 Data API. Fetches daily and
+            weekly visitors, bounce rate, average session time, conversion rate, exit rate, and
+            the device split (desktop / mobile / tablet).</li>
+          <li><strong>ClarityService</strong> — fetches scroll depth, rage clicks and dead clicks.
+            <em>Rage clicks</em> means a visitor clicked the same spot again and again because
+            nothing happened. That is a strong sign something looks clickable but is not.</li>
+          <li><strong>FetchAnalyticsJob</strong> — a background job that calls both services and
+            writes one <span class="mono">analytics_reports</span> row per audit.</li>
+          <li><strong>Plan B, build it now:</strong> Clarity's API is limited and may not give you
+            everything. Add a CSV upload on the page settings screen so a human can paste the same
+            numbers in by hand. The rest of the pipeline must not care where the numbers came from.</li>
+          <li>CTA click rate comes from a GA4 event on your button. If the client has not set that
+            event up, the audit says "not measured" rather than guessing.</li>
+        </ul>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Services/Analytics/</b> GoogleAnalyticsService.php</li>
+          <li><b>app/Services/Analytics/</b> ClarityService.php</li>
+          <li><b>app/Services/Analytics/</b> ManualCsvImporter.php</li>
+          <li><b>app/Jobs/</b> FetchAnalyticsJob.php</li>
+          <li><b>DTO</b> MetricsBundle</li>
+        </ul>
+        <p class="label">Guard rails</p>
+        <ul class="files">
+          <li><b>retry</b> 3 tries, backoff 30s</li>
+          <li><b>cache</b> 6 hours per page</li>
+          <li><b>timeout</b> 60s per call</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          Running an audit fills a table of real numbers, and pulling the plug on the Clarity key
+          does not break the run.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P3 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P3</div>
+      <div class="phase-title">
+        <h3>Take the pictures</h3>
+        <p class="phase-plain">A robot browser photographs every section of the page.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">1 week</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li>Write a small Node script, <span class="mono">scripts/capture.mjs</span>. It takes a
+            URL and returns image files plus a JSON list of what it captured.</li>
+          <li>Laravel runs that script with Symfony's <span class="mono">Process</span> class and
+            reads the JSON back. Laravel stays in charge; Node only drives the browser.</li>
+          <li><strong>How sections are found — three levels, in order:</strong>
+            <br>1. Use CSS selectors the user typed in (most accurate).
+            <br>2. If none, look for <span class="mono">&lt;section&gt;</span> tags and big
+            landmark blocks.
+            <br>3. If that fails, slice the full page into equal horizontal bands and label them
+            by position.</li>
+          <li>Capture at two sizes: desktop 1440×900 and mobile 390×844. Mobile is usually where
+            the conversion is lost, so it is not optional.</li>
+          <li>Wait for fonts and images to finish loading, hide cookie banners, then shoot.
+            A screenshot of a cookie wall teaches the AI nothing.</li>
+          <li>Save files to a storage disk (local in development, S3 in production) and write one
+            <span class="mono">screenshot_sections</span> row per image.</li>
+        </ul>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>scripts/</b> capture.mjs</li>
+          <li><b>app/Services/Screenshot/</b> PlaywrightRunner.php</li>
+          <li><b>app/Services/Screenshot/</b> SectionDetector.php</li>
+          <li><b>app/Jobs/</b> CaptureScreenshotsJob.php</li>
+        </ul>
+        <p class="label">Watch out for</p>
+        <ul class="files">
+          <li><b>Memory</b> Chromium is heavy — 2 GB minimum on the worker box</li>
+          <li><b>Images</b> compress to WebP before upload</li>
+          <li><b>Cost</b> big images cost more at the AI step</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          After an audit you can open a gallery and see Hero, Features, Pricing, Testimonials,
+          FAQ and Footer — on both desktop and mobile.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P4 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P4</div>
+      <div class="phase-title">
+        <h3>Let the AI look</h3>
+        <p class="phase-plain">Every picture gets a score and a list of problems.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">1 week</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li>One background job per section, run as a <span class="mono">Bus::batch()</span> so
+            six sections are analysed at once instead of one after another.</li>
+          <li>Each call sends: the section image, the section's own numbers, the page's goal, and
+            a strict instruction to reply as JSON only.</li>
+          <li><strong>What the AI is asked to judge</strong> — layout (hierarchy, alignment, white
+            space), the call-to-action button (visible, big enough, enough contrast, clear words),
+            typography (readable, sensible sizes), design (colour consistency, image quality,
+            mobile friendliness), trust (testimonials, logos, security badges), and content
+            (headline clarity, value proposition, button wording).</li>
+          <li>Force the shape of the answer with a JSON schema. Then validate it in PHP before
+            saving. If the reply does not match, retry once, then record a clean failure — never
+            save half-parsed text.</li>
+          <li>Keep a <span class="mono">token_cost</span> column on every call. You want to know
+            what one audit costs before a client asks.</li>
+        </ul>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Services/Ai/</b> VisionAuditor.php</li>
+          <li><b>app/Services/Ai/</b> AuditSchema.php</li>
+          <li><b>app/Jobs/</b> AnalyzeSectionJob.php</li>
+          <li><b>Model</b> AiFinding</li>
+          <li><b>resources/prompts/</b> section_audit.txt</li>
+        </ul>
+        <p class="label">The AI's role</p>
+        <p class="tiny">"You are an experienced conversion, UI/UX and digital marketing expert.
+        Judge this section using both the image and the numbers. Say what is wrong, why users may
+        not convert, what to change, and how much it matters."</p>
+        <div class="done">
+          <p class="label">Done when</p>
+          Every section has a score from 0 to 100 and at least one specific, non-obvious problem
+          written in plain language.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P5 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P5</div>
+      <div class="phase-title">
+        <h3>Join the numbers to the pictures</h3>
+        <p class="phase-plain">The heart of the product. Everything else is plumbing.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">1 week</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <p>Two passes, in this order. Rules first because they are cheap, repeatable and
+        explainable. AI second, to catch what the rules missed.</p>
+        <ul>
+          <li><strong>Pass 1 — rules in PHP.</strong> Fixed patterns you can test and trust.
+            See the table below.</li>
+          <li><strong>Pass 2 — one AI call.</strong> Send all section findings and all metrics
+            together, as text. Ask it to explain the drop-off story across the whole page — what
+            the rules cannot see because they only look one section at a time.</li>
+          <li>Every insight must carry <strong>evidence</strong>: a metric, a number, and a
+            section name. An insight without evidence is deleted, not shown. This is the rule that
+            keeps the tool honest.</li>
+        </ul>
+
+        <div class="tbl-shell" style="margin-top:16px;">
+          <table>
+            <thead>
+              <tr><th>When the numbers say</th><th>And the picture shows</th><th>The tool concludes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="m">80% see Hero<br>2% click CTA</td>
+                <td>Button has low contrast, weak wording</td>
+                <td>People find the button and ignore it. Fix the button, not the traffic.</td>
+              </tr>
+              <tr>
+                <td class="m">Only 20% reach<br>Pricing</td>
+                <td>Three long sections sit above Pricing</td>
+                <td>Pricing is buried. Move it up or add a second button earlier.</td>
+              </tr>
+              <tr>
+                <td class="m">High rage clicks<br>on Hero image</td>
+                <td>Image has a hover effect but no link</td>
+                <td>The image looks clickable and is not. Make it a link or kill the hover.</td>
+              </tr>
+              <tr>
+                <td class="m">Mobile bounce 2×<br>desktop bounce</td>
+                <td>Mobile hero text is 11px, button below the fold</td>
+                <td>The mobile layout is the leak. Fix mobile before anything else.</td>
+              </tr>
+              <tr>
+                <td class="m">Scroll depth 35%,<br>exit rate high</td>
+                <td>No trust signals anywhere above the fold</td>
+                <td>Visitors leave before believing you. Add proof early.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Services/Correlation/</b> CorrelationService.php</li>
+          <li><b>app/Services/Correlation/Rules/</b> SeenButNotClicked.php</li>
+          <li><b>…/Rules/</b> DropOffBeforeSection.php</li>
+          <li><b>…/Rules/</b> RageClickMismatch.php</li>
+          <li><b>…/Rules/</b> MobileGap.php</li>
+          <li><b>Model</b> Insight</li>
+        </ul>
+        <p class="label">Why rules first</p>
+        <p class="tiny">Rules are testable. You can write a unit test that proves "seen but not
+        clicked" fires correctly. You cannot unit-test an opinion. Rules also make the AI cheaper,
+        because you only pay for the hard part.</p>
+        <div class="done">
+          <p class="label">Done when</p>
+          Every insight on screen names a number <em>and</em> a visual cause. No insight is a
+          generic design tip.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P6 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P6</div>
+      <div class="phase-title">
+        <h3>Turn insights into a to-do list</h3>
+        <p class="phase-plain">Ranked by likely money, not by how loud the problem is.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">4 days</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i><i></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <p>Each recommendation has five parts, always in the same order, so people learn to read
+        them fast:</p>
+        <ul>
+          <li><strong>Problem</strong> — one sentence. "The main button is hard to see."</li>
+          <li><strong>Evidence</strong> — the numbers. "82% of visitors see the hero. 2% click."</li>
+          <li><strong>Suggested fix</strong> — something a designer can do today. "Raise button
+            contrast to at least 4.5:1 and move it above the fold."</li>
+          <li><strong>Expected impact</strong> — honest and ranged. "CTA clicks 2% → 4–6%."</li>
+          <li><strong>Priority</strong> — High, Medium or Low, calculated not guessed.</li>
+        </ul>
+        <p style="margin-top:16px;"><strong>How priority is calculated.</strong> A score, so two
+        people reading the same audit agree:</p>
+        <p class="mono" style="background:var(--panel-2); border:1px solid var(--rule); padding:12px 14px; margin:0 0 14px;">
+          priority = (traffic share × severity × confidence) ÷ effort
+        </p>
+        <p class="tiny">Traffic share = how many visitors actually see that section. Severity = how
+        badly it blocks the goal, 1–5. Confidence = how sure the evidence is, 0–1. Effort = a
+        rough dev estimate, 1–5. A tiny problem on a section 90% of people see beats a big problem
+        on a section 5% reach.</p>
+        <p style="margin-top:14px;">
+          <span class="pri h">High</span>&nbsp;
+          <span class="pri m">Medium</span>&nbsp;
+          <span class="pri l">Low</span>
+          <span class="tiny"> — three buckets only. More would be noise.</span>
+        </p>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Services/</b> RecommendationEngine.php</li>
+          <li><b>app/Services/</b> PriorityScorer.php</li>
+          <li><b>app/Jobs/</b> GenerateRecommendationsJob.php</li>
+          <li><b>Model</b> Recommendation</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          You get a ranked list where the top item is genuinely the thing you would fix first.
+          Show it to someone and see if they agree.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P7 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P7</div>
+      <div class="phase-title">
+        <h3>One number for the whole page</h3>
+        <p class="phase-plain">A health score out of 100 that people can track over time.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">2 days</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="on"></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <p>Six category scores, weighted, rolled into one. The weights are visible in the app so
+        nobody thinks the number is magic.</p>
+        <div class="tbl-shell">
+          <table>
+            <thead>
+              <tr><th>Category</th><th class="m">Weight</th><th>Where the score comes from</th><th class="m">Example</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>CTA effectiveness</td><td class="m">25%</td><td>AI vision + real click rate</td><td class="m">60</td></tr>
+              <tr><td>User experience</td><td class="m">20%</td><td>Scroll depth, rage clicks, exits</td><td class="m">78</td></tr>
+              <tr><td>UI design</td><td class="m">20%</td><td>AI vision on every section</td><td class="m">84</td></tr>
+              <tr><td>Trust</td><td class="m">15%</td><td>AI vision — proof, logos, badges</td><td class="m">72</td></tr>
+              <tr><td>Performance</td><td class="m">10%</td><td>Playwright load timings</td><td class="m">91</td></tr>
+              <tr><td>Accessibility</td><td class="m">10%</td><td>Contrast and font-size checks</td><td class="m">90</td></tr>
+              <tr><td><strong>Overall</strong></td><td class="m">100%</td><td>Weighted average, rounded</td><td class="m"><strong>79</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tiny" style="margin-top:14px;">The score's real job is comparison, not judgement.
+        79 means nothing on its own. 79 last month and 86 today means the fixes worked.</p>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Services/</b> HealthScorer.php</li>
+          <li><b>config/scoring.php</b> the weights</li>
+          <li><b>Migration</b> audits.overall_score, category_scores (json)</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          The dashboard shows one number, and clicking it explains exactly how it was built.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P8 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P8</div>
+      <div class="phase-title">
+        <h3>Build the React dashboard</h3>
+        <p class="phase-plain">Four screens. Understandable in two minutes, with no training.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">1.5 weeks</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <div class="grid g2">
+          <div class="card" style="box-shadow:none; padding:14px 16px;">
+            <h4>1 · Overview</h4>
+            <p class="tiny">The health score, visitors, bounce rate, conversion rate, and the
+            change since the last audit. Plus the three highest-priority fixes, right there. If
+            someone reads only this screen, they still know what to do.</p>
+          </div>
+          <div class="card" style="box-shadow:none; padding:14px 16px;">
+            <h4>2 · Analytics</h4>
+            <p class="tiny">Visitor trend over time, bounce rate, scroll depth by section, CTA
+            click rate, desktop vs mobile. Charts, not tables.</p>
+          </div>
+          <div class="card" style="box-shadow:none; padding:14px 16px;">
+            <h4>3 · AI findings</h4>
+            <p class="tiny">One card per section: the screenshot on the left, the score, the
+            problems and the suggested fixes on the right. Seeing the picture next to the words is
+            what makes the advice believable.</p>
+          </div>
+          <div class="card" style="box-shadow:none; padding:14px 16px;">
+            <h4>4 · Priority tasks</h4>
+            <p class="tiny">The to-do list, grouped High / Medium / Low, each with a checkbox.
+            Ticking one records who fixed it and when, so the next audit can measure the result.</p>
+          </div>
+        </div>
+        <p style="margin-top:18px;"><strong>Two rules for this screen.</strong> First, no metric
+        appears without a sentence saying what it means. Second, every number is clickable and
+        leads to the finding that explains it. A dashboard that only shows numbers is the exact
+        problem this product was built to solve.</p>
+
+        <p style="margin-top:16px;"><strong>How React knows the audit finished.</strong> The audit
+        takes two to four minutes, so the browser cannot just wait. Do the simple thing:</p>
+        <ul>
+          <li>After <span class="mono">POST /api/audits</span>, React gets back an audit id and a
+            status of <span class="mono">pending</span>.</li>
+          <li>TanStack Query re-fetches <span class="mono">GET /api/audits/{id}</span> every 5
+            seconds while the status is running, and stops on its own when it reads
+            <span class="mono">completed</span> or <span class="mono">failed</span>.</li>
+          <li>The API returns a <span class="mono">stage</span> field — "taking screenshots",
+            "analysing sections" — so the progress bar says something true instead of spinning.</li>
+        </ul>
+        <p class="tiny">Websockets (Laravel Reverb) would be nicer, but polling one endpoint every
+        five seconds for three minutes is 36 tiny requests. Not a problem worth solving in V1.</p>
+
+        <p style="margin-top:16px;">Add a PDF export from day one. Agencies will send this to
+        clients, and a link behind a login does not survive an email chain. Generate the PDF on the
+        server with Browsershot — never in the browser, or the layout will differ per person.</p>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <p class="label">React side</p>
+        <ul class="files">
+          <li><b>pages/</b> Overview.jsx</li>
+          <li><b>pages/</b> Analytics.jsx</li>
+          <li><b>pages/</b> Findings.jsx</li>
+          <li><b>pages/</b> Tasks.jsx</li>
+          <li><b>components/</b> ScoreDial, MetricCard,<br>SectionCard, PriorityGroup, ProgressBar</li>
+          <li><b>hooks/</b> useAudit.js — the polling hook</li>
+          <li><b>Charts</b> Recharts (React-native API,<br>less glue than Chart.js)</li>
+        </ul>
+        <p class="label">Laravel side</p>
+        <ul class="files">
+          <li><b>Controllers</b> ReportController</li>
+          <li><b>Resources</b> AuditReportResource</li>
+          <li><b>PDF</b> Browsershot</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          Someone who has never seen the tool reads the overview and correctly names the top fix,
+          unprompted, in under two minutes.
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- P9 -->
+  <article class="phase">
+    <div class="phase-top">
+      <div class="phase-id">P9</div>
+      <div class="phase-title">
+        <h3>Automate and ship</h3>
+        <p class="phase-plain">Make it run every week without anyone pressing a button.</p>
+      </div>
+      <div class="phase-meta">
+        <span class="mono">4 days</span>
+        <span class="strip"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></span>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-main">
+        <ul>
+          <li>Laravel Scheduler runs every active page weekly, spread across the night so twenty
+            audits do not start at once.</li>
+          <li>Email when an audit finishes, and email louder when the score drops more than five
+            points. A falling score is the alert people actually want.</li>
+          <li>Horizon dashboard, failed-job alerts, and a retry button on the audit screen.</li>
+          <li>Rate-limit audits per page — one per day maximum — so nobody burns the AI budget by
+            clicking Run audit twelve times.</li>
+          <li>Deploy: PHP-FPM + Nginx, a separate worker box with Chromium installed, Redis, and
+            PostgreSQL. Screenshots on S3.</li>
+          <li><strong>Two extra steps because of React.</strong> Run
+            <span class="mono">npm run build</span> in the deploy script — the React app is compiled
+            files, not source. And add a catch-all web route so that refreshing the browser on
+            <span class="mono">/audits/42</span> serves React's <span class="mono">index.html</span>
+            instead of a Laravel 404. Forgetting that second one is the classic first bug of any
+            Laravel + React app.</li>
+        </ul>
+      </div>
+      <div class="phase-side">
+        <p class="label">You will create</p>
+        <ul class="files">
+          <li><b>app/Console/Kernel</b> weekly schedule</li>
+          <li><b>Notifications</b> AuditCompleted, ScoreDropped</li>
+          <li><b>Middleware</b> RateLimitAudits</li>
+          <li><b>routes/web.php</b> SPA catch-all</li>
+          <li><b>deploy.sh</b> npm ci &amp;&amp; npm run build</li>
+        </ul>
+        <div class="done">
+          <p class="label">Done when</p>
+          You close your laptop on Friday and a finished audit is in your inbox on Monday.
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ DATABASE ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Data model</p>
+    <h2>Where everything is stored</h2>
+    <p>Ten tables. Read them top-left to bottom-right — that is also the order data arrives in
+    during one audit.</p>
+  </div>
+
+  <div class="tables">
+    <div class="tbox">
+      <h4>users</h4>
+      <ul>
+        <li><b>id</b></li><li>name, email, password</li><li>created_at</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>projects</h4>
+      <ul>
+        <li><b>id</b></li><li>user_id →</li><li>name</li><li>created_at</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>pages</h4>
+      <ul>
+        <li><b>id</b></li><li>project_id →</li><li>name, url</li><li>ga4_property_id</li>
+        <li>clarity_project_id</li><li>section_selectors (json)</li><li>is_active</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>api_credentials</h4>
+      <ul>
+        <li><b>id</b></li><li>project_id →</li><li>provider</li><li>credentials (encrypted)</li>
+        <li>expires_at</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>audits</h4>
+      <ul>
+        <li><b>id</b></li><li>page_id →</li><li>audit_date</li><li>status</li>
+        <li>overall_score</li><li>category_scores (json)</li><li>token_cost</li><li>created_at</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>analytics_reports</h4>
+      <ul>
+        <li><b>id</b></li><li>audit_id →</li><li>visitors, bounce_rate</li>
+        <li>session_duration</li><li>conversion_rate</li><li>cta_click_rate, exit_rate</li>
+        <li>scroll_depth (json)</li><li>device_split (json)</li><li>source</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>screenshot_sections</h4>
+      <ul>
+        <li><b>id</b></li><li>audit_id →</li><li>section_name</li><li>viewport</li>
+        <li>screenshot_path</li><li>position, height</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>ai_findings</h4>
+      <ul>
+        <li><b>id</b></li><li>audit_id →</li><li>screenshot_section_id →</li>
+        <li>ai_score</li><li>problems (json)</li><li>raw_response (json)</li><li>model, tokens</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>insights</h4>
+      <ul>
+        <li><b>id</b></li><li>audit_id →</li><li>section_name</li><li>rule_key</li>
+        <li>statement</li><li>evidence (json)</li><li>confidence</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <h4>recommendations</h4>
+      <ul>
+        <li><b>id</b></li><li>audit_id →</li><li>insight_id →</li><li>section_name</li>
+        <li>title, description</li><li>expected_impact</li><li>priority</li>
+        <li>priority_score, effort</li><li>completed_at, completed_by</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rels">
+    <code>users 1—n projects</code>
+    <code>projects 1—n pages</code>
+    <code>pages 1—n audits</code>
+    <code>audits 1—1 analytics_reports</code>
+    <code>audits 1—n screenshot_sections</code>
+    <code>screenshot_sections 1—1 ai_findings</code>
+    <code>audits 1—n insights</code>
+    <code>insights 1—n recommendations</code>
+  </div>
+</section>
+
+<!-- ============ API ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">The contract</p>
+    <h2>Where React and Laravel meet</h2>
+    <p>Because the front end is a separate React app, this list <em>is</em> the seam between the
+    two halves. Agree it in week one and both halves can be built at the same time — one developer
+    on the API, one on the screens, without either waiting.</p>
+  </div>
+
+  <div class="tbl-shell">
+    <table>
+      <thead>
+        <tr><th class="m">Method</th><th class="m">Endpoint</th><th>What it does</th><th>Used by</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="m">POST</td><td class="m">/login · /logout</td><td>Sanctum cookie session</td><td>Login screen</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/user</td><td>Who am I</td><td>App shell, on first load</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/pages</td><td>All landing pages, with the latest score on each</td><td>Page list</td></tr>
+        <tr><td class="m">POST</td><td class="m">/api/pages</td><td>Add a page. Returns 422 with field errors if invalid</td><td>Page form</td></tr>
+        <tr><td class="m">PATCH</td><td class="m">/api/pages/{id}</td><td>Edit URL, IDs or section selectors</td><td>Page form</td></tr>
+        <tr><td class="m">POST</td><td class="m">/api/pages/{id}/audits</td><td>Start an audit. Returns the new audit with status <span class="mono">pending</span></td><td>Run audit button</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/audits/{id}</td><td>Status and stage. The endpoint React polls every 5 seconds</td><td>Progress bar</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/audits/{id}/report</td><td>Everything at once: score, metrics, sections with screenshot URLs, findings, recommendations</td><td>All four dashboard screens</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/pages/{id}/history</td><td>Scores over time, for the trend chart</td><td>Analytics screen</td></tr>
+        <tr><td class="m">PATCH</td><td class="m">/api/recommendations/{id}</td><td>Tick a fix as done</td><td>Priority tasks</td></tr>
+        <tr><td class="m">GET</td><td class="m">/api/audits/{id}/pdf</td><td>Server-rendered PDF download</td><td>Export button</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card">
+      <h4>One request per screen, not ten</h4>
+      <p><span class="mono">/report</span> returns the whole audit in a single response — roughly
+      60 KB of JSON. Four screens read from one cached result. Splitting it into ten small
+      endpoints feels tidier and makes the dashboard visibly slower.</p>
+    </div>
+    <div class="card">
+      <h4>Screenshots are signed URLs</h4>
+      <p>Never return a raw S3 path. Laravel returns a temporary signed URL that expires in an
+      hour, so a leaked link does not expose a client's page forever.</p>
+    </div>
+    <div class="card">
+      <h4>Laravel API Resources, always</h4>
+      <p>Never <span class="mono">return $model</span>. A Resource class is the only place that
+      decides what React sees, so adding a database column can never leak it into the API by
+      accident.</p>
+    </div>
+    <div class="card">
+      <h4>Errors have a shape</h4>
+      <p>Every failure returns <span class="mono">{ message, errors? }</span> with a real HTTP
+      status. React has one Axios interceptor that turns any of them into a toast, and no
+      component has to handle errors itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STACK ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Tools</p>
+    <h2>What we use, and why that one</h2>
+  </div>
+  <div class="tbl-shell">
+    <table>
+      <thead>
+        <tr><th>Job</th><th>Choice</th><th>Why this one</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Backend + API</td><td class="m">Laravel 12 · PHP 8.3</td><td>Jobs, queues, scheduling, storage and permissions all come built in. This project is 80% background work, which is exactly what Laravel is best at.</td></tr>
+        <tr><td>Screens</td><td class="m">React 19 + Vite + Tailwind</td><td>A plain React SPA, no framework on top. Vite already ships with Laravel, so <span class="mono">npm run dev</span> gives you hot reload on day one.</td></tr>
+        <tr><td>Routing &amp; data</td><td class="m">React Router · Axios · TanStack Query</td><td>Three small libraries, nothing exotic. TanStack Query is the one worth adding — it handles loading states, caching and the audit polling for free, which is otherwise 100 lines of <span class="mono">useEffect</span> you will get wrong.</td></tr>
+        <tr><td>Login</td><td class="m">Laravel Sanctum (cookie mode)</td><td>The browser holds a normal secure session cookie. No tokens in localStorage, no refresh logic, and it is safe against XSS token theft. Works because React and the API share one domain.</td></tr>
+        <tr><td>Charts</td><td class="m">Recharts</td><td>Built for React, so charts are just components. Chart.js works too but needs a wrapper and a ref.</td></tr>
+        <tr><td>Database</td><td class="m">PostgreSQL 16</td><td>Proper JSON columns for AI responses and scroll-depth maps, which you will query later.</td></tr>
+        <tr><td>Background work</td><td class="m">Redis + Horizon</td><td>An audit takes minutes. Nobody watches a spinner for minutes. Horizon shows you what is running and what failed.</td></tr>
+        <tr><td>Screenshots</td><td class="m">Playwright (Node)</td><td>Best control over waiting for fonts, images and lazy content. Driven from Laravel by <span class="mono">Symfony Process</span>.</td></tr>
+        <tr><td>Analytics</td><td class="m">GA4 Data API · Clarity API</td><td>Official sources. Add manual CSV import as a fallback — do not build the pipeline assuming both APIs will always answer.</td></tr>
+        <tr><td>AI vision</td><td class="m">Claude Opus 5 or Sonnet 5</td><td>Strong image understanding and reliable structured JSON output. Sonnet 5 for routine sections, Opus 5 for the whole-page correlation pass where the reasoning is hardest.</td></tr>
+        <tr><td>Files</td><td class="m">S3 (local disk in dev)</td><td>Screenshots add up fast. Set a lifecycle rule to delete images older than 90 days.</td></tr>
+        <tr><td>Reports</td><td class="m">Browsershot → PDF</td><td>Reuses the Chromium you already installed for screenshots. Render a Blade template for the PDF, not the React page — a print layout has different needs than a screen.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Schedule</p>
+    <h2>Seven weeks, one developer</h2>
+    <p>The React front end adds roughly a week over a server-rendered one — you are building an
+    API layer, a login flow and four screens as a separate app. That is the honest price of the
+    choice. The two heaviest weeks are still screenshots and correlation; protect those.</p>
+  </div>
+
+  <div class="gantt-shell">
+    <div class="gantt">
+      <div class="grow head">
+        <div>Phase</div><div>W1</div><div>W2</div><div>W3</div><div>W4</div><div>W5</div><div>W6</div><div>W7</div>
+      </div>
+      <div class="grow">
+        <div class="gname">P0 · Setup + React shell</div>
+        <div class="gcell"><div class="gbar" style="width:85%"></div></div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P1 · Pages &amp; settings</div>
+        <div class="gcell"><div class="gbar" style="width:15%; margin-left:85%"></div></div>
+        <div class="gcell"><div class="gbar" style="width:55%"></div></div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P2 · Analytics</div>
+        <div class="gcell"></div>
+        <div class="gcell"><div class="gbar warm" style="width:45%; margin-left:55%"></div></div>
+        <div class="gcell"><div class="gbar warm" style="width:70%"></div></div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P3 · Screenshots</div>
+        <div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar warm" style="width:30%; margin-left:70%"></div></div>
+        <div class="gcell"><div class="gbar warm" style="width:80%"></div></div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P4 · AI vision</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar alt" style="width:20%; margin-left:80%"></div></div>
+        <div class="gcell"><div class="gbar alt" style="width:70%"></div></div>
+        <div class="gcell"></div><div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P5 · Correlation</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar alt" style="width:30%; margin-left:70%"></div></div>
+        <div class="gcell"><div class="gbar alt" style="width:60%"></div></div>
+        <div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P6 · Recommendations</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar alt" style="width:40%; margin-left:60%"></div></div>
+        <div class="gcell"></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P7 · Health score</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"></div>
+        <div class="gcell"><div class="gbar" style="width:20%"></div></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P8 · React dashboard</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar" style="width:20%; margin-left:80%"></div></div>
+        <div class="gcell"><div class="gbar" style="width:100%"></div></div>
+        <div class="gcell"><div class="gbar" style="width:100%"></div></div>
+        <div class="gcell"><div class="gbar" style="width:65%"></div></div>
+      </div>
+      <div class="grow">
+        <div class="gname">P9 · Automate &amp; deploy</div>
+        <div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div><div class="gcell"></div>
+        <div class="gcell"><div class="gbar" style="width:30%; margin-left:70%"></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="tiny" style="margin-top:12px;">Dashboard work starts in week 4 on purpose, running
+  alongside the AI phases. Building the screen while the data is still forming shows you what the
+  data is missing, and stops you from building fields nobody will look at. With a separate React
+  app this overlap matters more, not less — the API shape is easiest to fix while the screens that
+  consume it are still being written.</p>
+</section>
+
+<!-- ============ DECISIONS ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Before you write code</p>
+    <h2>Eight things to decide</h2>
+    <p>Each of these changes the plan. Answer them in week one, not week four.</p>
+  </div>
+  <ol class="qs">
+    <li><b>How do we find the sections of a page?</b><span>Ask the user for CSS selectors, or guess automatically? Guessing is friendlier but less accurate, and inaccurate sections poison every step after. Recommendation: guess first, let the user correct it.</span></li>
+    <li><b>Do we actually have Clarity API access?</b><span>Microsoft Clarity's API is narrower than its dashboard. Confirm what it returns on a real account this week — heatmaps and click maps may need manual export.</span></li>
+    <li><b>Is the CTA click rate being measured at all?</b><span>It needs a GA4 event on the button. Most landing pages do not have one. If it is missing, the tool must say "not measured", never invent a number.</span></li>
+    <li><b>One company or many?</b><span>Single-tenant is faster to build. Multi-tenant means an agency can manage twenty clients. Decide now — retrofitting tenancy is expensive.</span></li>
+    <li><b>What is the budget per audit?</b><span>Six sections × two viewports = twelve vision calls, plus one correlation call. Set a hard ceiling in config and refuse to exceed it.</span></li>
+    <li><b>How long do we keep screenshots?</b><span>They are the biggest storage cost and may contain customer data if the page is behind a login. Ninety days is a sensible default.</span></li>
+    <li><b>Are we allowed to screenshot this page?</b><span>Fine for your own pages. If competitor comparison is added later, check terms of service and robots rules first.</span></li>
+    <li><b>Same domain, or React hosted separately?</b><span>Same domain is strongly preferred — Sanctum's cookie login just works, and there is no CORS to configure. If React must live on its own domain later, switch Sanctum to token mode and expect a day of work.</span></li>
+  </ol>
+</section>
+
+<!-- ============ SCOPE ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Boundaries</p>
+    <h2>In V1, and deliberately not in V1</h2>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h4 style="color:var(--good);">Shipping in V1</h4>
+      <ul>
+        <li>Analytics collected from GA4 and Clarity, with manual CSV as backup</li>
+        <li>Automatic screenshots of every section, desktop and mobile</li>
+        <li>AI vision analysis of each section</li>
+        <li>Numbers joined to visual causes — the correlation engine</li>
+        <li>Ranked recommendations with evidence and expected impact</li>
+        <li>A landing page health score out of 100</li>
+        <li>A four-screen React dashboard plus PDF export</li>
+        <li>Weekly automatic audits and email alerts</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--ink-3);">Waiting for V2</h4>
+      <ul>
+        <li>A/B test suggestions</li>
+        <li>AI-written page copy and automatic CTA rewrites</li>
+        <li>Competitor landing page comparison</li>
+        <li>SEO content recommendations</li>
+        <li>Deep accessibility and performance audits</li>
+        <li>Creating tasks in Jira or GitHub</li>
+        <li>Slack and Teams notifications</li>
+        <li>Trend analysis across many audits over months</li>
+      </ul>
+      <p class="tiny" style="margin-top:12px;">Every one of these is a good idea. None of them
+      matters if the correlation engine in P5 is not convincing. Ship that first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUCCESS ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">The finish line</p>
+    <h2>How we know it worked</h2>
+  </div>
+  <div class="tbl-shell">
+    <table>
+      <thead><tr><th class="m">#</th><th>The test</th><th>How you check it</th></tr></thead>
+      <tbody>
+        <tr><td class="m">1</td><td>It collects visitor behaviour on its own</td><td>Nobody touched it for a week and Monday's audit is complete</td></tr>
+        <tr><td class="m">2</td><td>It analyses screenshots with AI</td><td>Every section has a score and specific problems, not generic advice</td></tr>
+        <tr><td class="m">3</td><td>It connects analytics with design</td><td>Pick any insight at random — it names a number and a visual cause</td></tr>
+        <tr><td class="m">4</td><td>It explains why people are not converting</td><td>A marketer reads it and says "oh — that's why"</td></tr>
+        <tr><td class="m">5</td><td>Recommendations are clear and ranked</td><td>A designer can start work from the top item with no follow-up questions</td></tr>
+        <tr><td class="m">6</td><td>The dashboard is genuinely easy</td><td>Someone untrained names the top fix in under two minutes</td></tr>
+        <tr><td class="m">7</td><td>The advice actually works</td><td>Apply the top fix, re-audit in two weeks, and the metric moves</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tiny" style="margin-top:14px;">Number 7 is the only one that really counts. The other
+  six are how you get there.</p>
+</section>
+
+<!-- ============ GLOSSARY ============ -->
+<section class="sec">
+  <div class="sec-head">
+    <p class="eyebrow">Plain English</p>
+    <h2>Words used in this document</h2>
+  </div>
+  <div class="gloss">
+    <dl>
+      <div class="row"><dt>Bounce rate</dt><dd>The share of visitors who arrive and leave without doing anything.</dd></div>
+      <div class="row"><dt>Scroll depth</dt><dd>How far down the page people get before they stop. 35% means most never see the bottom two-thirds.</dd></div>
+      <div class="row"><dt>CTA</dt><dd>Call to action — the main button you want people to press.</dd></div>
+      <div class="row"><dt>Rage click</dt><dd>Clicking the same spot repeatedly because nothing happens. Usually means something looks clickable but is not.</dd></div>
+      <div class="row"><dt>Dead click</dt><dd>A click on something that was never interactive in the first place.</dd></div>
+      <div class="row"><dt>Above the fold</dt><dd>The part of the page you see before scrolling.</dd></div>
+      <div class="row"><dt>Queue / job</dt><dd>A to-do list for the server. Slow work goes on the list so the visitor's browser is not left waiting.</dd></div>
+      <div class="row"><dt>React</dt><dd>The tool that draws the screens in the browser. It runs on the visitor's machine, not the server.</dd></div>
+      <div class="row"><dt>API</dt><dd>The doorway between React and Laravel. React asks for data, Laravel answers with JSON — plain text a program can read.</dd></div>
+      <div class="row"><dt>SPA</dt><dd>Single page app. Moving between screens never reloads the browser, so it feels instant.</dd></div>
+      <div class="row"><dt>Polling</dt><dd>React asking "is it finished yet?" every few seconds while the audit runs in the background.</dd></div>
+      <div class="row"><dt>Playwright</dt><dd>A robot browser. It opens web pages and takes pictures the way a person would.</dd></div>
+      <div class="row"><dt>Vision AI</dt><dd>An AI model that can look at an image and describe what is wrong with it.</dd></div>
+      <div class="row"><dt>Conversion rate</dt><dd>The share of visitors who did the thing you wanted — signed up, bought, booked.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <span>AI Landing Page UX Auditor · V1 build plan · Laravel</span>
+  <span>Next step → answer the seven questions, then start P0</span>
+</footer>
+
+</div>
