@@ -1,0 +1,188 @@
+database/migrations/2026_08_02_110612_create_personal_access_tokens_table.php
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-33
+app/Services/Correlation/Rules/Rule.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-14
+tests/Unit/PriorityScorerTest.php
+  s_a06a49eeee2ab1::t_c82910076e2234 1-85
+tests/Unit/HealthScorerTest.php
+  s_a06a49eeee2ab1::t_c82910076e2234 1-84
+routes/api.php
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-8
+app/Services/Correlation/Support/AuditSnapshot.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-45
+bootstrap/cache/packages.php
+  s_a06a49eeee2ab1::t_f71a1f93e9c13c 1-15,23-51
+  s_a06a49eeee2ab1::t_b7cab209496c9a 16-22
+bootstrap/app.php
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-19
+tests/Unit/Correlation/SeenButNotClickedTest.php
+  s_a06a49eeee2ab1::t_1765435bb3c384 1-76
+.gitignore
+  s_a06a49eeee2ab1::t_f71a1f93e9c13c 22-35
+app/Services/Correlation/EvidenceGuarantee.php
+  s_a06a49eeee2ab1::t_8df4feadaa98db 1-54
+bootstrap/cache/services.php
+  s_a06a49eeee2ab1::t_b7cab209496c9a 29-34,49-53
+  s_a06a49eeee2ab1::t_f71a1f93e9c13c 1-28,35-48,54-263
+database/migrations/2026_08_02_120005_create_ai_findings_table.php
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,29-37
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-28
+tests/Unit/Correlation/DropOffBeforeSectionTest.php
+  s_a06a49eeee2ab1::t_83a1a1cca08fe3 1-86
+database/migrations/2026_08_02_120006_create_insights_table.php
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,28-36
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-27
+composer.json
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-87
+app/Services/Correlation/Rules/MobileGap.php
+  s_a06a49eeee2ab1::t_6ea8d686b7d5b6 1-76
+app/Services/HealthScorer.php
+  s_a06a49eeee2ab1::t_39579d132f3028 1-92
+database/migrations/2026_08_02_120002_create_audits_table.php
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,33-41
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-32
+database/migrations/2026_08_02_120007_create_recommendations_table.php
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,31-39
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-30
+app/Services/Correlation/Rules/DropOffBeforeSection.php
+  s_a06a49eeee2ab1::t_6ea8d686b7d5b6 1-119
+app/Services/Correlation/Rules/TrustGapEarly.php
+  s_a06a49eeee2ab1::t_6ea8d686b7d5b6 1-64
+tests/Unit/Correlation/EvidenceGuaranteeTest.php
+  s_a06a49eeee2ab1::t_40bfc2f7d5bb9d 1-105
+app/Services/Correlation/Support/InsightCandidate.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-23
+app/Services/Correlation/Support/Section.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-50
+app/Services/Correlation/Rules/SeenButNotClicked.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-78
+database/migrations/2026_08_02_120004_create_screenshot_sections_table.php
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-28
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,29-37
+tests/Unit/Correlation/MobileGapTest.php
+  s_a06a49eeee2ab1::t_83a1a1cca08fe3 1-76
+config/sanctum.php
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-87
+.env.example
+  s_a06a49eeee2ab1::t_b7cab209496c9a 1-77
+database/migrations/2026_08_02_120003_create_page_metrics_table.php
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-31
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,32-40
+app/Services/Correlation/Support/Metrics.php
+  s_a06a49eeee2ab1::t_330eaadc77e782 1-35
+database/migrations/2026_08_02_120001_create_pages_table.php
+  s_a06a49eeee2ab1::t_03a027fe7d2976 13-19
+  s_a06a49eeee2ab1::t_2c0b81e3aa5278 1-12,20-28
+tests/Unit/Correlation/TrustGapEarlyTest.php
+  s_a06a49eeee2ab1::t_83a1a1cca08fe3 1-69
+app/Services/PriorityScorer.php
+  s_a06a49eeee2ab1::t_39579d132f3028 1-45
+.editorconfig
+  s_a06a49eeee2ab1::t_17625965b80676 1-18
+.gitattributes
+  s_a06a49eeee2ab1::t_0410c16e70ee68 1-11
+README.md
+  s_a06a49eeee2ab1::t_5f0f97f75f0faa 1-59
+app/Http/Controllers/Controller.php
+  s_a06a49eeee2ab1::t_6a524e48644204 1-8
+app/Models/AiFinding.php
+  s_a06a49eeee2ab1::t_25e13215058ca4 1-51
+app/Models/Audit.php
+  s_a06a49eeee2ab1::t_df5731cf8a20b5 1-67
+app/Models/Insight.php
+  s_a06a49eeee2ab1::t_743093a96c52c0 1-28
+app/Models/Page.php
+  s_a06a49eeee2ab1::t_5a252b0f377cfa 1-29
+app/Models/PageMetrics.php
+  s_a06a49eeee2ab1::t_fc88a10f98fb6c 1-63
+app/Models/Recommendation.php
+  s_a06a49eeee2ab1::t_ce44eeb602ce1e 1-37
+app/Models/ScreenshotSection.php
+  s_a06a49eeee2ab1::t_ede1423f5331ba 1-49
+app/Models/User.php
+  s_a06a49eeee2ab1::t_f14fa4f0dac59e 1-49
+app/Providers/AppServiceProvider.php
+  s_a06a49eeee2ab1::t_b7a7aa4819dcb4 1-24
+artisan
+  s_a06a49eeee2ab1::t_e728b8cb4586ba 1-18
+bootstrap/providers.php
+  s_a06a49eeee2ab1::t_e58d8526268041 1-7
+composer.lock
+  s_a06a49eeee2ab1::t_93bd3ae70b8af8 1-8460
+config/app.php
+  s_a06a49eeee2ab1::t_a4b82514c0b65d 1-126
+config/auth.php
+  s_a06a49eeee2ab1::t_11e5ef1da8c9ef 1-117
+config/cache.php
+  s_a06a49eeee2ab1::t_31c7cefc1ff94f 1-117
+config/database.php
+  s_a06a49eeee2ab1::t_c45a586222619c 1-184
+config/filesystems.php
+  s_a06a49eeee2ab1::t_d9c4baa964494c 1-80
+config/logging.php
+  s_a06a49eeee2ab1::t_5f211c98f04474 1-132
+config/mail.php
+  s_a06a49eeee2ab1::t_abfb6ff3c8b2a3 1-118
+config/queue.php
+  s_a06a49eeee2ab1::t_0564be4867a337 1-129
+config/services.php
+  s_a06a49eeee2ab1::t_0e1e5c092c8cd3 1-38
+config/session.php
+  s_a06a49eeee2ab1::t_a599774cccc305 1-217
+database/factories/UserFactory.php
+  s_a06a49eeee2ab1::t_4888ecac11d24f 1-45
+database/migrations/0001_01_01_000000_create_users_table.php
+  s_a06a49eeee2ab1::t_90ea557cc9d9dd 1-49
+database/migrations/0001_01_01_000001_create_cache_table.php
+  s_a06a49eeee2ab1::t_07d45e6129bdbf 1-35
+database/migrations/0001_01_01_000002_create_jobs_table.php
+  s_a06a49eeee2ab1::t_997a6944d7b540 1-57
+database/seeders/DatabaseSeeder.php
+  s_a06a49eeee2ab1::t_29964923be92b8 1-25
+package.json
+  s_a06a49eeee2ab1::t_c5f22c2c520fe7 1-17
+phpunit.xml
+  s_a06a49eeee2ab1::t_9ec78a085dda06 1-36
+public/.htaccess
+  s_a06a49eeee2ab1::t_f92b75af4ef76e 1-25
+public/index.php
+  s_a06a49eeee2ab1::t_233be55ae6c950 1-20
+public/robots.txt
+  s_a06a49eeee2ab1::t_0fe73afe1ee7d1 1-2
+resources/css/app.css
+  s_a06a49eeee2ab1::t_c77cce5d61fad4 1-11
+resources/js/app.js
+  s_a06a49eeee2ab1::t_f1c10f96439fcc 1
+resources/js/bootstrap.js
+  s_a06a49eeee2ab1::t_5235e86ffa983a 1-4
+resources/views/welcome.blade.php
+  s_a06a49eeee2ab1::t_9bc08268f3ea39 1-277
+routes/console.php
+  s_a06a49eeee2ab1::t_b54e781fa3fb94 1-8
+routes/web.php
+  s_a06a49eeee2ab1::t_f7073e05b41223 1-7
+tests/Feature/ExampleTest.php
+  s_a06a49eeee2ab1::t_483ef22b84a35a 1-19
+tests/TestCase.php
+  s_a06a49eeee2ab1::t_616518f26c344f 1-10
+tests/Unit/ExampleTest.php
+  s_a06a49eeee2ab1::t_66188d8952ef0a 1-16
+vite.config.js
+  s_a06a49eeee2ab1::t_b17273a13b95a2 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "c8f02c40eda962d14e6fd1eff611b11ff5944b48",
+  "prompts": {},
+  "sessions": {
+    "s_a06a49eeee2ab1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4039f8a-fc16-40f0-aa22-8b05ba4f8f25",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
