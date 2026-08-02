@@ -1,0 +1,281 @@
+app/Http/Resources/PageResource.php
+  s_a06a49eeee2ab1::t_9745974b4497a3 1-31
+tests/Unit/BuriedSectionPriorityTest.php
+  s_a06a49eeee2ab1::t_558656ff061885 1-68
+storage/app/public/screenshots/1/hero-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/framework/views/1524a4deb47f567078e1de9b4dd0a2ef.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-79
+storage/app/public/screenshots/3/pricing-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/app/public/screenshots/2/hero-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/app/public/screenshots/3/testimonials-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+app/Http/Resources/AuditReportResource.php
+  s_a06a49eeee2ab1::t_43d241b1723a59 1-113
+storage/framework/views/05935b4b018d046b3f75532996594a50.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-108
+storage/framework/views/24e42cc3528cb06b967667f286a01646.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-57
+storage/app/pdf/audit-3.html
+  s_a06a49eeee2ab1::t_1da65021571886 1-171
+storage/app/public/screenshots/3/footer-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/framework/views/952656279338ff8ca3dc3395b731f35c.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-170
+app/Http/Controllers/ReportPdfController.php
+  s_a06a49eeee2ab1::t_4eefca6c8b1625 6,44
+  s_a06a49eeee2ab1::t_715033054b07ec 50-55
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-5,7-43,45-49,56-78
+app/Services/Capture/StubCaptureDriver.php
+  s_a06a49eeee2ab1::t_715e586ca61b63 1-73
+storage/app/public/screenshots/2/features-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/app/public/screenshots/3/hero-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/framework/views/2eed3fe2a43bf55ca3b978afba7053e5.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-374
+storage/app/public/screenshots/3/footer-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/app/public/screenshots/3/hero-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+config/scoring.php
+  s_a06a49eeee2ab1::t_25506ed72fe71d 1-31
+storage/framework/views/ef812ba5bd63fd7d61a1b028dc741398.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-395
+storage/app/public/screenshots/1/features-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/framework/views/74f82411b18f2168ab1226fc57177a23.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-77
+resources/js/features/report/ui.jsx
+  s_a06a49eeee2ab1::t_c9dc5b1bc1b09a 1-75
+storage/app/public/screenshots/2/footer-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+app/Services/NodeBinary.php
+  s_a06a49eeee2ab1::t_4eefca6c8b1625 1-52
+app/Http/Requests/StoreAuditRequest.php
+  s_a06a49eeee2ab1::t_9745974b4497a3 1-46
+app/Services/Ai/AnalysisResult.php
+  s_a06a49eeee2ab1::t_25506ed72fe71d 1-15
+storage/framework/views/71ebcbe8c8af63897077ca15caa799a3.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-51
+app/Services/AuditService.php
+  s_a06a49eeee2ab1::t_67876c46a551c3 1-63
+storage/framework/views/534fe0d0be9a03f64175436ce41785b0.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-4
+app/Http/Resources/AuditStatusResource.php
+  s_a06a49eeee2ab1::t_9745974b4497a3 1-23
+storage/app/public/screenshots/2/footer-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/app/public/screenshots/2/features-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/framework/views/94bcbba7f16acacfb2808fc0fe0ac494.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-60
+storage/app/public/screenshots/1/faq-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/app/public/screenshots/3/faq-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/app/public/screenshots/1/faq-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+app/Http/Requests/StorePageRequest.php
+  s_a06a49eeee2ab1::t_9745974b4497a3 1-33
+app/Providers/AppServiceProvider.php
+  s_a06a49eeee2ab1::t_77554b5700c7cc 5-11,18-29
+storage/app/public/screenshots/3/testimonials-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/app/public/screenshots/2/testimonials-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+app/Services/Correlation/CorrelationService.php
+  s_a06a49eeee2ab1::t_382424dcc9385f 1-96
+storage/framework/views/2ca19b61b070978f29742a0be3d9052a.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-11
+storage/framework/views/7fd87d729e95f4bb9dd6a7aa521c1994.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-12
+storage/framework/views/fc48d7e3952aacba9920c5de514971e8.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-98
+scripts/pdf.mjs
+  s_a06a49eeee2ab1::t_c2fda8f792ff61 1-40
+app/Services/Ai/GeminiVisionAnalyzer.php
+  s_a06a49eeee2ab1::t_eb91acb7a739e0 1-110
+storage/framework/views/77403908fdf4311fa6d9a4c3d7546b3e.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-79
+storage/app/public/screenshots/2/faq-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/app/public/screenshots/1/features-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/framework/views/402373c664da9d9f206789c77524e023.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-4
+config/ai.php
+  s_a06a49eeee2ab1::t_34b51c98688c8c 1-22,27
+  s_a06a49eeee2ab1::t_4eefca6c8b1625 23-26
+app/Services/Ai/AuditSchema.php
+  s_a06a49eeee2ab1::t_25506ed72fe71d 1-111
+storage/framework/views/0598b0cd78454d922c0aa73460597e81.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-115
+resources/js/api/client.js
+  s_a06a49eeee2ab1::t_06f3ecc255e238 1-27
+storage/framework/views/30b50bd3c7a347bb20338b51de4695c3.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-4
+storage/app/public/screenshots/3/faq-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/app/public/screenshots/1/pricing-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/framework/views/c2ba22945a4bafcfab8ec8b288edf91a.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-69
+app/Jobs/RankAndScoreJob.php
+  s_a06a49eeee2ab1::t_4accc82ff2cec0 1-92
+storage/app/public/screenshots/1/pricing-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+resources/views/pdf/report.blade.php
+  s_a06a49eeee2ab1::t_c2fda8f792ff61 1-70,78-93
+  s_a06a49eeee2ab1::t_1da65021571886 71-77
+app/Services/Capture/PlaywrightCaptureDriver.php
+  s_a06a49eeee2ab1::t_72b605fb0ab445 1-5,7-23,25-73
+  s_a06a49eeee2ab1::t_4eefca6c8b1625 6,24
+routes/api.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 5,16
+  s_a06a49eeee2ab1::t_a1a05be40f8be0 3-4,8-15
+app/Services/PriorityScorer.php
+  s_a06a49eeee2ab1::t_51a0470320bf45 36-55
+storage/framework/views/13745db96f7b33b2d56a53e31e5ce1b2.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-28
+storage/framework/views/7c79f441a0a91d3181960be80303fb0c.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-12
+storage/framework/views/923f93bc178ffff89d770a7416feef69.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-12
+storage/framework/views/a9a2f5a747fee3a121be93e7d933739c.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-80
+storage/framework/views/c98d8096b4a254b48445401b88fedbb1.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-11
+storage/app/public/screenshots/2/pricing-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/framework/views/eabacc4d84a08db8944c8defb397cfa8.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-167
+routes/web.php
+  s_a06a49eeee2ab1::t_a1a05be40f8be0 3,5,7-22
+vite.config.js
+  s_a06a49eeee2ab1::t_06f3ecc255e238 4,9,13,16
+storage/app/public/screenshots/2/faq-desktop.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+resources/js/app.jsx
+  s_a06a49eeee2ab1::t_c9dc5b1bc1b09a 1-41
+package.json
+  s_a06a49eeee2ab1::t_6eba63d5533194 11
+  s_a06a49eeee2ab1::t_a988609b6ce348 12,18-23
+  s_a06a49eeee2ab1::t_8b34c474cd2b13 15
+storage/framework/views/9f26c1b790e6ee6bd43b7acf69fc97db.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-4
+storage/framework/views/ff11bf0879adc7b9574d362ba8168f44.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-65
+app/Jobs/CorrelateJob.php
+  s_a06a49eeee2ab1::t_4accc82ff2cec0 1-28
+app/Http/Controllers/AuditController.php
+  s_a06a49eeee2ab1::t_43d241b1723a59 1-50
+resources/js/features/report/MetricsForm.jsx
+  s_a06a49eeee2ab1::t_2afd8c984b5ddf 1-121
+storage/app/public/screenshots/1/testimonials-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+app/Services/Ai/ClaudeVisionAnalyzer.php
+  s_a06a49eeee2ab1::t_eb91acb7a739e0 1-90
+storage/app/public/screenshots/2/testimonials-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+storage/framework/views/d62d80fbe7c656b1f525feea708a5d61.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-6
+storage/framework/views/91319d9f2b622206480c48ddae2d0b21.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-180
+storage/framework/views/84e13e1dbb3d060ad07d4b40ed7a0c5b.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-5
+storage/framework/views/9f0892e4bc833d7a5bf3d47a33a89870.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-15
+storage/app/public/screenshots/1/hero-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+app/Jobs/CaptureScreenshotsJob.php
+  s_a06a49eeee2ab1::t_4accc82ff2cec0 1-31
+app/Services/Ai/StubVisionAnalyzer.php
+  s_a06a49eeee2ab1::t_715e586ca61b63 1-103
+storage/app/public/screenshots/3/features-mobile.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/framework/views/973d03bf967f3643d01be910386b9215.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-35
+scripts/capture.mjs
+  s_a06a49eeee2ab1::t_72b605fb0ab445 1-170
+storage/framework/views/33a4ff3761920c7645761709ca3e65d7.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-83
+app/Services/Capture/CaptureDriver.php
+  s_a06a49eeee2ab1::t_715e586ca61b63 1-15
+storage/framework/views/90d10f620431ce81d4a3a6c205e91f1e.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-8
+storage/framework/views/f25539360d9d6b3c832c8e076db5743d.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-66,74-90
+  s_a06a49eeee2ab1::t_1da65021571886 67-73
+storage/app/public/screenshots/3/features-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/framework/views/f9f92cba93a81f58cf78973bdd2fb367.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-48
+database/seeders/DemoAuditSeeder.php
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-92
+storage/framework/views/61595463d3a2d5d86f3916e75643014d.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-6
+storage/framework/views/071445da3267e0951bac7c2cba70fcc5.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-4
+resources/js/pages/Report.jsx
+  s_a06a49eeee2ab1::t_7a9ead29eb97d7 1-185
+resources/js/pages/Pages.jsx
+  s_a06a49eeee2ab1::t_df9fc2470d20e1 1-133
+storage/app/public/screenshots/1/footer-mobile.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/app/public/screenshots/1/testimonials-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/framework/views/e1eac279350de97887ad01ea69187ecb.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-61
+resources/views/app.blade.php
+  s_a06a49eeee2ab1::t_06f3ecc255e238 1-13
+storage/app/public/screenshots/3/pricing-desktop.svg
+  s_a06a49eeee2ab1::t_c2d11967ea55a3 1-6
+storage/framework/views/87ebb5498417e9edca40ac27500a72d4.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-157
+storage/app/public/screenshots/2/hero-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+app/Http/Controllers/PageController.php
+  s_a06a49eeee2ab1::t_43d241b1723a59 1-24
+storage/framework/views/c6eceaa59fcf7fed401c237bfd227a35.php
+  s_a06a49eeee2ab1::t_a0eef59d05bdbe 1-5
+app/Jobs/AnalyzePageJob.php
+  s_a06a49eeee2ab1::t_4accc82ff2cec0 1-80
+storage/app/public/screenshots/1/footer-desktop.svg
+  s_a06a49eeee2ab1::t_188b832e42c73f 1-6
+storage/app/public/screenshots/2/pricing-mobile.svg
+  s_a06a49eeee2ab1::t_7bc964e7d596f2 1-6
+.env.example
+  s_a06a49eeee2ab1::t_4eefca6c8b1625 78-79
+app/Services/Ai/VisionAnalyzer.php
+  s_a06a49eeee2ab1::t_25506ed72fe71d 1-23
+app/Services/RecommendationEngine.php
+  s_a06a49eeee2ab1::t_51a0470320bf45 26-27
+  s_a06a49eeee2ab1::t_382424dcc9385f 1-25,28-115
+tests/Feature/AuditEndpointsTest.php
+  s_a06a49eeee2ab1::t_9f95865c88ca22 1-145
+app/Services/Ai/PromptBuilder.php
+  s_a06a49eeee2ab1::t_f25b31d1a9501f 1-113
+package-lock.json
+  s_a06a49eeee2ab1::t_c9dc9ba554e166 1-3218
+storage/framework/views/d2a498b6014c7d0db8b3041102dc49be.php
+  s_a06a49eeee2ab1::t_bbf9f477d32c15 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "df0f7e8eac14441945702c0b44a0025cb0d43125",
+  "prompts": {},
+  "sessions": {
+    "s_a06a49eeee2ab1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4039f8a-fc16-40f0-aa22-8b05ba4f8f25",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
