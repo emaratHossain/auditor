@@ -19,3 +19,17 @@ yarn-error.log
 /tests/e2e/.auth
 /test-results
 /playwright-report
+*.log
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.nova
+/.phpunit.cache
+/.zed
+/storage/pail
+Homestead.json
+Homestead.yaml
+Thumbs.db
