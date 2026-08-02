@@ -1,0 +1,40 @@
+docs/features/README.md
+  h_2d5a554200463e 1-51
+docs/features/f00-setup-and-shell.md
+  h_2d5a554200463e 1-47
+docs/features/f01-pages.md
+  h_2d5a554200463e 1-49
+docs/features/f02-metrics-input.md
+  h_2d5a554200463e 1-69
+docs/features/f03-audit-pipeline.md
+  h_2d5a554200463e 1-67
+docs/features/f04-screenshot-capture.md
+  h_2d5a554200463e 1-66
+docs/features/f05-ai-vision.md
+  h_2d5a554200463e 1-85
+docs/features/f06-correlation.md
+  h_2d5a554200463e 1-76
+docs/features/f07-recommendations.md
+  h_2d5a554200463e 1-80
+docs/features/f08-health-score.md
+  h_2d5a554200463e 1-76
+docs/features/f09-report-screen.md
+  h_2d5a554200463e 1-73
+docs/features/f10-pdf-export.md
+  h_2d5a554200463e 1-56
+docs/features/v1.dashboard.html
+  h_2d5a554200463e 1-544
+docs/superpowers/specs/2026-08-02-landing-page-auditor-v1-design.md
+  h_2d5a554200463e 1-353
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "4344e38e42d95f8817b307c589c52b2ab6607d5e",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
