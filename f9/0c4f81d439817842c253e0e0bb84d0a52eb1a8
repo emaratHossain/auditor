@@ -1,0 +1,82 @@
+storage/app/public/screenshots/5/faq-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/faq-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/testimonials-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/features-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/hero-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/hero-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+package-lock.json
+  s_a06a49eeee2ab1::t_083259f1418957 14,816-831
+storage/app/public/screenshots/4/faq-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/features-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+playwright.config.js
+  s_a06a49eeee2ab1::t_7d7bc574273849 1-21
+storage/app/public/screenshots/5/footer-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/pricing-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/footer-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/pricing-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/pricing-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/testimonials-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/testimonials-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/hero-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/footer-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+package.json
+  s_a06a49eeee2ab1::t_7d7bc574273849 10
+storage/app/public/screenshots/5/pricing-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+tests/e2e/audit-flow.spec.js
+  s_a06a49eeee2ab1::t_dd25edbfcae5bd 64-66
+  s_a06a49eeee2ab1::t_7d7bc574273849 1-20,24,29-63,67
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 21-23,25-28
+storage/app/public/screenshots/5/features-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/4/features-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/testimonials-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/hero-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+storage/app/public/screenshots/5/faq-mobile.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+resources/js/features/report/MetricsForm.jsx
+  s_a06a49eeee2ab1::t_dd25edbfcae5bd 59,100
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 73-78
+storage/app/public/screenshots/4/footer-desktop.svg
+  s_a06a49eeee2ab1::t_4fc84c171c9c2f 1-6
+.gitignore
+  s_a06a49eeee2ab1::t_51082d282d99ed 10-11
+README.md
+  s_a06a49eeee2ab1::t_c18ba6a8e80c21 1,3,5-7,9-10,12,14-18,20-23,25,27,29-31,33,35-36,38-42,44-45,47-48,50,52-55,57-58,60,62-67,69-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "f90c4f81d439817842c253e0e0bb84d0a52eb1a8",
+  "prompts": {},
+  "sessions": {
+    "s_a06a49eeee2ab1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4039f8a-fc16-40f0-aa22-8b05ba4f8f25",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
