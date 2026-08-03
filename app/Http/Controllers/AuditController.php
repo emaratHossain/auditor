@@ -30,7 +30,7 @@ class AuditController extends Controller
     /** Everything at once. */
     public function report(Audit $audit)
     {
-        $audit->load(['page', 'metrics', 'sections', 'findings', 'insights', 'recommendations']);
+        $audit->load(['page', 'metrics', 'sections', 'findings', 'insights', 'recommendations', 'rewrites']);
 
         return new AuditReportResource($audit);
     }

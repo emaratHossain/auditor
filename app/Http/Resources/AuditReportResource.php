@@ -96,6 +96,17 @@ class AuditReportResource extends JsonResource
                 'evidence'  => collect($i->evidence)->except('source_problem'),
             ]),
 
+            // Rides along in the one response rather than needing a call of its
+            // own — and it is what the panel falls back to when a live call fails.
+            'rewrites' => $this->rewrites->map(fn ($r) => [
+                'id'       => $r->id,
+                'section'  => $r->section_name,
+                'element'  => $r->element,
+                'original' => $r->original,
+                'variants' => $r->variants,
+                'model'    => $r->model,
+            ]),
+
             'cost' => [
                 'usd'   => (float) $this->token_cost,
                 'model' => $this->ai_model,
