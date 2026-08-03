@@ -1,0 +1,30 @@
+app/Http/Controllers/RewriteController.php
+  s_d59fea9650f5ed::t_b5bec3b6358a06 1-43
+tests/Feature/RewriteEndpointTest.php
+  s_d59fea9650f5ed::t_91d8a7281204b4 1-106
+app/Http/Requests/StoreRewriteRequest.php
+  s_d59fea9650f5ed::t_906771a38c9b22 1-30
+app/Http/Resources/AuditReportResource.php
+  s_d59fea9650f5ed::t_732264eccf085c 99-109
+routes/api.php
+  s_d59fea9650f5ed::t_1778c9dcd527d2 21-24
+  s_d59fea9650f5ed::t_3623acfad9191b 7
+app/Http/Controllers/AuditController.php
+  s_d59fea9650f5ed::t_56315039d49ae2 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "ad47be61c3731c8d52b8637f0d31b5329025ffc6",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
