@@ -62,12 +62,15 @@ class PlaywrightCaptureDriver implements CaptureDriver
             }
         }
 
-        // Speed is measured here because the browser is already open — it is free
-        // at this point and the health score needs it.
-        $audit->update(['category_scores' => array_merge($audit->category_scores ?? [], [
-            'load_ms' => $payload['load_ms'] ?? null,
-            'detection' => $payload['how'] ?? null,
-        ])]);
+        // Speed and accessibility are measured here because the browser is
+        // already open — free at this point, and the score needs both.
+        $audit->update([
+            'lighthouse'      => $payload['lighthouse'] ?? null,
+            'category_scores' => array_merge($audit->category_scores ?? [], [
+                'load_ms'   => $payload['load_ms'] ?? null,
+                'detection' => $payload['how'] ?? null,
+            ]),
+        ]);
 
         return $count;
     }

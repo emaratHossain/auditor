@@ -8,6 +8,7 @@
  *   node scripts/capture.mjs --url https://example.com --out storage/app/public/screenshots/12
  */
 import { chromium } from 'playwright';
+import lighthouse from 'lighthouse';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -15,6 +16,9 @@ const MAX_SECTIONS = 6;          // cost and waiting time stay bounded
 const LONG_EDGE = 1568;          // a full-size image can cost ~3x as many image tokens
 const MAX_CTAS = 3;              // a footer with forty links is not forty rewrite targets
 const CTA_MAX_WORDS = 6;         // "Start free trial" is a CTA; a paragraph is not
+const LH_PORT = 9222;            // the debugging port Lighthouse attaches to
+const LH_TIMEOUT_MS = 90000;     // it is allowed to fail; it is not allowed to hang
+const WORST_CHECKS = 3;
 const DESKTOP = { width: 1440, height: 900 };
 const MOBILE = { width: 390, height: 844 };
 
@@ -187,7 +191,62 @@ async function readCopy(page, sections) {
   );
 }
 
-const browser = await chromium.launch({ args: ['--no-sandbox'] });
+/**
+ * Lighthouse, against the browser we already have open.
+ *
+ * It is allowed to fail. A timeout or a crash returns null, capture still
+ * succeeds, and the score falls back to the old estimates labelled as such —
+ * an audit must never die because a Lighthouse run hung.
+ *
+ * Note on words: Lighthouse calls its individual checks "audits". In this
+ * codebase an audit is a row in the audits table, so these are checks.
+ */
+async function runLighthouse(url) {
+  let timer;
+
+  try {
+    const result = await Promise.race([
+      lighthouse(url, {
+        port: LH_PORT,
+        output: 'json',
+        logLevel: 'silent',
+        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+      }),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Lighthouse timed out')), LH_TIMEOUT_MS);
+      }),
+    ]);
+
+    const cats = result?.lhr?.categories;
+    if (!cats) return null;
+
+    const pct = (c) => (c?.score == null ? null : Math.round(c.score * 100));
+
+    const worst = Object.values(result.lhr.audits ?? {})
+      .filter((a) => typeof a.score === 'number' && a.score < 0.9 && a.title)
+      .sort((a, b) => a.score - b.score)
+      .slice(0, WORST_CHECKS)
+      .map((a) => ({ id: a.id, title: a.title, score: Math.round(a.score * 100) }));
+
+    return {
+      performance: pct(cats.performance),
+      accessibility: pct(cats.accessibility),
+      best_practices: pct(cats['best-practices']),
+      seo: pct(cats.seo),
+      worst_checks: worst,
+    };
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+const skipLighthouse = process.argv.includes('--no-lighthouse');
+
+const browser = await chromium.launch({
+  args: ['--no-sandbox', `--remote-debugging-port=${LH_PORT}`],
+});
 
 try {
   await mkdir(args.out, { recursive: true });
@@ -274,9 +333,12 @@ try {
     copy: null,
   });
 
+  // After the screenshots, so a slow Lighthouse run never costs us the pictures.
+  const lighthouseScores = skipLighthouse ? null : await runLighthouse(args.url);
+
   console.log(JSON.stringify({
     ok: true, how, load_ms: loadMs, page_height: pageHeight,
-    long_edge: LONG_EDGE, sections: captured,
+    long_edge: LONG_EDGE, lighthouse: lighthouseScores, sections: captured,
   }));
 } catch (err) {
   console.log(JSON.stringify({ ok: false, error: String(err?.message ?? err) }));

@@ -26,7 +26,7 @@ class Audit extends Model
     ];
 
     protected $fillable = [
-        'page_id', 'status', 'stage', 'overall_score', 'category_scores',
+        'page_id', 'status', 'stage', 'overall_score', 'category_scores', 'lighthouse',
         'token_cost', 'ai_model', 'error_message', 'completed_at',
     ];
 
@@ -34,6 +34,7 @@ class Audit extends Model
     {
         return [
             'category_scores' => 'array',
+            'lighthouse'      => 'array',
             'token_cost'      => 'float',
             'completed_at'    => 'datetime',
         ];
