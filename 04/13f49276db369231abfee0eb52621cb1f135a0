@@ -1,0 +1,38 @@
+scripts/capture.mjs
+  s_d59fea9650f5ed::t_01ec8bc245d8f4 336-338,341
+  s_d59fea9650f5ed::t_5951973bf790bc 19-21
+  s_d59fea9650f5ed::t_dd502b4b321b0c 194-249
+  s_d59fea9650f5ed::t_49682bbaaf05f5 11
+tests/e2e/capture-lighthouse.spec.js
+  s_d59fea9650f5ed::t_9c72e8f8d87297 63,80
+  s_d59fea9650f5ed::t_9f4ee54360d44b 31-38,43,45
+  s_d59fea9650f5ed::t_8950a32742113b 2,7-9
+  s_d59fea9650f5ed::t_d0c44ea538a481 1,3-6,10-30,39-42,44,46-62,64-79,81-89
+package.json
+  s_d59fea9650f5ed::t_775f6d3ebae56b 16
+database/migrations/2026_08_03_100004_add_lighthouse_to_audits_table.php
+  s_d59fea9650f5ed::t_cebffe5ebcd75f 1-25
+app/Models/Audit.php
+  s_d59fea9650f5ed::t_8b1af802761839 37
+  s_d59fea9650f5ed::t_dbd6b2defbfae9 29
+app/Services/Capture/PlaywrightCaptureDriver.php
+  s_d59fea9650f5ed::t_36c775597ce46e 65-73
+package-lock.json
+  s_d59fea9650f5ed::t_7dc92dba788408 20,26-71,796-851,919-1050,1067-1258,1616-1735,2086-2095,2130-2139,2166-2175,2183-2203,2329-2371,2445-2463,2484-2490,2509-2525,2546-2568,2605-2620,2623,2646-2652,2734-2769,2871-2883,2995-3004,3019-3069,3080-3092,3103-3119,3173-3240,3502-3515,3536-3542,3553-3562,3586-3609,3646-3663,3770-3816,3896-3919,3982-3988,4018-4027,4038-4052,4081-4097,4135-4141,4159-4175,4193-4219,4350-4370,4389-4423,4469-4478
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "0413f49276db369231abfee0eb52621cb1f135a0",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
