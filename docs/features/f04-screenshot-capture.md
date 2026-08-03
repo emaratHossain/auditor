@@ -2,7 +2,7 @@
 
 **One line:** A robot browser opens the page once and takes everything it can from that one visit — the pictures, the page's own words, and a Lighthouse run.
 
-- **Mode:** build · **Status:** V1 capture built · DropSense adds the crawl and Lighthouse · **Epic:** `#71`
+- **Mode:** build · **Status:** built — crawl and Lighthouse shipped; capture fixed on real pages `#143` · **Epic:** `#71`
 - **Spec:** [`../superpowers/specs/2026-08-03-dropsense-ai-design.md`](../superpowers/specs/2026-08-03-dropsense-ai-design.md)
 - **Tasks:** `kanban-md list --compact --tag f04-capture`
 
@@ -79,6 +79,28 @@ audit dies because a Lighthouse run hung.
 **Cost:** capture goes from roughly 25 seconds to roughly 45. That sits inside the
 existing five-second progress polling, so nobody watches a frozen screen — the stage
 label just reads *capturing* for longer.
+
+## What running it against real pages changed (`#143`)
+
+Every one of these was invisible to the test suite and obvious the first time a
+real landing page went through. They are the reason the rule is now *no
+capture-touching change ships without a real URL behind it*.
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| **Every real page failed to capture at all** | `page.screenshot({clip})` without `fullPage` measures the clip against the *viewport*. Any section below 900px was "outside the resulting image". The e2e fixture was short enough that all its sections fit on one screen, so the suite stayed green | `fullPage: true`, which makes the clip page-relative — the coordinate space the measured section positions were already in |
+| Heavy pages timed out | `waitUntil: 'load'` waits for every image, font and third-party iframe. stripe.com's load event measured **31.8s**; over 45s killed the audit | `domcontentloaded`, then the existing scroll-and-settle |
+| The same section appeared twice | Dedupe gap was a fixed 120px — nothing on a 14,000px page | Gap scales with page height, and a repeated heading is rejected outright |
+| Names cut mid-word: *"…to grow your re"* | Hard 40-character slice | Cut at a word boundary |
+| A 300-character "button label" | `<button>` skipped the CTA word cap, and real sites wrap whole feature cards in one | The cap applies to buttons too |
+
+**Measured cost on real pages:** 72–121 seconds end to end with Lighthouse, not
+the ~45s originally estimated. Lighthouse is the slow half. The seeded audit is
+what keeps this off the demo's critical path.
+
+**Lighthouse failing is survivable, and that is not theoretical:** vercel.com's
+run timed out and its audit still completed, with the two categories falling
+back to labelled estimates.
 
 ## What "done" means
 

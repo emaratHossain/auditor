@@ -11,6 +11,23 @@ still accurate for everything it describes — the V1 pipeline is not being rebu
 
 ## Where things stand
 
+**Days 1–7 of the plan are built.** 104 PHP tests and 38 end-to-end tests pass.
+The rebrand, the demo fixture and pre-filled form, the HTML crawl, the rewrite
+(service, endpoint, panel, PDF), Lighthouse, the fifth correlation rule, the
+design pass and the seeded demo audit are all in.
+
+**One thing is not done and needs you:** the real-AI runs. `ANTHROPIC_API_KEY` is
+empty, so the critique and the rewrites have only ever been exercised against the
+stub driver. Everything else on the real-page checklist has been done against
+live URLs — stripe.com, linear.app, vercel.com and notion.com all complete end
+to end. See card `#141`.
+
+**The find that mattered most:** capture had never worked on a live URL at all
+(`#143`). It failed on every real landing page and passed its tests, because the
+fixture page was short enough to hide the bug. That is now fixed, and every
+capture-touching change is checked against a real URL.
+
+
 V1 shipped end to end: capture → one vision call → four correlation rules → ranked
 recommendations → score → two screens → PDF. **DropSense is that, plus three
 capabilities and a face:**
