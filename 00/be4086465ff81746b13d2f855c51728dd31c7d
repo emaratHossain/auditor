@@ -1,0 +1,48 @@
+app/Services/Rewrite/RewritePrompt.php
+  s_d59fea9650f5ed::t_2abc68ae644a7e 1-81
+app/Services/Rewrite/RewriteResult.php
+  s_d59fea9650f5ed::t_853d9cb51d9fb2 1-13
+config/ai.php
+  s_d59fea9650f5ed::t_a11b8b32fae92c 8-12
+app/Services/Rewrite/RewriteService.php
+  s_d59fea9650f5ed::t_424c76b51e7d11 1-101
+app/Services/Rewrite/CopyRewriter.php
+  s_d59fea9650f5ed::t_a9e970e8316659 1-30
+database/migrations/2026_08_03_100003_create_rewrites_table.php
+  s_d59fea9650f5ed::t_d1c06fc8023543 1-40
+app/Services/Rewrite/RewriteSchema.php
+  s_d59fea9650f5ed::t_ae772773bc800e 1-83
+app/Models/Rewrite.php
+  s_d59fea9650f5ed::t_dbd09098561752 1-37
+app/Services/Rewrite/StubCopyRewriter.php
+  s_d59fea9650f5ed::t_88484e56a1d89f 1-74
+app/Models/Audit.php
+  s_d59fea9650f5ed::t_08607462b8d86f 48
+app/Services/Rewrite/ClaudeCopyRewriter.php
+  s_d59fea9650f5ed::t_61e8bcafb7af44 1-80
+tests/Unit/Rewrite/RewriteSchemaTest.php
+  s_d59fea9650f5ed::t_cbe5c4cf0986f7 1-73
+.env.example
+  s_d59fea9650f5ed::t_50a12acc8540f8 70
+tests/Unit/Rewrite/RewriteServiceTest.php
+  s_d59fea9650f5ed::t_eace5e1e3599c1 1-118
+app/Providers/AppServiceProvider.php
+  s_d59fea9650f5ed::t_fc36c04efb6907 12-14
+  s_d59fea9650f5ed::t_46e6d2ec219a59 33-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "00be4086465ff81746b13d2f855c51728dd31c7d",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
