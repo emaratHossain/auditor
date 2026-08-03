@@ -15,6 +15,11 @@ use Symfony\Component\Process\Process;
  */
 class PlaywrightCaptureDriver implements CaptureDriver
 {
+    public function name(): string
+    {
+        return 'playwright';
+    }
+
     public function capture(Audit $audit): int
     {
         $relative = "screenshots/{$audit->id}";

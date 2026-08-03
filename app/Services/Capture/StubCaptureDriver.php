@@ -62,6 +62,11 @@ class StubCaptureDriver implements CaptureDriver
         ],
     ];
 
+    public function name(): string
+    {
+        return 'stub';
+    }
+
     public function capture(Audit $audit): int
     {
         $pageHeight = array_sum(array_column(self::SECTIONS, 1));

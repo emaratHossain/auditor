@@ -44,6 +44,16 @@ class AuditReportResource extends JsonResource
                 ? ['worst_checks' => $this->lighthouse['worst_checks'] ?? []]
                 : null,
 
+            // Whether anything actually looked at this page.
+            //
+            // With the stub drivers on, no browser is opened and no model is
+            // called: the screenshots are placeholders and the critique is
+            // canned. That is a legitimate mode — it is how the tests run and
+            // how the demo survives a dead network — but presenting invented
+            // findings about a real client URL as fact is the exact dishonesty
+            // this product exists to prevent.
+            'simulated' => $this->simulationNotice(),
+
             // The report says where its numbers came from. Demo data is labelled,
             // not hidden — that is what keeps the evidence honest.
             'metrics_source' => [
@@ -117,6 +127,31 @@ class AuditReportResource extends JsonResource
                 'usd'   => (float) $this->token_cost,
                 'model' => $this->ai_model,
             ],
+        ];
+    }
+
+    /**
+     * @return array{any:bool, page_visited:bool, ai_analysed:bool, note:string|null}
+     */
+    private function simulationNotice(): array
+    {
+        // Null means the audit predates the column. Those all ran on the stub,
+        // so treating an unknown as "not visited" errs toward saying so.
+        $visited  = ($this->capture_driver ?? 'stub') !== 'stub';
+        $analysed = ($this->ai_model ?? 'stub') !== 'stub';
+
+        $note = match (true) {
+            ! $visited && ! $analysed => 'This page was not visited and no AI looked at it. The screenshots and every finding below are placeholders from the built-in example, not this page. Set CAPTURE_DRIVER=playwright and AI_DRIVER=claude in .env to audit it for real.',
+            ! $visited                => 'This page was not visited — the screenshots and the wording below are placeholders, not this page. Set CAPTURE_DRIVER=playwright in .env to photograph it for real.',
+            ! $analysed               => 'The screenshots are real, but no AI looked at them: the critique below is a canned example. Set AI_DRIVER=claude in .env and add an API key to have it judged for real.',
+            default                   => null,
+        };
+
+        return [
+            'any'          => $note !== null,
+            'page_visited' => $visited,
+            'ai_analysed'  => $analysed,
+            'note'         => $note,
         ];
     }
 

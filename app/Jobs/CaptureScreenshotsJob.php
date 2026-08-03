@@ -11,8 +11,15 @@ class CaptureScreenshotsJob implements ShouldQueue
 {
     use Queueable;
 
-    /** Capture is the slow stage; anything past this is wedged, not working. */
-    public int $timeout = 120;
+    /**
+     * Capture is the slow stage; anything past this is wedged, not working.
+     *
+     * Measured on real landing pages with Lighthouse: 72-121 seconds. The old
+     * 120s ceiling would have killed a Stripe-sized page a second before it
+     * finished, which reads as a random failure rather than a timeout.
+     */
+    public int $timeout = 300;
+
     public int $tries = 1;
 
     public function __construct(public int $auditId) {}
@@ -21,6 +28,10 @@ class CaptureScreenshotsJob implements ShouldQueue
     {
         $audit = Audit::findOrFail($this->auditId);
         $audit->markStage('capturing');
+
+        // Recorded before the work, so an audit that dies mid-capture still says
+        // what was meant to be looking at the page.
+        $audit->update(['capture_driver' => $driver->name()]);
 
         $count = $driver->capture($audit);
 

@@ -74,6 +74,24 @@ export default function Report() {
         <a href={`/api/audits/${id}/pdf`} className={T.buttonQuiet}>Download PDF</a>
       </div>
 
+      {/*
+        Nothing below is real unless something actually opened the page.
+        This has to sit above the score, not in a footnote: the failure mode it
+        prevents is someone showing invented findings about a real client URL
+        and believing them.
+      */}
+      {r.simulated?.any && (
+        <div
+          data-testid="simulated-warning"
+          className="rounded-lg border border-[var(--color-sev-med)]/50 bg-[var(--color-sev-med)]/10 p-4"
+        >
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-sev-med)]">
+            Example data — not this page
+          </p>
+          <p className={`mt-2 ${T.body}`}>{r.simulated.note}</p>
+        </div>
+      )}
+
       {/* 1. Score and the three fixes that matter most. Read only this far and you still know what to do. */}
       <section className={`${T.surface} p-6`}>
         {/* Stacks on a phone. Side by side, the page name wraps to four lines
