@@ -21,9 +21,17 @@ class AuditController extends Controller
         return (new AuditStatusResource($audit))->response()->setStatusCode(201);
     }
 
-    /** The small payload the browser polls every five seconds. */
+    /**
+     * The small payload the browser polls every five seconds.
+     *
+     * The poll is also where a stuck audit gets caught. No audit may sit on
+     * pending or running forever, and the person watching the progress bar is
+     * exactly who needs to be told why it is not moving.
+     */
     public function show(Audit $audit)
     {
+        $audit->failIfStalled();
+
         return new AuditStatusResource($audit);
     }
 
