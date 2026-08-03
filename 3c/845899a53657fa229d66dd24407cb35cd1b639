@@ -1,0 +1,32 @@
+app/Models/ScreenshotSection.php
+  s_d59fea9650f5ed::t_71ea96ff46dc28 21
+  s_d59fea9650f5ed::t_fa77f0f672ed81 14
+database/migrations/2026_08_03_100002_add_copy_to_screenshot_sections_table.php
+  s_d59fea9650f5ed::t_899e13ae5c4099 1-25
+tests/Feature/AuditEndpointsTest.php
+  s_d59fea9650f5ed::t_245afbfb568d1d 130-175
+app/Services/Capture/PlaywrightCaptureDriver.php
+  s_d59fea9650f5ed::t_9172731a2be64e 53
+app/Http/Resources/AuditReportResource.php
+  s_d59fea9650f5ed::t_f6989f980e402c 72-74
+app/Services/Capture/StubCaptureDriver.php
+  s_d59fea9650f5ed::t_aeaa7a3215f428 79-81
+  s_d59fea9650f5ed::t_d86e15db4093c1 96-117
+  s_d59fea9650f5ed::t_7d7d16aa30a5ea 25-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "3c845899a53657fa229d66dd24407cb35cd1b639",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
