@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\DemoMetricsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportPdfController;
 use Illuminate\Support\Facades\Route;
+
+// The numbers that pre-fill the metrics form, so the demo needs no typing.
+Route::get('/demo-metrics', DemoMetricsController::class);
 
 Route::get('/pages',  [PageController::class, 'index']);
 Route::post('/pages', [PageController::class, 'store']);
