@@ -19,6 +19,9 @@ const CTA_MAX_WORDS = 6;         // "Start free trial" is a CTA; a paragraph is 
 const LH_PORT = 9222;            // the debugging port Lighthouse attaches to
 const LH_TIMEOUT_MS = 90000;     // it is allowed to fail; it is not allowed to hang
 const WORST_CHECKS = 3;
+const NAV_TIMEOUT_MS = 45000;        // getting a document at all
+const DOM_READY_BUDGET_MS = 12000;   // then carry on whether or not it fires
+const THIRD_PARTY_TIMEOUT_MS = 8000; // a cross-origin request that misses this is dropped
 const DESKTOP = { width: 1440, height: 900 };
 const MOBILE = { width: 390, height: 844 };
 
@@ -35,6 +38,39 @@ if (!args.url || !args.out) {
 }
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section';
+
+/**
+ * Give every third-party request a deadline.
+ *
+ * A single dead CDN request poisons everything downstream: DOMContentLoaded
+ * never fires, and document.fonts.ready never resolves, so even page.screenshot
+ * hangs. arraytics.com does this with a popup widget while serving its own HTML
+ * in under two seconds.
+ *
+ * Only cross-origin requests are policed, and only by time — a slow-but-alive
+ * CDN bundle still loads, because plenty of real sites render their hero from
+ * one. What gets cut loose is the request that is never coming back.
+ */
+async function deadlineThirdParties(page, pageUrl) {
+  const ownHost = new URL(pageUrl).host;
+
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+
+    let host;
+    try { host = new URL(url).host; } catch { return route.continue(); }
+
+    if (host === ownHost) return route.continue();
+
+    try {
+      const response = await route.fetch({ timeout: THIRD_PARTY_TIMEOUT_MS });
+      await route.fulfill({ response });
+    } catch {
+      // Never coming back. Let the parser and the font loader move on.
+      await route.abort().catch(() => {});
+    }
+  });
+}
 
 /** Hide the things that teach the AI nothing about the page underneath. */
 async function hideOverlays(page) {
@@ -261,6 +297,51 @@ async function runLighthouse(url) {
   }
 }
 
+/**
+ * Open a page without letting one dead resource sink the whole audit.
+ *
+ * Three levels, each weaker than the last, because real landing pages fail in
+ * all three ways:
+ *
+ *   'load' waits for every image, font and iframe. stripe.com measured 31.8s.
+ *   'domcontentloaded' never fires at all if a blocking third-party script in
+ *   the head hangs — arraytics.com does exactly this with a popup widget, and
+ *   the page renders perfectly while the event never comes.
+ *
+ * So we wait only for the navigation to commit, which means we have a document,
+ * then give DOMContentLoaded a short budget and carry on regardless. The scroll
+ * pass and fonts.ready below are what actually make the screenshot correct.
+ */
+async function openPage(page, url) {
+  await deadlineThirdParties(page, url);
+
+  const response = await page.goto(url, { waitUntil: 'commit', timeout: NAV_TIMEOUT_MS });
+
+  const status = response?.status() ?? 0;
+  if (status >= 400) {
+    throw new Error(`That address returned ${status}.`);
+  }
+
+  // Best effort. A page that never fires it is still worth photographing.
+  await page.waitForLoadState('domcontentloaded', { timeout: DOM_READY_BUDGET_MS }).catch(() => {});
+
+  // The real readiness signal for a screenshot is simply: is there a body yet.
+  // If a blocking script stalled the parser before it ever reached one, there
+  // is genuinely nothing rendered to photograph, and that deserves a sentence
+  // rather than a null-property crash three functions later.
+  // locator().waitFor, not waitForSelector: the latter blocks on Playwright's
+  // internal navigation barrier, which on a page whose load never settles took
+  // 9.3 seconds here against 7 milliseconds for the locator. Same question,
+  // two orders of magnitude apart.
+  try {
+    await page.locator('body').waitFor({ state: 'attached', timeout: DOM_READY_BUDGET_MS });
+  } catch {
+    throw new Error('That page never rendered anything we could photograph — a script on it is not responding.');
+  }
+
+  return response;
+}
+
 const skipLighthouse = process.argv.includes('--no-lighthouse');
 
 const browser = await chromium.launch({
@@ -274,12 +355,7 @@ try {
   const page = await ctx.newPage();
 
   const started = Date.now();
-  // domcontentloaded, not load. A heavy marketing page's load event waits for
-  // every image, font and third-party iframe on it — stripe.com measured 31.8s
-  // on one run here, and anything slower than 45s failed the whole audit. We
-  // scroll the page and wait for fonts below anyway, which is what actually
-  // matters for a screenshot.
-  await page.goto(args.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await openPage(page, args.url);
   const loadMs = Date.now() - started;
 
   await hideOverlays(page);
@@ -340,7 +416,7 @@ try {
   // One full-page phone shot. Mobile is usually where the conversion is lost.
   const mctx = await browser.newContext({ viewport: MOBILE, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
   const mpage = await mctx.newPage();
-  await mpage.goto(args.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await openPage(mpage, args.url);
   await hideOverlays(mpage);
   await mpage.waitForTimeout(500);
 

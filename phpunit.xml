@@ -28,6 +28,16 @@
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
+        <!--
+            The suite must never open a browser or call a model, however .env is
+            set on the machine running it. Switching CAPTURE_DRIVER to playwright
+            for real audits silently turned four feature tests into live network
+            calls, which is a test suite reporting on the developer's config
+            rather than on the code.
+        -->
+        <env name="CAPTURE_DRIVER" value="stub"/>
+        <env name="AI_DRIVER" value="stub"/>
+        <env name="AI_REWRITE_DRIVER" value="stub"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
