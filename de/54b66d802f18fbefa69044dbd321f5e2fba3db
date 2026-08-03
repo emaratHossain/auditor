@@ -1,0 +1,73 @@
+docs/features/f11-ai-rewrite.md
+  s_d59fea9650f5ed::t_f26e281f1d5423 1-89
+docs/features/f06-correlation.md
+  s_d59fea9650f5ed::t_364593efd42067 3,5-6
+  s_d59fea9650f5ed::t_01dff4885e7b50 32
+  s_d59fea9650f5ed::t_bfc396f6213165 40,42-45
+  s_d59fea9650f5ed::t_367c04549a8ca9 65-66
+  s_d59fea9650f5ed::t_d99e218b5ebb39 72-73
+  s_d59fea9650f5ed::t_96a0c03689ae87 81-83
+docs/features/f00-setup-and-shell.md
+  s_d59fea9650f5ed::t_313a4ec9302ba0 5-6,9-13
+  s_d59fea9650f5ed::t_9ba68efc7b1fbb 14
+docs/features/f08-health-score.md
+  s_d59fea9650f5ed::t_8f1db4ea7fc6ad 90,92-93
+  s_d59fea9650f5ed::t_432ac441485de8 50-57,59-61,63-65
+  s_d59fea9650f5ed::t_7622045fcac76e 34-35,40
+  s_d59fea9650f5ed::t_7a42cb8ffd1ff0 1,5-6,9-10
+  s_d59fea9650f5ed::t_4c966e4d5edc6c 83
+  s_d59fea9650f5ed::t_cd15120e5736f1 73-76
+  s_d59fea9650f5ed::t_1d54fe8236a38f 11
+  s_d59fea9650f5ed::t_69d144ad35ca36 41
+docs/features/f10-pdf-export.md
+  s_d59fea9650f5ed::t_34d191f022e2c6 5-6
+  s_d59fea9650f5ed::t_9860c705f4433b 40-41
+docs/features/f02-metrics-input.md
+  s_d59fea9650f5ed::t_68147040568c33 38-56
+  s_d59fea9650f5ed::t_772f4f190e4066 83-86
+  s_d59fea9650f5ed::t_492835c4af4161 69-75
+  s_d59fea9650f5ed::t_4c66da52c8da5f 3,5-6,9-10
+  s_d59fea9650f5ed::t_a75370f0175fec 101-103
+  s_d59fea9650f5ed::t_f5d48c4ad0456b 11
+docs/features/README.md
+  s_d59fea9650f5ed::t_46f1d7c3286179 1-58,64,68,74-76,78-79
+docs/superpowers/specs/2026-08-03-dropsense-ai-design.md
+  s_d59fea9650f5ed::t_8508b2e2d0aef1 148-150
+  s_d59fea9650f5ed::t_568a9f8891c21f 1-31,37-147,151-188,190-253,255-257,259-294
+  s_d59fea9650f5ed::t_5cf77e9a62b9e5 254
+  s_d59fea9650f5ed::t_5172d476a2cec9 258
+  s_d59fea9650f5ed::t_59843bca0f88b7 189
+  s_d59fea9650f5ed::t_330d747d418a99 32-36
+docs/features/f04-screenshot-capture.md
+  s_d59fea9650f5ed::t_995fcec38fdbeb 106
+  s_d59fea9650f5ed::t_1989582390af22 48-82
+  s_d59fea9650f5ed::t_21ea439a6772c1 1,3,5-6,9-12
+  s_d59fea9650f5ed::t_08edbac33b69d1 21-24,27-28
+  s_d59fea9650f5ed::t_f710fcc2338dad 115-116
+  s_d59fea9650f5ed::t_f918bfe02a049a 91-95
+  s_d59fea9650f5ed::t_e940c8cd5c8591 13
+docs/features/f09-report-screen.md
+  s_d59fea9650f5ed::t_b944a2f34a5b2d 71-74
+  s_d59fea9650f5ed::t_d1f7cb0ccd1a98 5-6,9-11
+  s_d59fea9650f5ed::t_af7a1eeb0939b1 88
+  s_d59fea9650f5ed::t_96418521dc08c4 34-35,38-40,42-48
+  s_d59fea9650f5ed::t_3fa636bc915ec3 12
+CLAUDE.md
+  s_d59fea9650f5ed::t_338876d102ebbe 5,7-9,11-13,15,17-35,39-41,45-48,56,58-59,61-63,66,69-72,74-79,81-84,86-88,91-101,103,105-111,115-126,128-130,136-138,141-142,145-149,152-153,155-159,163-168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "de54b66d802f18fbefa69044dbd321f5e2fba3db",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
