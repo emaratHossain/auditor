@@ -1,0 +1,22 @@
+docs/features/README.md
+  s_d59fea9650f5ed::t_2564da00343637 14-30
+docs/features/f04-screenshot-capture.md
+  s_d59fea9650f5ed::t_7757ccbeaebe50 83-104
+  s_d59fea9650f5ed::t_38a7bb3063f398 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "b66de3800974a85baeaf5474c0e05becfc5e000b",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
