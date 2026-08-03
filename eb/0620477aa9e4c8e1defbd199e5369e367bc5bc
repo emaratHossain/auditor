@@ -1,0 +1,24 @@
+app/Http/Controllers/AuditController.php
+  s_d59fea9650f5ed::t_cd3f7f33164f8c 24-30,33-34
+app/Models/Audit.php
+  s_d59fea9650f5ed::t_cd0c4019796b9c 20-32
+  s_d59fea9650f5ed::t_71e145354019b1 82-124
+tests/Feature/StalledAuditTest.php
+  s_d59fea9650f5ed::t_f58e0b1f3e34ed 1-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "eb0620477aa9e4c8e1defbd199e5369e367bc5bc",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
