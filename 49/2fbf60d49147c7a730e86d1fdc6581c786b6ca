@@ -1,0 +1,20 @@
+scripts/capture.mjs
+  s_d59fea9650f5ed::t_fbc1f4be95413f 324
+  s_d59fea9650f5ed::t_92420162ce8144 258-263
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "492fbf60d49147c7a730e86d1fdc6581c786b6ca",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
