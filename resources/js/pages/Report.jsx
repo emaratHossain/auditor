@@ -41,6 +41,7 @@ export default function Report() {
         message={status.data.error_message ?? 'That audit did not finish.'}
         onRetry={() => retry.mutate()}
         retryLabel={retry.isPending ? 'Starting…' : 'Try again'}
+        note={retry.isError ? retry.error?.friendly : null}
       />
     )
   }

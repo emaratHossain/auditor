@@ -8,6 +8,7 @@ use App\Http\Resources\AuditStatusResource;
 use App\Models\Audit;
 use App\Models\Page;
 use App\Services\AuditService;
+use InvalidArgumentException;
 
 class AuditController extends Controller
 {
@@ -43,7 +44,13 @@ class AuditController extends Controller
         return new AuditReportResource($audit);
     }
 
-    /** Re-runs a failed audit with the numbers already on file. */
+    /**
+     * Re-runs a failed audit with the numbers already on file.
+     *
+     * This is the button on every failure screen, so it is the one button that
+     * must never itself fail — a 500 here leaves the user at a dead end on the
+     * page that was already telling them something went wrong.
+     */
     public function retry(Audit $audit)
     {
         // Every field, not a subset. A whitelist that falls behind the form
@@ -55,7 +62,17 @@ class AuditController extends Controller
             'rage_clicks', 'dead_clicks', 'source',
         ]) ?? [];
 
-        $fresh = $this->audits->start($audit->page, $metrics);
+        try {
+            $fresh = $this->audits->start($audit->page, $metrics);
+        } catch (InvalidArgumentException $e) {
+            // No numbers were ever saved against this audit, so there is nothing
+            // to re-run it with — and inventing them is the one thing this
+            // product must never do.
+            return response()->json([
+                'message' => 'We do not have the numbers that audit was run with, so it cannot be repeated. '
+                    .'Start a new audit for this page from the pages screen.',
+            ], 422);
+        }
 
         return (new AuditStatusResource($fresh))->response()->setStatusCode(201);
     }

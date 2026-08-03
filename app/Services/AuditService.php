@@ -9,6 +9,7 @@ use App\Jobs\RankAndScoreJob;
 use App\Models\Audit;
 use App\Models\Page;
 use Illuminate\Support\Facades\Bus;
+use InvalidArgumentException;
 use Throwable;
 
 class AuditService
@@ -17,8 +18,28 @@ class AuditService
      * Creates the audit and queues the four stages, then returns immediately.
      * Nobody waits on a spinner.
      */
+    /** Without these three there is no audit worth running. */
+    public const REQUIRED_METRICS = ['visitors', 'bounce_rate', 'conversion_rate'];
+
+    /**
+     * @throws InvalidArgumentException when a required number is missing — a
+     *                                  sentence a caller can act on, rather than
+     *                                  an "Undefined array key" notice from
+     *                                  three lines further down.
+     */
     public function start(Page $page, array $metrics): Audit
     {
+        $missing = array_values(array_filter(
+            self::REQUIRED_METRICS,
+            fn (string $key) => ! isset($metrics[$key]),
+        ));
+
+        if ($missing !== []) {
+            throw new InvalidArgumentException(
+                'An audit needs '.implode(', ', self::REQUIRED_METRICS).'. Missing: '.implode(', ', $missing).'.'
+            );
+        }
+
         $audit = $page->audits()->create(['status' => Audit::STATUS_PENDING]);
 
         $audit->metrics()->create([

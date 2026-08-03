@@ -21,7 +21,7 @@ export function EmptyState({ title, children }) {
   )
 }
 
-export function ErrorState({ message, onRetry, retryLabel = 'Try again' }) {
+export function ErrorState({ message, onRetry, retryLabel = 'Try again', note }) {
   return (
     <div className="rounded-lg border border-[var(--color-sev-high)]/40 bg-[var(--color-sev-high)]/10 p-5">
       <p className="text-[var(--color-paper)]">{message}</p>
@@ -29,6 +29,14 @@ export function ErrorState({ message, onRetry, retryLabel = 'Try again' }) {
         <button onClick={onRetry} className={`mt-3 ${T.buttonPrime}`}>
           {retryLabel}
         </button>
+      )}
+      {/* When the retry itself fails. Without this the button flickers and
+          nothing changes, which is a dead end on the screen that was already
+          telling someone something went wrong. */}
+      {note && (
+        <p data-testid="retry-error" className="mt-3 text-sm text-[var(--color-sev-med)]">
+          {note}
+        </p>
       )}
     </div>
   )
