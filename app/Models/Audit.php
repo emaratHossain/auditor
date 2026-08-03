@@ -45,6 +45,7 @@ class Audit extends Model
     public function findings(): HasMany          { return $this->hasMany(AiFinding::class); }
     public function insights(): HasMany          { return $this->hasMany(Insight::class); }
     public function recommendations(): HasMany   { return $this->hasMany(Recommendation::class)->orderByDesc('priority_score'); }
+    public function rewrites(): HasMany          { return $this->hasMany(Rewrite::class); }
 
     public function markStage(string $stage): void
     {
