@@ -66,6 +66,15 @@ async function findSections(page, selectors) {
   }
 
   const landmarks = await page.evaluate(() => {
+    /** Cut at a word boundary. "…to grow your re" reads like a bug. */
+    const trim = (s, max = 42) => {
+      const clean = s.replace(/\s+/g, ' ').trim();
+      if (clean.length <= max) return clean;
+      const cut = clean.slice(0, max);
+      const space = cut.lastIndexOf(' ');
+      return (space > 12 ? cut.slice(0, space) : cut).replace(/[,.;:—-]$/, '');
+    };
+
     const nodes = Array.from(document.querySelectorAll('section, main > div, [class*="section" i], header, footer'));
     const seen = [];
     for (const el of nodes) {
@@ -73,9 +82,19 @@ async function findSections(page, selectors) {
       const top = Math.round(r.top + window.scrollY);
       const height = Math.round(r.height);
       if (height < 200 || r.width < 200) continue;              // too small to be a section
-      if (seen.some((s) => Math.abs(s.position - top) < 120)) continue;  // nested duplicate
+
+      // A fixed 120px gap is not enough on a 14,000px page: stripe.com produced
+      // two cards with the same name and the same screenshot, one percent apart,
+      // which reads as a broken report. Scale the gap with the page, and reject
+      // a repeated heading outright — the same words twice is the same section.
+      const minGap = Math.max(160, Math.round(document.body.scrollHeight * 0.02));
+      if (seen.some((s) => Math.abs(s.position - top) < minGap)) continue;
+
       const heading = el.querySelector('h1, h2, h3')?.innerText?.trim();
-      const name = (heading || el.id || el.getAttribute('aria-label') || '').slice(0, 40);
+      const name = trim(heading || el.id || el.getAttribute('aria-label') || '');
+
+      if (name && seen.some((s) => s.name === name)) continue;
+
       seen.push({ name: name || `Section ${seen.length + 1}`, position: top, height });
     }
     return seen.sort((a, b) => a.position - b.position);
