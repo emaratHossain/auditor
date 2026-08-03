@@ -1,0 +1,27 @@
+app/Http/Controllers/DemoMetricsController.php
+  s_d59fea9650f5ed::t_fb65b249156ca9 1-19
+config/demo-analytics.php
+  s_d59fea9650f5ed::t_0789fc8a3669bb 1-61
+routes/api.php
+  s_d59fea9650f5ed::t_05d6038c62f63d 4
+  s_d59fea9650f5ed::t_9a5681aba3cf6f 9-11
+tests/Feature/DemoMetricsEndpointTest.php
+  s_d59fea9650f5ed::t_de17a1ad3a03b7 1-49,54-57
+  s_d59fea9650f5ed::t_8233b70b5825c1 50-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "7662150da0402c4f9115aea4a415eed1895bc8ee",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
