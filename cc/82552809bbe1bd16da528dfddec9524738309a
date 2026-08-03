@@ -1,0 +1,31 @@
+tests/e2e/rewrite.spec.js
+  s_d59fea9650f5ed::t_054317c47bee54 1-75
+app/Http/Controllers/ReportPdfController.php
+  s_d59fea9650f5ed::t_1b26f86b066781 35-38
+  s_d59fea9650f5ed::t_f2e973ff4cdf6a 17
+resources/js/pages/Report.jsx
+  s_d59fea9650f5ed::t_81255954ec45d7 123
+  s_d59fea9650f5ed::t_8f43b58e259e25 148-153
+  s_d59fea9650f5ed::t_39cece1df00fc7 6
+resources/views/pdf/report.blade.php
+  s_d59fea9650f5ed::t_64aa3befc6cd65 31-35
+  s_d59fea9650f5ed::t_09d986b662363a 90-103
+resources/js/features/report/RewritePanel.jsx
+  s_d59fea9650f5ed::t_b3a1d37d8682b7 1-144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "cc82552809bbe1bd16da528dfddec9524738309a",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
