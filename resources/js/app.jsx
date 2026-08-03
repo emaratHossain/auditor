@@ -11,13 +11,16 @@ const queryClient = new QueryClient({
 
 function Shell({ children }) {
   return (
-    <div className="mx-auto max-w-5xl px-5 py-8 sm:py-12">
-      <header className="mb-8 flex flex-wrap items-baseline justify-between gap-3 border-b border-stone-300 pb-5">
-        <Link to="/" className="text-xl font-semibold tracking-tight text-stone-900">
+    <div className="mx-auto max-w-5xl px-5 py-8 sm:py-10">
+      <header className="mb-8 flex flex-wrap items-baseline justify-between gap-3 border-b border-[var(--color-line)] pb-5">
+        <Link to="/" className="flex items-baseline gap-2 text-lg font-semibold tracking-tight text-[var(--color-paper)]">
+          <span className="h-[7px] w-[7px] rounded-full bg-[var(--color-sev-high)]" aria-hidden="true" />
           DropSense AI
         </Link>
-        <p className="text-sm text-stone-500">
-          Analytics tells you people leave. This tells you why — and rewrites the copy.
+        {/* Cramped next to the wordmark on a phone, and it is a tagline — the
+            first thing that should give up its space. */}
+        <p className="hidden font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mist)] sm:block">
+          Where they leave, and why
         </p>
       </header>
       {children}

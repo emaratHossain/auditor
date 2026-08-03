@@ -46,21 +46,21 @@ function Field({ f, optional, value, error, onChange }) {
   return (
     <label className="block">
       <span className="text-sm font-medium">
-        {f.label} {optional && <span className="font-normal text-stone-400">— optional</span>}
+        {f.label} {optional && <span className="font-normal text-[var(--color-mist)]">— optional</span>}
       </span>
       <div className="mt-1 flex items-center gap-2">
         <input
           type="number" step="any" inputMode="decimal"
           name={f.key}
-          className="w-full rounded-md border border-stone-300 px-3 py-2 text-sm"
+          className="w-full rounded-md border border-[var(--color-line)] px-3 py-2 text-sm"
           value={value ?? ''}
           onChange={(e) => onChange(f.key, e.target.value)}
         />
-        {f.unit && <span className="text-sm text-stone-400">{f.unit}</span>}
+        {f.unit && <span className="text-sm text-[var(--color-mist)]">{f.unit}</span>}
       </div>
-      <span className="mt-1 block text-xs text-stone-500">{f.explain}</span>
-      {optional && <span className="mt-0.5 block text-xs text-stone-400">If you leave this blank: {f.ifBlank}</span>}
-      {error && <span className="mt-1 block text-xs text-red-700">{error}</span>}
+      <span className="mt-1 block text-xs text-[var(--color-mist)]">{f.explain}</span>
+      {optional && <span className="mt-0.5 block text-xs text-[var(--color-mist)]">If you leave this blank: {f.ifBlank}</span>}
+      {error && <span className="mt-1 block text-xs text-[var(--color-sev-high)]">{error}</span>}
     </label>
   )
 }
@@ -129,11 +129,11 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
       role="dialog"
       aria-modal="true"
       aria-label={`Run an audit on ${page.name}`}
-      className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-stone-900/40 p-4"
+      className="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-black/70 p-4"
     >
-      <form onSubmit={submit} className="my-8 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+      <form onSubmit={submit} className="my-8 w-full max-w-lg rounded-xl bg-[var(--color-slate)] p-6 shadow-xl">
         <h3 className="text-lg font-semibold">Run an audit on {page.name}</h3>
-        <p className="mt-1 text-sm text-stone-500" data-testid="metrics-form-source">
+        <p className="mt-1 text-sm text-[var(--color-mist)]" data-testid="metrics-form-source">
           {demo.isLoading
             ? 'Loading example numbers…'
             : untouched && d
@@ -146,7 +146,7 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
             <Field key={f.key} f={f} value={filled[f.key]} error={errors?.[f.key]?.[0]} onChange={set} />
           ))}
 
-          <details className="rounded-md border border-stone-200 p-3">
+          <details className="rounded-md border border-[var(--color-line)] p-3">
             <summary className="cursor-pointer text-sm font-medium">
               Four optional numbers — they unlock more of the analysis
             </summary>
@@ -157,19 +157,19 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
 
               <label className="block">
                 <span className="text-sm font-medium">
-                  How far down people get <span className="font-normal text-stone-400">— optional</span>
+                  How far down people get <span className="font-normal text-[var(--color-mist)]">— optional</span>
                 </span>
                 <input
                   name="section_reach"
-                  className="mt-1 w-full rounded-md border border-stone-300 px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded-md border border-[var(--color-line)] px-3 py-2 text-sm"
                   placeholder="Hero: 96, Features: 71, Pricing: 20"
                   value={filledReach}
                   onChange={(e) => setReach(e.target.value)}
                 />
-                <span className="mt-1 block text-xs text-stone-500">
+                <span className="mt-1 block text-xs text-[var(--color-mist)]">
                   The share of visitors who scroll far enough to see each section.
                 </span>
-                <span className="mt-0.5 block text-xs text-stone-400">
+                <span className="mt-0.5 block text-xs text-[var(--color-mist)]">
                   If you leave this blank: we cannot tell you which sections are buried too far down.
                 </span>
               </label>
@@ -178,10 +178,10 @@ export default function MetricsForm({ page, onSubmit, onCancel, submitting, erro
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onCancel} className="rounded-md px-4 py-2 text-sm font-medium text-stone-600 hover:bg-stone-100">
+          <button type="button" onClick={onCancel} className="rounded-md px-4 py-2 text-sm font-medium text-[var(--color-mist)] hover:bg-[var(--color-raised)]">
             Cancel
           </button>
-          <button type="submit" disabled={submitting} className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-50">
+          <button type="submit" disabled={submitting} className="rounded-md bg-[var(--color-raised)] px-4 py-2 text-sm font-medium text-[var(--color-paper)] hover:border-[var(--color-mist)] disabled:opacity-50">
             {submitting ? 'Starting…' : 'Run audit'}
           </button>
         </div>

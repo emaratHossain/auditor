@@ -29,8 +29,8 @@ export default function RewritePanel({ auditId, section, stored = [] }) {
   if (present.length === 0) return null
 
   return (
-    <div className="mt-4 rounded-lg border border-stone-200 bg-stone-50 p-4">
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+    <div className="mt-4 rounded-lg border border-[var(--color-line)] bg-[var(--color-raised)] p-4">
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-[var(--color-mist)]">
         What this section says
       </h4>
 
@@ -81,8 +81,8 @@ function Element({ auditId, sectionName, element, original, stored }) {
     <div>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <span className="block text-xs text-stone-500">{element.label}</span>
-          <p data-testid={`copy-${element.key}`} className="text-sm font-medium text-stone-900">
+          <span className="block text-xs text-[var(--color-mist)]">{element.label}</span>
+          <p data-testid={`copy-${element.key}`} className="text-sm font-medium text-[var(--color-paper)]">
             {original}
           </p>
         </div>
@@ -91,7 +91,7 @@ function Element({ auditId, sectionName, element, original, stored }) {
           type="button"
           onClick={() => rewrite.mutate()}
           disabled={rewrite.isPending}
-          className="shrink-0 rounded-md border border-stone-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-stone-100 disabled:opacity-50"
+          className="shrink-0 rounded-md border border-[var(--color-line)] bg-[var(--color-slate)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-raised)] disabled:opacity-50"
         >
           {rewrite.isPending ? 'Rewriting…' : 'Rewrite this'}
         </button>
@@ -99,13 +99,13 @@ function Element({ auditId, sectionName, element, original, stored }) {
 
       {rewrite.isPending && (
         <div data-testid="rewrite-loading" className="mt-3 space-y-2">
-          <div className="h-4 w-3/4 animate-pulse rounded bg-stone-200" />
-          <div className="h-3 w-1/2 animate-pulse rounded bg-stone-200" />
+          <div className="h-4 w-3/4 animate-pulse rounded bg-[var(--color-raised)]" />
+          <div className="h-3 w-1/2 animate-pulse rounded bg-[var(--color-raised)]" />
         </div>
       )}
 
       {!rewrite.isPending && rewrite.isError && !result && (
-        <p className="mt-2 text-xs text-red-700">
+        <p className="mt-2 text-xs text-[var(--color-sev-high)]">
           {rewrite.error?.friendly ?? 'Could not rewrite this just now.'}
         </p>
       )}
@@ -113,26 +113,26 @@ function Element({ auditId, sectionName, element, original, stored }) {
       {!rewrite.isPending && result && (
         <div className="mt-3 space-y-2">
           {fellBack && (
-            <p data-testid="rewrite-fallback" className="text-xs text-amber-700">
+            <p data-testid="rewrite-fallback" className="text-xs text-[var(--color-sev-med)]">
               Could not reach the model just now — these are the versions saved earlier.
             </p>
           )}
 
           {result.variants.map((v, i) => (
-            <div key={i} className="rounded-md border border-stone-200 bg-white p-3">
+            <div key={i} className="rounded-md border border-[var(--color-line)] bg-[var(--color-slate)] p-3">
               <div className="flex items-start justify-between gap-3">
-                <p data-testid="rewrite-variant" className="text-sm font-medium text-stone-900">
+                <p data-testid="rewrite-variant" className="text-sm font-medium text-[var(--color-paper)]">
                   {v.text}
                 </p>
                 <button
                   type="button"
                   onClick={() => copyToClipboard(v.text, i)}
-                  className="shrink-0 text-xs text-stone-500 underline hover:text-stone-900"
+                  className="shrink-0 text-xs text-[var(--color-mist)] underline hover:text-[var(--color-paper)]"
                 >
                   {copied === i ? 'Copied' : 'Copy'}
                 </button>
               </div>
-              <p data-testid="rewrite-reason" className="mt-1 text-xs text-stone-500">
+              <p data-testid="rewrite-reason" className="mt-1 text-xs text-[var(--color-mist)]">
                 {v.reason}
               </p>
             </div>

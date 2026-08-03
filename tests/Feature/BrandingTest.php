@@ -24,10 +24,12 @@ class BrandingTest extends TestCase
 
     public function test_the_score_is_called_the_conversion_score_in_the_ui(): void
     {
-        $report = file_get_contents(resource_path('js/pages/Report.jsx'));
-        $pdf    = file_get_contents(resource_path('views/pdf/report.blade.php'));
+        // It lives in the score readout rather than the page, so the label
+        // travels with the component that renders the number.
+        $ui  = file_get_contents(resource_path('js/features/report/ui.jsx'));
+        $pdf = file_get_contents(resource_path('views/pdf/report.blade.php'));
 
-        $this->assertStringContainsString('Conversion Score', $report);
+        $this->assertStringContainsString('Conversion Score', $ui);
         $this->assertStringContainsString('Conversion Score', $pdf);
     }
 

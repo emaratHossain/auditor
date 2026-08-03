@@ -4,8 +4,109 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@source '../**/*.jsx';
+
+/*
+|--------------------------------------------------------------------------
+| DropSense AI — an instrument, not a website
+|--------------------------------------------------------------------------
+| Two rules hold this together, and both encode meaning rather than taste:
+|
+| 1. COLOUR ONLY EVER MEANS SEVERITY OR MEASUREMENT. Chrome, buttons, links
+|    and headings are all neutral. If something on this screen is coloured,
+|    it is telling you how bad a problem is or how much to trust a number.
+|    That is why there is no brand accent: the palette is the data.
+|
+| 2. MONOSPACE MEANS MEASURED, SANS MEANS JUDGED. Every number that came off
+|    a real page or a real analytics figure is set in mono and tabular. Every
+|    sentence of opinion is set in sans. You can tell what the machine
+|    measured from what the model thinks without reading a word.
+|
+| No web fonts on purpose. The demo runs in a venue whose network cannot be
+| trusted, and a font that fails to load is a design that fails to load.
+*/
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+
+    /* Canvas — blue-shifted, so screenshots of real pages read as warm against it */
+    --color-ink: #0a0d13;
+    --color-slate: #131822;
+    --color-raised: #1a2130;
+    --color-line: #262f3f;
+
+    /* Text */
+    --color-mist: #8994a8;
+    --color-paper: #e6ebf2;
+
+    /* The severity ramp. The ONLY saturated colour on the screen. */
+    --color-sev-high: #ff5f52;
+    --color-sev-med: #f0a830;
+    --color-sev-low: #45b69c;
+
+    /* Measurement status — a separate signal from severity, deliberately cool */
+    --color-measured: #64c8e0;
+}
+
+html {
+    background: var(--color-ink);
+    color-scheme: dark;
+}
+
+body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Every number is tabular. Columns of figures that jitter are not an instrument. */
+.tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+}
+
+/* The one piece of motion on the whole screen: the depth spine draws itself
+   top to bottom on load, which is the movement the page is describing. */
+@keyframes spine-drop {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+}
+
+.spine-line {
+    transform-origin: top;
+    animation: spine-drop 700ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spine-line { animation: none; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-measured);
+    outline-offset: 2px;
+}
+
+/* Controls. Inputs hold measured values, so they are set in mono and tabular
+   like every other figure on the screen. */
+input,
+textarea,
+select {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+input::placeholder {
+    color: var(--color-mist);
+    opacity: 0.7;
+}
+
+summary {
+    color: var(--color-paper);
 }
