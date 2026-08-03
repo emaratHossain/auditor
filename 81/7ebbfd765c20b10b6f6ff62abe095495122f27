@@ -1,0 +1,30 @@
+app/Http/Controllers/AuditController.php
+  s_d59fea9650f5ed::t_b774a83db2f116 11
+  s_d59fea9650f5ed::t_9c421316e8c6ef 47-53,65-75
+app/Services/AuditService.php
+  s_d59fea9650f5ed::t_a3950e1529f339 21-29,32-42
+  s_d59fea9650f5ed::t_8acbfd625c0522 12
+resources/js/features/report/ui.jsx
+  s_d59fea9650f5ed::t_49de2833ead762 24,33-39
+  s_d59fea9650f5ed::t_11c341a32bca6d 40
+resources/js/pages/Report.jsx
+  s_d59fea9650f5ed::t_4910cf69fb6a2c 44
+tests/Feature/RetryAuditTest.php
+  s_d59fea9650f5ed::t_6d6a6912a629e6 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "817ebbfd765c20b10b6f6ff62abe095495122f27",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
