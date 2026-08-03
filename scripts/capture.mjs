@@ -255,7 +255,12 @@ try {
   const page = await ctx.newPage();
 
   const started = Date.now();
-  await page.goto(args.url, { waitUntil: 'load', timeout: 45000 });
+  // domcontentloaded, not load. A heavy marketing page's load event waits for
+  // every image, font and third-party iframe on it — stripe.com measured 31.8s
+  // on one run here, and anything slower than 45s failed the whole audit. We
+  // scroll the page and wait for fonts below anyway, which is what actually
+  // matters for a screenshot.
+  await page.goto(args.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   const loadMs = Date.now() - started;
 
   await hideOverlays(page);
@@ -316,7 +321,7 @@ try {
   // One full-page phone shot. Mobile is usually where the conversion is lost.
   const mctx = await browser.newContext({ viewport: MOBILE, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
   const mpage = await mctx.newPage();
-  await mpage.goto(args.url, { waitUntil: 'load', timeout: 45000 });
+  await mpage.goto(args.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await hideOverlays(mpage);
   await mpage.waitForTimeout(500);
 
