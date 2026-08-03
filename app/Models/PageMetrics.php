@@ -21,7 +21,7 @@ class PageMetrics extends Model
     protected $fillable = [
         'audit_id', 'visitors', 'bounce_rate', 'conversion_rate',
         'cta_click_rate', 'mobile_share', 'mobile_bounce_rate',
-        'section_reach', 'source',
+        'section_reach', 'rage_clicks', 'dead_clicks', 'source',
     ];
 
     protected function casts(): array
@@ -34,6 +34,8 @@ class PageMetrics extends Model
             'mobile_share'       => 'float',
             'mobile_bounce_rate' => 'float',
             'section_reach'      => 'array',
+            'rage_clicks'        => 'array',
+            'dead_clicks'        => 'array',
         ];
     }
 

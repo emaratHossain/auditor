@@ -38,9 +38,13 @@ class AuditController extends Controller
     /** Re-runs a failed audit with the numbers already on file. */
     public function retry(Audit $audit)
     {
+        // Every field, not a subset. A whitelist that falls behind the form
+        // silently drops numbers on retry, and the rules that needed them go
+        // quiet without saying why.
         $metrics = $audit->metrics?->only([
             'visitors', 'bounce_rate', 'conversion_rate',
             'cta_click_rate', 'mobile_share', 'mobile_bounce_rate', 'section_reach',
+            'rage_clicks', 'dead_clicks', 'source',
         ]) ?? [];
 
         $fresh = $this->audits->start($audit->page, $metrics);

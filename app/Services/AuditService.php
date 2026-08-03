@@ -29,7 +29,12 @@ class AuditService
             'mobile_share'       => $metrics['mobile_share']       ?? null,
             'mobile_bounce_rate' => $metrics['mobile_bounce_rate'] ?? null,
             'section_reach'      => $metrics['section_reach']      ?? null,
-            'source'             => 'manual',
+            'rage_clicks'        => $metrics['rage_clicks']        ?? null,
+            'dead_clicks'        => $metrics['dead_clicks']        ?? null,
+
+            // The report prints this, so it has to be what actually happened.
+            // Anything but an untouched demo form counts as the user's own numbers.
+            'source' => $metrics['source'] ?? 'manual',
         ]);
 
         $id = $audit->id;

@@ -30,6 +30,16 @@ class StoreAuditRequest extends FormRequest
 
             'section_reach'   => ['nullable', 'array'],
             'section_reach.*' => $percent,
+
+            // Clarity's two signals. Counts, not percentages.
+            'rage_clicks'   => ['nullable', 'array'],
+            'rage_clicks.*' => ['integer', 'min:0'],
+            'dead_clicks'   => ['nullable', 'array'],
+            'dead_clicks.*' => ['integer', 'min:0'],
+
+            // Where these numbers came from. The report prints it, so it is not
+            // decoration — an unknown value would put an unexplained word on screen.
+            'source' => ['nullable', 'string', 'in:demo,manual'],
         ];
     }
 

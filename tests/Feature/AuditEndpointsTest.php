@@ -65,6 +65,68 @@ class AuditEndpointsTest extends TestCase
         $this->assertNull($metrics->mobile_bounce_rate);
     }
 
+    public function test_it_accepts_the_clarity_numbers_and_remembers_they_were_demo_data(): void
+    {
+        Bus::fake();
+        $page = Page::create(['name' => 'Pre-fill test', 'url' => 'https://example.com/pre-fill']);
+
+        $response = $this->postJson("/api/pages/{$page->id}/audits", [
+            'visitors'        => 18450,
+            'bounce_rate'     => 64.2,
+            'conversion_rate' => 1.8,
+            'rage_clicks'     => ['Features' => 340],
+            'dead_clicks'     => ['Features' => 512],
+            'source'          => 'demo',
+        ]);
+
+        $response->assertCreated();
+
+        $metrics = Audit::find($response->json('data.id'))->metrics;
+
+        $this->assertSame(['Features' => 340], $metrics->rage_clicks);
+        $this->assertSame(['Features' => 512], $metrics->dead_clicks);
+        $this->assertSame('demo', $metrics->source);
+    }
+
+    public function test_the_source_defaults_to_manual_when_nobody_says_otherwise(): void
+    {
+        Bus::fake();
+        $page = Page::create(['name' => 'Manual test', 'url' => 'https://example.com/manual']);
+
+        $response = $this->postJson("/api/pages/{$page->id}/audits", [
+            'visitors'        => 1000,
+            'bounce_rate'     => 50.0,
+            'conversion_rate' => 2.0,
+        ]);
+
+        $response->assertCreated();
+
+        $this->assertSame('manual', Audit::find($response->json('data.id'))->metrics->source);
+    }
+
+    public function test_an_invented_source_is_rejected(): void
+    {
+        $page = Page::create(['name' => 'Bad source', 'url' => 'https://example.com/bad-source']);
+
+        $this->postJson("/api/pages/{$page->id}/audits", [
+            'visitors'        => 1000,
+            'bounce_rate'     => 50.0,
+            'conversion_rate' => 2.0,
+            'source'          => 'guessed',
+        ])->assertStatus(422)->assertJsonValidationErrors('source');
+    }
+
+    public function test_the_report_says_where_its_numbers_came_from(): void
+    {
+        $audit = $this->completedAudit();
+        $audit->metrics->update(['source' => 'demo']);
+
+        $this->getJson("/api/audits/{$audit->id}/report")
+            ->assertOk()
+            ->assertJsonPath('data.metrics_source.key', 'demo')
+            ->assertJsonPath('data.metrics_source.label', config('demo-analytics.label'));
+    }
+
     public function test_a_bounce_rate_of_one_hundred_and_fifty_is_rejected(): void
     {
         $page = Page::create(['name' => 'P', 'url' => 'https://example.com']);

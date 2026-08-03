@@ -38,6 +38,15 @@ class AuditReportResource extends JsonResource
                 'categories' => $this->categoryBreakdown(),
             ],
 
+            // The report says where its numbers came from. Demo data is labelled,
+            // not hidden — that is what keeps the evidence honest.
+            'metrics_source' => [
+                'key'   => $metrics?->source ?? 'manual',
+                'label' => ($metrics?->source ?? 'manual') === 'demo'
+                    ? config('demo-analytics.label')
+                    : 'Numbers you entered yourself',
+            ],
+
             // Every number carries a plain sentence saying what it means, because a
             // screen that only shows numbers is the problem this product solves.
             'metrics' => $metrics ? [
