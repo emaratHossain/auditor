@@ -1,0 +1,34 @@
+playwright.config.js
+  s_d59fea9650f5ed::t_65d1bafd6d7f64 17-39
+tests/e2e/capture-hanging-script.spec.js
+  s_d59fea9650f5ed::t_af83a21ce564fc 1-27,31,33-38,40-76
+  s_d59fea9650f5ed::t_e60f7bb02cb34b 28-30,32,39
+scripts/capture.mjs
+  s_d59fea9650f5ed::t_52b884ba88da85 332-335,337
+  s_d59fea9650f5ed::t_1225778e8d2446 22-23
+  s_d59fea9650f5ed::t_e74b646e0231c5 42-74
+  s_d59fea9650f5ed::t_259f273838fdeb 300-315,318-327,342-344
+  s_d59fea9650f5ed::t_0170d0091bc607 24
+  s_d59fea9650f5ed::t_fd10429f1faf48 358
+  s_d59fea9650f5ed::t_4a88b1668ae328 316-317
+  s_d59fea9650f5ed::t_332eb34ed0b7cb 328-331,336,338-341
+  s_d59fea9650f5ed::t_6e0725c8a552bd 419
+phpunit.xml
+  s_d59fea9650f5ed::t_f2c9ef6ec53cc9 31-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "dbaa463d0f2e046c6bb42794e74e81e53ee857a9",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
