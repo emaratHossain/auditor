@@ -2,9 +2,15 @@
 
 **One line:** One application that answers data requests at `/api/*` and serves the React screens for every other address.
 
-- **Mode:** plan · **Status:** planned — nothing built yet · **Epic:** `#67`
-- **Visual doc:** [`v1.dashboard.html`](v1.dashboard.html) — open it in a browser
+- **Mode:** build · **Status:** built · DropSense adds the rename · **Epic:** `#67`
+- **Spec:** [`../superpowers/specs/2026-08-03-dropsense-ai-design.md`](../superpowers/specs/2026-08-03-dropsense-ai-design.md)
 - **Tasks:** `kanban-md list --compact --tag f00-setup`
+
+> **The rename (`#124`) is user-facing only.** App name, titles, nav, README, PDF header
+> and these docs say DropSense AI; *health score* becomes *Conversion Score* wherever a
+> user can read it. Class names, table names and routes do not move. Renaming a working
+> pipeline mid-week is a day of churn with a real chance of breaking the demo path, and
+> no judge reads a namespace.
 
 ## Flow
 

@@ -2,8 +2,8 @@
 
 **One line:** A download button that produces a document an agency can email to a client.
 
-- **Mode:** plan · **Status:** planned — nothing built yet · **Epic:** `#77`
-- **Visual doc:** [`v1.dashboard.html`](v1.dashboard.html) — open it in a browser
+- **Mode:** build · **Status:** V1 export built · DropSense adds the header and the rewrites · **Epic:** `#77`
+- **Spec:** [`../superpowers/specs/2026-08-03-dropsense-ai-design.md`](../superpowers/specs/2026-08-03-dropsense-ai-design.md)
 - **Tasks:** `kanban-md list --compact --tag f10-pdf`
 
 ## Flow
@@ -37,6 +37,8 @@ for taking screenshots. There is no new dependency.
 - [ ] **It carries the substance** — the score, the top fixes and the section pictures are all in it · `#104`
 - [ ] **It looks the same everywhere** — open it on a second machine and the layout is identical · `#104`
 - [ ] **It is short enough to read** — two or three pages, not twenty · `#104`
+- [ ] **The header says DropSense AI**, and the number is called the Conversion Score · `#124`
+- [ ] **It carries the rewrites** — where a rewrite was generated, the old and new copy are both in the document. This is the part a client can act on without opening the app · `#132`
 
 ## Tests
 
