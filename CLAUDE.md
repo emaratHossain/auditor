@@ -125,9 +125,9 @@ The AI call sits behind a `VisionAnalyzer` interface with three drivers — `stu
 `gemini`, `claude` — selected by `AI_DRIVER` in `.env`. `stub` is the default so tests and
 local work cost nothing.
 
-Tooling: Pint + PHPStan for PHP, `tsc` + ESLint for React, Pest + Vitest + Playwright for
-tests. The DoD bar requires `php artisan test`, `npm run type-check` and `npm test` to all
-pass.
+Tests: `php artisan test` (PHPUnit) and `npx playwright test` (e2e). The frontend is plain
+JSX — there is no TypeScript, no `npm test` and no `npm run type-check` script, whatever
+older docs claim. `npm run build` and `npm run dev` are the only scripts.
 
 ## Conventions
 
