@@ -77,6 +77,7 @@ export default function Report() {
         <div className="flex flex-wrap items-center gap-6">
           <ScoreDial score={r.score.overall} />
           <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">Conversion Score</p>
             <h1 className="text-xl font-semibold">{r.page.name}</h1>
             <p className="truncate text-sm text-stone-500">{r.page.url}</p>
             <button onClick={() => setShowBreakdown(!showBreakdown)} className="mt-2 text-sm text-stone-600 underline underline-offset-2">

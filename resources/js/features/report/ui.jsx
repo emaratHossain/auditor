@@ -58,7 +58,7 @@ export function ScoreDial({ score }) {
   const stroke = value >= 75 ? '#15803d' : value >= 50 ? '#b45309' : '#b91c1c'
 
   return (
-    <svg viewBox="0 0 130 130" className="h-32 w-32" role="img" aria-label={`Health score ${score ?? 'not yet known'} out of 100`}>
+    <svg viewBox="0 0 130 130" className="h-32 w-32" role="img" aria-label={`Conversion Score ${score ?? 'not yet known'} out of 100`}>
       <circle cx="65" cy="65" r={r} fill="none" stroke="#e7e5e4" strokeWidth="12" />
       <circle
         cx="65" cy="65" r={r} fill="none" stroke={stroke} strokeWidth="12" strokeLinecap="round"

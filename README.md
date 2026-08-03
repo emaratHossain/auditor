@@ -1,10 +1,10 @@
-# AI Landing Page UX Auditor — V1
+# DropSense AI
 
 Google Analytics tells you 62% of people leave. It never tells you why.
 
-Paste a landing page address, type in seven numbers from your analytics, and get
-back a ranked list of fixes where **every single item names a real metric, a real
-number, and a real section of the page**.
+Paste a landing page address and get back a ranked list of fixes where **every
+single item names a real metric, a real number, and a real section of the page** —
+then click once to rewrite the copy that is failing.
 
 An insight that cannot do that is discarded, not shown with a caveat. That one
 rule is what separates this from a generic design-tips generator.

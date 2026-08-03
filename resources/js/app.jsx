@@ -14,10 +14,10 @@ function Shell({ children }) {
     <div className="mx-auto max-w-5xl px-5 py-8 sm:py-12">
       <header className="mb-8 flex flex-wrap items-baseline justify-between gap-3 border-b border-stone-300 pb-5">
         <Link to="/" className="text-xl font-semibold tracking-tight text-stone-900">
-          Landing Page Auditor
+          DropSense AI
         </Link>
         <p className="text-sm text-stone-500">
-          Analytics tells you people leave. This tells you why.
+          Analytics tells you people leave. This tells you why — and rewrites the copy.
         </p>
       </header>
       {children}

@@ -1,0 +1,40 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class BrandingTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_the_app_is_called_dropsense_ai(): void
+    {
+        $this->assertSame('DropSense AI', config('app.name'));
+    }
+
+    public function test_the_react_shell_says_dropsense_ai(): void
+    {
+        $shell = file_get_contents(resource_path('js/app.jsx'));
+
+        $this->assertStringContainsString('DropSense AI', $shell);
+        $this->assertStringNotContainsString('Landing Page Auditor', $shell);
+    }
+
+    public function test_the_score_is_called_the_conversion_score_in_the_ui(): void
+    {
+        $report = file_get_contents(resource_path('js/pages/Report.jsx'));
+        $pdf    = file_get_contents(resource_path('views/pdf/report.blade.php'));
+
+        $this->assertStringContainsString('Conversion Score', $report);
+        $this->assertStringContainsString('Conversion Score', $pdf);
+    }
+
+    /** The rename is user-facing only. Renaming a working pipeline mid-week is churn. */
+    public function test_the_code_keeps_its_v1_names(): void
+    {
+        $this->assertTrue(class_exists(\App\Services\HealthScorer::class));
+        $this->assertTrue(\Illuminate\Support\Facades\Schema::hasTable('audits'));
+    }
+}

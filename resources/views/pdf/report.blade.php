@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>{{ $audit->page->name }} — landing page audit</title>
+<title>{{ $audit->page->name }} — DropSense AI conversion audit</title>
 <style>
   * { box-sizing: border-box; }
   body { font-family: Georgia, 'Times New Roman', serif; color: #1c1917; font-size: 11pt; line-height: 1.5; margin: 0; }
@@ -32,12 +32,13 @@
 </head>
 <body>
 
+<p class="muted">DropSense AI — conversion audit</p>
 <h1>{{ $audit->page->name }}</h1>
 <p class="muted">{{ $audit->page->url }} · audited {{ $audit->created_at->format('j M Y, H:i') }}</p>
 
 <div class="score">
   <b>{{ $audit->overall_score ?? '—' }}</b>
-  <span class="muted">out of 100 · six weighted categories</span>
+  <span class="muted">Conversion Score, out of 100 · six weighted categories</span>
 </div>
 
 <table class="cats">
