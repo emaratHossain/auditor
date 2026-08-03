@@ -1,0 +1,34 @@
+tests/Feature/AuditEndpointsTest.php
+  s_d59fea9650f5ed::t_6561ec082f1654 68-129
+app/Services/AuditService.php
+  s_d59fea9650f5ed::t_369436cd4f1820 32-37
+database/migrations/2026_08_03_100001_add_clarity_columns_to_page_metrics_table.php
+  s_d59fea9650f5ed::t_dd5596297343f1 1-26
+app/Models/PageMetrics.php
+  s_d59fea9650f5ed::t_ebbe60704a8025 24
+  s_d59fea9650f5ed::t_277b31d5074b02 37-38
+app/Http/Requests/StoreAuditRequest.php
+  s_d59fea9650f5ed::t_05f0abbf08f0a1 33-42
+resources/js/features/report/MetricsForm.jsx
+  s_d59fea9650f5ed::t_56bdae2732391d 2-3,6-12,36-46,56-57,63,66-125,136-141,145-147,154-156,166
+app/Http/Controllers/AuditController.php
+  s_d59fea9650f5ed::t_374faad36bc71a 41-43,47
+app/Http/Resources/AuditReportResource.php
+  s_d59fea9650f5ed::t_a830a4719b9ade 41-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "5469719beeb34156af5db818171db18cffa1982a",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
