@@ -81,4 +81,50 @@ class HealthScorerTest extends TestCase
         $this->assertSame(100, $result['categories']['cta']['score']);
         $this->assertSame(0, $result['categories']['ux']['score']);
     }
+
+    public function test_a_measured_category_carries_no_caveat(): void
+    {
+        $result = (new HealthScorer)->score(
+            ['performance' => 71, 'accessibility' => 88],
+            measured: ['performance', 'accessibility'],
+        );
+
+        $this->assertTrue($result['categories']['accessibility']['measured']);
+        $this->assertNull(
+            $result['categories']['accessibility']['caveat'],
+            'a measured score must not still claim to be an AI approximation',
+        );
+    }
+
+    public function test_an_unmeasured_category_keeps_its_caveat(): void
+    {
+        $result = (new HealthScorer)->score(['accessibility' => 88]);
+
+        $this->assertFalse($result['categories']['accessibility']['measured']);
+        $this->assertStringContainsString('estimate', $result['categories']['accessibility']['caveat']);
+    }
+
+    public function test_the_weights_do_not_move_when_a_score_is_measured(): void
+    {
+        $scorer = new HealthScorer;
+
+        $estimated = $scorer->score(['performance' => 60, 'accessibility' => 60]);
+        $measured  = $scorer->score(['performance' => 60, 'accessibility' => 60], measured: ['performance', 'accessibility']);
+
+        $this->assertSame($estimated['overall'], $measured['overall']);
+    }
+
+    public function test_a_dead_lighthouse_run_does_not_kill_the_audit(): void
+    {
+        // Exactly what RankAndScoreJob produces when audits.lighthouse is null:
+        // the two categories fall back to the AI estimates and are labelled.
+        $result = (new HealthScorer)->score([
+            'cta' => 40, 'ux' => 50, 'ui' => 60, 'trust' => 70,
+            'performance' => 55, 'accessibility' => 65,
+        ]);
+
+        $this->assertIsInt($result['overall']);
+        $this->assertFalse($result['categories']['performance']['measured']);
+        $this->assertFalse($result['categories']['accessibility']['measured']);
+    }
 }

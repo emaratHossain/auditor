@@ -38,6 +38,12 @@ class AuditReportResource extends JsonResource
                 'categories' => $this->categoryBreakdown(),
             ],
 
+            // The two or three things Lighthouse scored worst, so "71" is
+            // something a reader can act on rather than a number to admire.
+            'lighthouse' => $this->lighthouse
+                ? ['worst_checks' => $this->lighthouse['worst_checks'] ?? []]
+                : null,
+
             // The report says where its numbers came from. Demo data is labelled,
             // not hidden — that is what keeps the evidence honest.
             'metrics_source' => [

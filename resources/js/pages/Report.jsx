@@ -90,9 +90,11 @@ export default function Report() {
         {showBreakdown && (
           <div className="mt-5 grid gap-2 border-t border-stone-200 pt-5 sm:grid-cols-2">
             {r.score.categories.map((c) => (
-              <div key={c.label} className="flex items-start justify-between gap-3 rounded-md bg-stone-50 px-3 py-2">
+              <div key={c.label} data-testid={`category-${c.label}`} className="flex items-start justify-between gap-3 rounded-md bg-stone-50 px-3 py-2">
                 <div className="min-w-0">
                   <p className="text-sm font-medium">{c.label} <span className="text-stone-400">· {c.weight}%</span></p>
+                  {/* Which of the six are opinions, and which were actually measured. */}
+                  <p className="mt-0.5 text-xs text-stone-400">{c.measured ? 'measured' : 'estimated'}</p>
                   {c.caveat && <p className="mt-0.5 text-xs text-amber-800">{c.caveat}</p>}
                 </div>
                 <p className="text-sm font-semibold tabular-nums">{c.score ?? 'not measured'}</p>

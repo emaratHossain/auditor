@@ -24,7 +24,9 @@ class RankAndScoreJob implements ShouldQueue
 
         $engine->generate($audit);
 
-        $result = $scorer->score($this->categoryScores($audit));
+        [$scores, $measured] = $this->categoryScores($audit);
+
+        $result = $scorer->score($scores, $measured);
 
         $audit->update([
             'status'          => Audit::STATUS_COMPLETED,
@@ -39,6 +41,11 @@ class RankAndScoreJob implements ShouldQueue
      * Each category is scored from what we actually measured. Anything we could
      * not judge is left null so HealthScorer drops it from the average rather
      * than scoring it zero.
+     *
+     * @return array{0:array<string,int|null>, 1:array<int,string>} the scores, and
+     *                                                             the keys that were
+     *                                                             measured rather
+     *                                                             than estimated.
      */
     private function categoryScores(Audit $audit): array
     {
@@ -46,7 +53,7 @@ class RankAndScoreJob implements ShouldQueue
         $metrics = $audit->metrics;
 
         if ($findings->isEmpty()) {
-            return [];
+            return [[], []];
         }
 
         $penalty = function (string ...$categories) use ($findings): ?int {
@@ -80,13 +87,31 @@ class RankAndScoreJob implements ShouldQueue
             ? max(0, min(100, (int) round(100 - $metrics->bounce_rate)))
             : null;
 
-        return [
+        // Lighthouse measured these two. When it failed the column is null, so
+        // they fall back to the AI estimate and stay labelled as estimates —
+        // the score never silently changes meaning.
+        $lighthouse = $audit->lighthouse ?? [];
+        $measured = [];
+
+        $performance = $penalty('performance');
+        if (is_int($lighthouse['performance'] ?? null)) {
+            $performance = $lighthouse['performance'];
+            $measured[] = 'performance';
+        }
+
+        $accessibility = $penalty('accessibility', 'ui');
+        if (is_int($lighthouse['accessibility'] ?? null)) {
+            $accessibility = $lighthouse['accessibility'];
+            $measured[] = 'accessibility';
+        }
+
+        return [[
             'cta'           => $cta,
             'ux'            => $ux,
             'ui'            => $visualAverage,
             'trust'         => $penalty('trust'),
-            'performance'   => null,   // filled in once real capture records load timing
-            'accessibility' => $penalty('accessibility', 'ui'),
-        ];
+            'performance'   => $performance,
+            'accessibility' => $accessibility,
+        ], $measured];
     }
 }
