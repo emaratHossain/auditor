@@ -50,6 +50,7 @@ class PlaywrightCaptureDriver implements CaptureDriver
                 'section_name'    => $section['name'],
                 'viewport'        => $section['viewport'],
                 'screenshot_path' => $relative.'/'.basename($section['file']),
+                'copy'            => $section['copy'] ?? null,
                 'position'        => (int) $section['position'],
                 'height'          => (int) $section['height'],
                 'page_height'     => (int) $section['page_height'],

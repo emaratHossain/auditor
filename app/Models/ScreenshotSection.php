@@ -11,13 +11,14 @@ class ScreenshotSection extends Model
     use HasFactory;
 
     protected $fillable = [
-        'audit_id', 'section_name', 'viewport', 'screenshot_path',
+        'audit_id', 'section_name', 'viewport', 'screenshot_path', 'copy',
         'position', 'height', 'page_height', 'sort_order',
     ];
 
     protected function casts(): array
     {
         return [
+            'copy'        => 'array',
             'position'    => 'integer',
             'height'      => 'integer',
             'page_height' => 'integer',

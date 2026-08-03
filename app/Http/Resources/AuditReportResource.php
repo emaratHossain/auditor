@@ -69,6 +69,9 @@ class AuditReportResource extends JsonResource
                     ),
                     'position_percent' => (int) round($section->depth() * 100),
                     'above_the_fold'   => $section->isAboveTheFold(),
+                    // The section's own words, so the report can show them as
+                    // text and offer to rewrite them — not only as a picture.
+                    'copy'             => $section->copy,
                     'ai_score'         => $finding?->ai_score,
                     'problems'         => $finding?->problems ?? [],
                 ];

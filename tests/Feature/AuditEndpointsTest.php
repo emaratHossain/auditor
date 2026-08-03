@@ -127,6 +127,52 @@ class AuditEndpointsTest extends TestCase
             ->assertJsonPath('data.metrics_source.label', config('demo-analytics.label'));
     }
 
+    public function test_the_report_carries_the_pages_own_words(): void
+    {
+        $page = Page::create(['name' => 'Copy test', 'url' => 'https://example.com/copy']);
+        $audit = $page->audits()->create(['status' => Audit::STATUS_COMPLETED]);
+
+        $audit->sections()->create([
+            'section_name'    => 'Hero',
+            'viewport'        => 'desktop',
+            'screenshot_path' => 'screenshots/1/hero-0-desktop.webp',
+            'position'        => 0,
+            'height'          => 900,
+            'page_height'     => 4500,
+            'sort_order'      => 0,
+            'copy'            => [
+                'headline' => ['text' => 'Ship faster', 'tag' => 'h1', 'selector' => 'h1'],
+                'subhead'  => ['text' => 'One dashboard.', 'tag' => 'p', 'selector' => 'p:nth-child(2)'],
+                'ctas'     => [['text' => 'Start free trial', 'tag' => 'a', 'selector' => 'a.btn']],
+            ],
+        ]);
+
+        $this->getJson("/api/audits/{$audit->id}/report")
+            ->assertOk()
+            ->assertJsonPath('data.sections.0.copy.headline.text', 'Ship faster')
+            ->assertJsonPath('data.sections.0.copy.ctas.0.text', 'Start free trial');
+    }
+
+    public function test_a_section_with_no_readable_copy_returns_null_not_an_empty_shell(): void
+    {
+        $page = Page::create(['name' => 'No copy', 'url' => 'https://example.com/no-copy']);
+        $audit = $page->audits()->create(['status' => Audit::STATUS_COMPLETED]);
+
+        $audit->sections()->create([
+            'section_name'    => 'Hero',
+            'viewport'        => 'desktop',
+            'screenshot_path' => 'screenshots/2/hero-0-desktop.webp',
+            'position'        => 0,
+            'height'          => 900,
+            'page_height'     => 4500,
+            'sort_order'      => 0,
+        ]);
+
+        $this->getJson("/api/audits/{$audit->id}/report")
+            ->assertOk()
+            ->assertJsonPath('data.sections.0.copy', null);
+    }
+
     public function test_a_bounce_rate_of_one_hundred_and_fifty_is_rejected(): void
     {
         $page = Page::create(['name' => 'P', 'url' => 'https://example.com']);

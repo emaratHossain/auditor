@@ -22,6 +22,46 @@ class StubCaptureDriver implements CaptureDriver
         ['Footer', 500],
     ];
 
+    /**
+     * The words the stub page "says", in the same shape the real crawl returns.
+     *
+     * Deliberately weak — a headline that greets the visitor instead of naming
+     * an outcome, and a button labelled after the form rather than the reward.
+     * A rewrite of good copy demonstrates nothing.
+     */
+    private const COPY = [
+        'Hero' => [
+            'headline' => 'Welcome to our platform',
+            'subhead'  => 'We help businesses grow.',
+            'cta'      => 'Submit',
+        ],
+        'Features' => [
+            'headline' => 'Our features',
+            'subhead'  => 'Everything you need in one place.',
+            'cta'      => null,
+        ],
+        'Testimonials' => [
+            'headline' => 'What people say',
+            'subhead'  => 'Our customers love us.',
+            'cta'      => null,
+        ],
+        'Pricing' => [
+            'headline' => 'Pricing',
+            'subhead'  => 'Plans for every team.',
+            'cta'      => 'Learn more',
+        ],
+        'FAQ' => [
+            'headline' => 'Frequently asked questions',
+            'subhead'  => 'Answers to common questions.',
+            'cta'      => null,
+        ],
+        'Footer' => [
+            'headline' => null,
+            'subhead'  => null,
+            'cta'      => null,
+        ],
+    ];
+
     public function capture(Audit $audit): int
     {
         $pageHeight = array_sum(array_column(self::SECTIONS, 1));
@@ -36,6 +76,9 @@ class StubCaptureDriver implements CaptureDriver
                     'section_name'    => $name,
                     'viewport'        => $viewport,
                     'screenshot_path' => $path,
+                    // Only the desktop rows carry copy, exactly as the real
+                    // crawl does — the phone shot is the whole page.
+                    'copy'            => $viewport === 'desktop' ? $this->copyFor($name) : null,
                     'position'        => $position,
                     'height'          => $height,
                     'page_height'     => $pageHeight,
@@ -48,6 +91,28 @@ class StubCaptureDriver implements CaptureDriver
         }
 
         return count(self::SECTIONS);
+    }
+
+    /** The same shape scripts/capture.mjs emits, so nothing downstream can tell. */
+    private function copyFor(string $name): ?array
+    {
+        $copy = self::COPY[$name] ?? null;
+
+        if ($copy === null || $copy['headline'] === null) {
+            return null;
+        }
+
+        $slug = strtolower($name);
+
+        return [
+            'headline' => ['text' => $copy['headline'], 'tag' => 'h1', 'selector' => "#{$slug} h1"],
+            'subhead'  => $copy['subhead']
+                ? ['text' => $copy['subhead'], 'tag' => 'p', 'selector' => "#{$slug} p"]
+                : null,
+            'ctas' => $copy['cta']
+                ? [['text' => $copy['cta'], 'tag' => 'a', 'selector' => "#{$slug} a.btn"]]
+                : [],
+        ];
     }
 
     /** A labelled SVG so the report screen has something real to show. */
