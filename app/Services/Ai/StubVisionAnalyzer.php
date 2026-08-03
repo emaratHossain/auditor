@@ -78,6 +78,20 @@ class StubVisionAnalyzer implements VisionAnalyzer
             ];
         }
 
+        // The demo fixture records 340 rage clicks on Features. The findings have
+        // to describe the thing people are clicking, or RageClickMismatch stays
+        // correctly silent and the fifth rule never appears on stage — the
+        // numbers and the picture must tell the same story.
+        if (str_contains($n, 'feature')) {
+            $problems[] = [
+                'what'     => 'The feature cards lift and change colour on hover, but clicking one does nothing.',
+                'why'      => 'A hover effect is a promise that something is clickable. Visitors take it literally.',
+                'fix'      => 'Either link each card to its detail section, or remove the hover effect so it stops promising.',
+                'severity' => 4,
+                'category' => 'ui',
+            ];
+        }
+
         if (str_contains($n, 'pricing') || str_contains($n, 'plan')) {
             $problems[] = [
                 'what'     => 'The plans are readable, but this section sits a long way down the page.',

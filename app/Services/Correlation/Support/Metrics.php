@@ -19,7 +19,35 @@ readonly class Metrics
         public ?float $mobileBounceRate = null,
         /** @var array<string,float> section name => % of visitors who reach it */
         public array $sectionReach = [],
+        /** @var array<string,int> section name => rage clicks recorded there */
+        public array $rageClicks = [],
+        /** @var array<string,int> section name => dead clicks recorded there */
+        public array $deadClicks = [],
     ) {}
+
+    /** Rage clicks recorded on this section, or null if none were supplied. */
+    public function rageClicksFor(string $sectionName): ?int
+    {
+        return $this->lookUp($this->rageClicks, $sectionName);
+    }
+
+    /** Dead clicks recorded on this section, or null if none were supplied. */
+    public function deadClicksFor(string $sectionName): ?int
+    {
+        return $this->lookUp($this->deadClicks, $sectionName);
+    }
+
+    /** @param  array<string,int>  $map */
+    private function lookUp(array $map, string $sectionName): ?int
+    {
+        foreach ($map as $name => $count) {
+            if (strcasecmp((string) $name, $sectionName) === 0) {
+                return (int) $count;
+            }
+        }
+
+        return null;
+    }
 
     /** What share of visitors reach this section, as a fraction of 1, or null if unknown. */
     public function reachFor(string $sectionName): ?float

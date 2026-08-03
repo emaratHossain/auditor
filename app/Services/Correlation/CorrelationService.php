@@ -5,6 +5,7 @@ namespace App\Services\Correlation;
 use App\Models\Audit;
 use App\Services\Correlation\Rules\DropOffBeforeSection;
 use App\Services\Correlation\Rules\MobileGap;
+use App\Services\Correlation\Rules\RageClickMismatch;
 use App\Services\Correlation\Rules\Rule;
 use App\Services\Correlation\Rules\SeenButNotClicked;
 use App\Services\Correlation\Rules\TrustGapEarly;
@@ -28,6 +29,7 @@ class CorrelationService
             new DropOffBeforeSection,
             new MobileGap,
             new TrustGapEarly,
+            new RageClickMismatch,
         ];
     }
 
@@ -73,6 +75,8 @@ class CorrelationService
             mobileShare: $m?->mobile_share,
             mobileBounceRate: $m?->mobile_bounce_rate,
             sectionReach: $m?->section_reach ?? [],
+            rageClicks: $m?->rage_clicks ?? [],
+            deadClicks: $m?->dead_clicks ?? [],
         );
 
         $findings = $audit->findings->keyBy(fn ($f) => strtolower($f->section_name));
