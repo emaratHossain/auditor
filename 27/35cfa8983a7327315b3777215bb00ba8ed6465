@@ -1,0 +1,36 @@
+.env.example
+  s_d59fea9650f5ed::t_a01136170d7442 1
+resources/views/app.blade.php
+  s_d59fea9650f5ed::t_1986e0bc0e2279 6
+resources/js/features/report/ui.jsx
+  s_d59fea9650f5ed::t_b54c61b825a754 61
+tests/Feature/BrandingTest.php
+  s_d59fea9650f5ed::t_232f9fb735ae2d 5,10-11
+  s_d59fea9650f5ed::t_40ab03bb51fd39 1-4,6-9,12-40
+resources/views/pdf/report.blade.php
+  s_d59fea9650f5ed::t_e053479e4c146e 41
+  s_d59fea9650f5ed::t_81ecc77f547a39 35
+  s_d59fea9650f5ed::t_5fe6835e09fb46 10
+README.md
+  s_d59fea9650f5ed::t_3a214b386fdf3f 1,5-7
+resources/js/app.jsx
+  s_d59fea9650f5ed::t_3ab94ca0eb1f1e 17,20
+resources/js/pages/Report.jsx
+  s_d59fea9650f5ed::t_545e4d36369da1 80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "2735cfa8983a7327315b3777215bb00ba8ed6465",
+  "prompts": {},
+  "sessions": {
+    "s_d59fea9650f5ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb5e08e-91a1-41e6-8b5b-aed1ee62505b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
