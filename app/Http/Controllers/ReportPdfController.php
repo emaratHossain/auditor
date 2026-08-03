@@ -14,7 +14,7 @@ class ReportPdfController extends Controller
     {
         abort_unless($audit->status === Audit::STATUS_COMPLETED, 409, 'That audit has not finished yet.');
 
-        $audit->load(['page', 'sections', 'findings', 'recommendations']);
+        $audit->load(['page', 'sections', 'findings', 'recommendations', 'rewrites']);
 
         $findings = $audit->findings->keyBy(fn ($f) => strtolower($f->section_name));
 
@@ -32,7 +32,10 @@ class ReportPdfController extends Controller
             ];
         })->all();
 
-        $html = view('pdf.report', compact('audit', 'sections'))->render();
+        // Keyed by section so the view can drop them beside the right picture.
+        $rewrites = $audit->rewrites->groupBy('section_name');
+
+        $html = view('pdf.report', compact('audit', 'sections', 'rewrites'))->render();
 
         $dir = storage_path('app/pdf');
         @mkdir($dir, 0775, true);

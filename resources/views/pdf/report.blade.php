@@ -28,6 +28,11 @@
   .label { font-weight: bold; color: #57534e; }
   .shot { page-break-inside: avoid; margin-bottom: 16px; }
   .shot img { width: 100%; border: 1px solid #d6d3d1; }
+  .rewrite { border: 1px solid #d6d3d1; padding: 8px 10px; margin: 8px 0 0; page-break-inside: avoid; }
+  .rewrite-label { font-size: 8pt; text-transform: uppercase; letter-spacing: .06em; color: #57534e; margin: 0 0 4px; }
+  .rewrite-old { font-size: 10pt; color: #78716c; margin: 0 0 6px; text-decoration: line-through; }
+  .rewrite-new { font-size: 11pt; font-weight: bold; margin: 6px 0 1px; }
+  .rewrite-why { font-size: 9.5pt; color: #57534e; margin: 0 0 4px; }
 </style>
 </head>
 <body>
@@ -81,6 +86,20 @@
     @endif
     @foreach ($section['problems'] as $p)
       <p style="font-size:10pt">— {{ $p['what'] }} <span class="muted">{{ $p['fix'] }}</span></p>
+    @endforeach
+
+    {{-- The part a client can act on without opening the app. --}}
+    @foreach ($rewrites[$section['name']] ?? [] as $rewrite)
+      <div class="rewrite">
+        <p class="rewrite-label">
+          Suggested {{ $rewrite->element === 'cta' ? 'button label' : ($rewrite->element === 'subhead' ? 'supporting line' : 'headline') }}
+        </p>
+        <p class="rewrite-old">{{ $rewrite->original }}</p>
+        @foreach ($rewrite->variants as $variant)
+          <p class="rewrite-new">{{ $variant['text'] }}</p>
+          <p class="rewrite-why">{{ $variant['reason'] }}</p>
+        @endforeach
+      </div>
     @endforeach
   </div>
 @endforeach

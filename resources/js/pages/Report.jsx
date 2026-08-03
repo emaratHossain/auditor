@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import client from '../api/client'
 import { Skeleton, EmptyState, ErrorState, PriorityTag, ScoreDial } from '../features/report/ui'
+import RewritePanel from '../features/report/RewritePanel'
 
 const RUNNING = ['pending', 'running']
 
@@ -119,7 +120,7 @@ export default function Report() {
         <h2 className="mb-4 text-lg font-semibold">What the AI saw, section by section</h2>
         <div className="space-y-4">
           {r.sections.map((s) => (
-            <article key={s.name} className="grid gap-5 rounded-lg border border-stone-200 bg-white p-4 sm:grid-cols-[260px_1fr]">
+            <article key={s.name} data-testid="section-card" className="grid gap-5 rounded-lg border border-stone-200 bg-white p-4 sm:grid-cols-[260px_1fr]">
               <div>
                 {s.screenshot_url
                   ? <img src={s.screenshot_url} alt={`${s.name} section`} className="w-full rounded-md border border-stone-200" />
@@ -144,6 +145,12 @@ export default function Report() {
                     </li>
                   ))}
                 </ul>
+
+                <RewritePanel
+                  auditId={id}
+                  section={s}
+                  stored={(r.rewrites ?? []).filter((rw) => rw.section === s.name)}
+                />
               </div>
             </article>
           ))}
