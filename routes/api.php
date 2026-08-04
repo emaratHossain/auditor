@@ -12,6 +12,7 @@ Route::get('/demo-metrics', DemoMetricsController::class);
 
 Route::get('/pages',  [PageController::class, 'index']);
 Route::post('/pages', [PageController::class, 'store']);
+Route::delete('/pages/{page}', [PageController::class, 'destroy']);
 
 Route::post('/pages/{page}/audits', [AuditController::class, 'store']);
 

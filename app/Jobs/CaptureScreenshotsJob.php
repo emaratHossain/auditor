@@ -26,7 +26,11 @@ class CaptureScreenshotsJob implements ShouldQueue
 
     public function handle(CaptureDriver $driver): void
     {
-        $audit = Audit::findOrFail($this->auditId);
+        // The page this belongs to can be deleted while its chain is still
+        // queued. That is a decision, not a failure — say nothing and stop.
+        if (! $audit = Audit::find($this->auditId)) {
+            return;
+        }
         $audit->markStage('capturing');
 
         // Recorded before the work, so an audit that dies mid-capture still says

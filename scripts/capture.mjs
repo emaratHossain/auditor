@@ -72,17 +72,59 @@ async function deadlineThirdParties(page, pageUrl) {
   });
 }
 
-/** Hide the things that teach the AI nothing about the page underneath. */
+/**
+ * Hide the things that teach the AI nothing about the page underneath.
+ *
+ * The match is on a substring of the class attribute, because cookie banners
+ * name themselves a hundred different ways — and that is exactly why the rules
+ * are scoped to descendants of <body>. WordPress's Cookie Notice plugin writes
+ * its state onto the body element itself (`<body class="home ... cookies-not-set">`),
+ * so an unscoped `[class*="cookie" i]` set `display: none` on the whole
+ * document. Every measurement after it read 0, section finding fell through to
+ * equal bands of nothing, and the run died on "Expected options.clip.height to
+ * be greater than 0". themelooks.com does this; so does any Cookie Notice site.
+ *
+ * A banner is always inside the body, so nothing we actually want gone is lost.
+ */
 async function hideOverlays(page) {
   await page.addStyleTag({
     content: `
-      [id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i],
-      [aria-label*="cookie" i], [class*="gdpr" i], [id*="onetrust" i], #CybotCookiebotDialog,
-      [class*="newsletter-popup" i], [class*="modal-backdrop" i] { display: none !important; }
+      body :is(
+        [id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i],
+        [aria-label*="cookie" i], [class*="gdpr" i], [id*="onetrust" i], #CybotCookiebotDialog,
+        [class*="newsletter-popup" i], [class*="modal-backdrop" i]
+      ) { display: none !important; }
       html { scroll-behavior: auto !important; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
     `,
   });
+}
+
+/**
+ * How tall the page is — and a real sentence when the answer is "nothing".
+ *
+ * Two reasons not to read document.body.scrollHeight alone. A page can put its
+ * scroll on the documentElement instead, and body then under-reports. And a
+ * page that is hiding itself — either because a script it waits for was one of
+ * the third-party requests we cut loose, or because our own overlay CSS matched
+ * too much — reports 0, which used to travel three functions downstream and
+ * surface as Playwright's "Expected options.clip.height to be greater than 0".
+ * That message tells the person who pasted the URL nothing at all.
+ */
+async function measureHeight(page) {
+  const seen = await page.evaluate(() => ({
+    height: Math.max(
+      document.body?.scrollHeight ?? 0,
+      document.documentElement?.scrollHeight ?? 0,
+    ),
+    // Asked about a display:none body, documentElement still answers with the
+    // viewport height, so the height alone cannot tell the two apart.
+    shown: !!document.body && getComputedStyle(document.body).display !== 'none',
+  }));
+
+  if (seen.shown && seen.height > 0) return seen.height;
+
+  throw new Error('That page rendered nothing we could measure — it may be hiding itself until a script that never loaded has run.');
 }
 
 /** Three levels, in order: the user's selectors, then landmarks, then equal bands. */
@@ -374,7 +416,7 @@ try {
   await page.waitForTimeout(600);
   try { await page.evaluate(() => document.fonts.ready); } catch {}
 
-  const pageHeight = await page.evaluate(() => document.body.scrollHeight);
+  const pageHeight = await measureHeight(page);
   const selectors = args.selectors ? args.selectors.split(',').map((s) => s.trim()).filter(Boolean) : [];
   const { sections, how } = await findSections(page, selectors);
   const copyPerSection = await readCopy(page, sections);
@@ -421,7 +463,7 @@ try {
   await mpage.waitForTimeout(500);
 
   const mobileFile = path.join(args.out, 'page-mobile.webp');
-  const mobileHeight = await mpage.evaluate(() => document.body.scrollHeight);
+  const mobileHeight = await measureHeight(mpage);
 
   // Asked for one image taller than it can allocate, Chromium writes zero bytes
   // and raises nothing. The audit then survived capture, survived correlation,

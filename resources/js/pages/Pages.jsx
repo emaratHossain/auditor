@@ -2,8 +2,17 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '../api/client'
-import { Skeleton, EmptyState, ErrorState } from '../features/report/ui'
+import { Skeleton, EmptyState, ErrorState, ConfirmDialog } from '../features/report/ui'
 import MetricsForm from '../features/report/MetricsForm'
+
+/** "Its 3 reports and their screenshots go too." */
+function whatGoesWithIt(count) {
+  if (!count) return 'It has no reports yet, so nothing else goes with it.'
+
+  return count === 1
+    ? 'Its report and the screenshots of the page go too.'
+    : `Its ${count} reports and the screenshots of the page go too.`
+}
 
 export default function Pages() {
   const qc = useQueryClient()
@@ -11,6 +20,7 @@ export default function Pages() {
   const [form, setForm] = useState({ name: '', url: '' })
   const [fieldErrors, setFieldErrors] = useState({})
   const [auditingPage, setAuditingPage] = useState(null)
+  const [deletingPage, setDeletingPage] = useState(null)
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['pages'],
@@ -31,6 +41,16 @@ export default function Pages() {
   const startAudit = useMutation({
     mutationFn: ({ pageId, metrics }) => client.post(`/pages/${pageId}/audits`, metrics),
     onSuccess: (res) => navigate(`/audits/${res.data.data.id}`),
+  })
+
+  // The dialog closes whatever happened: on success the row is gone, and on
+  // failure the Axios interceptor has already said so in a toast.
+  const deletePage = useMutation({
+    mutationFn: (pageId) => client.delete(`/pages/${pageId}`),
+    onSettled: () => {
+      setDeletingPage(null)
+      qc.invalidateQueries({ queryKey: ['pages'] })
+    },
   })
 
   return (
@@ -112,6 +132,14 @@ export default function Pages() {
                   >
                     Run audit
                   </button>
+                  <button
+                    onClick={() => setDeletingPage(page)}
+                    aria-label={`Delete ${page.name}`}
+                    title="Delete this page and its reports"
+                    className="rounded-md px-2 py-1.5 text-sm text-[var(--color-mist)] hover:bg-[var(--color-sev-high)]/15 hover:text-[var(--color-sev-high)]"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </li>
@@ -127,6 +155,19 @@ export default function Pages() {
           onCancel={() => setAuditingPage(null)}
           onSubmit={(metrics) => startAudit.mutate({ pageId: auditingPage.id, metrics })}
         />
+      )}
+
+      {deletingPage && (
+        <ConfirmDialog
+          title={`Delete “${deletingPage.name}”?`}
+          confirmLabel="Delete page"
+          pending={deletePage.isPending}
+          onCancel={() => setDeletingPage(null)}
+          onConfirm={() => deletePage.mutate(deletingPage.id)}
+        >
+          <p>{whatGoesWithIt(deletingPage.audits_count)}</p>
+          <p className="mt-2">This cannot be undone.</p>
+        </ConfirmDialog>
       )}
     </div>
   )

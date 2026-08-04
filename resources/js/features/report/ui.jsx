@@ -42,6 +42,56 @@ export function ErrorState({ message, onRetry, retryLabel = 'Try again', note })
   )
 }
 
+/**
+ * A last word before something goes for good.
+ *
+ * Nothing in this app can be undone, so the dialog's job is to say exactly what
+ * is about to be lost — the name of the thing, and what goes with it — rather
+ * than asking "are you sure?" about an unnamed row. Escape and the backdrop
+ * both cancel, and Cancel takes the focus, because the destructive button
+ * should never be the one a stray Enter presses.
+ */
+export function ConfirmDialog({ title, children, confirmLabel, onConfirm, onCancel, pending = false }) {
+  const cancelRef = React.useRef(null)
+
+  React.useEffect(() => {
+    cancelRef.current?.focus()
+
+    const onKey = (e) => { if (e.key === 'Escape') onCancel() }
+    window.addEventListener('keydown', onKey)
+
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onCancel])
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      className="fixed inset-0 z-20 flex items-center justify-center overflow-y-auto bg-black/70 p-4"
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onCancel() }}
+    >
+      <div className="w-full max-w-md rounded-xl bg-[var(--color-slate)] p-6 shadow-xl">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <div className={`mt-2 ${T.quiet}`}>{children}</div>
+
+        <div className="mt-6 flex justify-end gap-3">
+          <button ref={cancelRef} onClick={onCancel} disabled={pending} className={T.buttonPrime}>
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={pending}
+            className="rounded-md border border-[var(--color-sev-high)]/50 bg-[var(--color-sev-high)]/15 px-4 py-2 text-sm font-medium text-[var(--color-sev-high)] hover:bg-[var(--color-sev-high)]/25 disabled:opacity-40"
+          >
+            {pending ? 'Deleting…' : confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function PriorityTag({ value }) {
   const sev = SEVERITY[value] ?? SEVERITY.low
 

@@ -18,7 +18,11 @@ class CorrelateJob implements ShouldQueue
 
     public function handle(CorrelationService $correlation): void
     {
-        $audit = Audit::findOrFail($this->auditId);
+        // The page this belongs to can be deleted while its chain is still
+        // queued. That is a decision, not a failure — say nothing and stop.
+        if (! $audit = Audit::find($this->auditId)) {
+            return;
+        }
         $audit->markStage('correlating');
 
         // Zero insights is a legitimate outcome, not a failure. A page where

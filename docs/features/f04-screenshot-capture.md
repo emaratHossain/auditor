@@ -31,6 +31,21 @@ flowchart LR
 **Why hide the cookie banner.** A photograph of a cookie wall teaches the AI nothing
 about the page underneath it.
 
+**Why the banner rules only ever match inside `<body>`.** Banners name themselves a
+hundred different ways, so the rules match on a substring of the class attribute —
+and WordPress's Cookie Notice plugin writes its state onto the body element itself
+(`<body class="home … cookies-not-set">`). Unscoped, `[class*="cookie" i]` set
+`display: none` on the whole document: every measurement then read 0, section finding
+fell through to equal bands of nothing, and the run died on Playwright's *"Expected
+options.clip.height to be greater than 0"*. themelooks.com did exactly this. A banner
+is always inside the body, so scoping the rules to descendants loses nothing.
+
+**Why a height of zero is an error with a sentence.** Whatever the cause — our own CSS
+matching too much, or a page that hides its body until a script we cut loose has run —
+a page that measures as nothing cannot be photographed. `measureHeight()` says so in
+words about the page, instead of letting a 0 travel three functions downstream and
+surface as Playwright's argument checking.
+
 **Why the phone shot is not optional.** Mobile is usually where the conversion is lost.
 
 **Finding the sections, three levels in order:**

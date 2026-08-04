@@ -19,6 +19,9 @@ class PageResource extends JsonResource
             'id'   => $this->id,
             'name' => $this->name,
             'url'  => $this->url,
+            // What the delete confirmation counts. Absent unless index asked
+            // for it, and 0 is a truthful answer for a page never audited.
+            'audits_count' => $this->whenCounted('audits'),
             'latest_audit' => $latest ? [
                 'id'      => $latest->id,
                 'status'  => $latest->status,
