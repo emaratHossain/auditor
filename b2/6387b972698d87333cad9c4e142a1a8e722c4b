@@ -1,0 +1,37 @@
+scripts/ga4-capture.mjs
+  s_a06a49eeee2ab1::t_8082d6047460bd 1-77
+.gitignore
+  s_911d2fe9f53faa::t_6211117343a183 41-63
+  s_a06a49eeee2ab1::t_8082d6047460bd 38-40
+scripts/ga4-login.mjs
+  s_a06a49eeee2ab1::t_8082d6047460bd 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "b26387b972698d87333cad9c4e142a1a8e722c4b",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_911d2fe9f53faa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e7ccc6de-a336-4720-8706-92c6685849e9",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    },
+    "s_a06a49eeee2ab1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4039f8a-fc16-40f0-aa22-8b05ba4f8f25",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
