@@ -12,11 +12,6 @@ use RuntimeException;
  */
 class GeminiVisionAnalyzer implements VisionAnalyzer
 {
-    // Published free-tier rates are 0; these are the paid rates per million tokens,
-    // so the recorded cost is honest if the key is ever a paid one.
-    private const IN_PER_M = 0.30;
-    private const OUT_PER_M = 2.50;
-
     public function __construct(private PromptBuilder $prompt = new PromptBuilder) {}
 
     public function modelName(): string
@@ -61,13 +56,22 @@ class GeminiVisionAnalyzer implements VisionAnalyzer
 
         $usage = $response->json('usageMetadata', []);
         $in = (int) ($usage['promptTokenCount'] ?? 0);
-        $out = (int) ($usage['candidatesTokenCount'] ?? 0);
+
+        // A thinking model reports what it thought separately from what it said,
+        // and bills both as output. Counting only the visible reply understates
+        // the cost several times over on the 3.x flash models — and the ceiling
+        // in AnalyzePageJob is checked against this number.
+        $out = (int) ($usage['candidatesTokenCount'] ?? 0) + (int) ($usage['thoughtsTokenCount'] ?? 0);
 
         return new AnalysisResult(
             sections: $decoded['sections'] ?? [],
             model: $this->modelName(),
             tokens: $in + $out,
-            cost: round(($in / 1_000_000 * self::IN_PER_M) + ($out / 1_000_000 * self::OUT_PER_M), 5),
+            cost: round(
+                ($in / 1_000_000 * (float) config('ai.gemini.input_per_million'))
+                + ($out / 1_000_000 * (float) config('ai.gemini.output_per_million')),
+                5,
+            ),
             raw: $decoded,
         );
     }

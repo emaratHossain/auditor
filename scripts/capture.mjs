@@ -421,8 +421,28 @@ try {
   await mpage.waitForTimeout(500);
 
   const mobileFile = path.join(args.out, 'page-mobile.webp');
-  await mpage.screenshot({ path: mobileFile, type: 'webp', quality: 78, fullPage: true });
   const mobileHeight = await mpage.evaluate(() => document.body.scrollHeight);
+
+  // Asked for one image taller than it can allocate, Chromium writes zero bytes
+  // and raises nothing. The audit then survived capture, survived correlation,
+  // and died at the AI call with "Unable to process input image (400)" — minutes
+  // and one browser launch after the mistake. stripe.com's phone layout is over
+  // 20,000px; plenty of marketing pages are.
+  //
+  // The clamp costs nothing that matters. This shot exists so the model can judge
+  // the phone layout, and that judgement is made at the top of the page — nobody
+  // reads the 18,000th pixel. mobileHeight below still reports the real height,
+  // so the scroll-depth numbers are unaffected.
+  const MOBILE_SHOT_LIMIT = 12_000;
+
+  await mpage.screenshot({
+    path: mobileFile,
+    type: 'webp',
+    quality: 78,
+    fullPage: true,
+    clip: { x: 0, y: 0, width: MOBILE.width, height: Math.min(mobileHeight, MOBILE_SHOT_LIMIT) },
+    scale: 'css',
+  });
 
   captured.push({
     name: sections[0]?.name ?? 'Whole page',

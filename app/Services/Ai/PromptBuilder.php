@@ -38,12 +38,18 @@ class PromptBuilder
 
         $categories = implode(', ', AuditSchema::ALLOWED_CATEGORIES);
 
+        $names = collect($this->sectionNames($audit))->map(fn ($n) => "- {$n}")->implode("\n") ?: '- none captured';
+
         return <<<TXT
         You are an experienced conversion, UI/UX and digital marketing expert reviewing a
         landing page at {$url}.
 
         You are given one image per section of the page, in the order a visitor meets them,
         plus that page's real visitor numbers.
+
+        These are the sections, named as they were captured. They are the only sections
+        there are:
+        {$names}
 
         The page's numbers:
         {$numbers}
@@ -60,6 +66,12 @@ class PromptBuilder
         - content: headline clarity, whether the value is stated, button wording
 
         Rules you must follow:
+        - "section" must copy one of the names listed above exactly, character for
+          character. Do not invent a name, do not tidy one up, and do not describe the
+          section in your own words — a name that is not on the list is thrown away, and
+          everything you noticed about that section is lost with it.
+        - A problem that only shows up on a phone still belongs to the listed section it
+          appears in. There is no separate mobile section to put it in.
         - Be specific. Name the actual element you are talking about. "Improve the design"
           is useless; "the button's background is within one shade of the section behind it"
           is useful.
@@ -70,6 +82,23 @@ class PromptBuilder
 
         Reply with JSON only. No prose before or after it.
         TXT;
+    }
+
+    /**
+     * The captured desktop section names, top to bottom.
+     *
+     * The prompt shows this list and `AnalyzePageJob` matches replies against it,
+     * so both sides are reading the same names from the same place.
+     *
+     * @return array<int,string>
+     */
+    public function sectionNames(Audit $audit): array
+    {
+        return $audit->sections()
+            ->where('viewport', 'desktop')
+            ->orderBy('sort_order')
+            ->pluck('section_name')
+            ->all();
     }
 
     /** @return array<int,array{name:string,mime:string,data:string}> base64 images, top to bottom */
@@ -101,6 +130,14 @@ class PromptBuilder
         // Skipping them means AI_DRIVER=gemini with CAPTURE_DRIVER=stub degrades
         // to a text-only judgement rather than erroring.
         if (! isset(self::RASTER[$ext]) || ! Storage::disk('public')->exists($section->screenshot_path)) {
+            return null;
+        }
+
+        // An empty file is not a picture. Gemini answers one with a flat 400 that
+        // fails the entire audit — every other section, the numbers and the
+        // Lighthouse run discarded over one bad write. One image fewer is the
+        // cheaper loss by a long way.
+        if (Storage::disk('public')->size($section->screenshot_path) === 0) {
             return null;
         }
 

@@ -102,6 +102,22 @@ what keeps this off the demo's critical path.
 run timed out and its audit still completed, with the two categories falling
 back to labelled estimates.
 
+## The phone shot is clamped
+
+Asked for one image taller than it can allocate — a little over 16,000px — Chromium
+writes a file of **zero bytes and raises nothing**. The desktop sections have clamped to
+2400px since they were written; the phone shot was taking `fullPage: true` with no clip.
+
+stripe.com's phone layout runs past 20,000px, so its audit captured cleanly, passed
+every check, and then died at the AI call with *"Unable to process input image (400)"* —
+minutes and one browser launch after the actual mistake, with the error naming nothing
+useful. The shot is now clipped to 12,000px. Nobody judges a phone layout on its
+18,000th pixel, and `page_height` still records the real height, so the scroll-depth
+rules are unaffected.
+
+`PromptBuilder` also refuses to send a zero-byte file at all, so a disk that fills up or
+a killed process costs one image rather than the whole audit.
+
 ## What "done" means
 
 - [ ] **Every section is photographed** — you can see up to six named sections plus one full-page phone shot · `#88` `#89`

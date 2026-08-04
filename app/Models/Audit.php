@@ -40,7 +40,7 @@ class Audit extends Model
 
     protected $fillable = [
         'page_id', 'status', 'stage', 'overall_score', 'category_scores', 'lighthouse',
-        'token_cost', 'ai_model', 'capture_driver', 'error_message', 'completed_at',
+        'token_cost', 'ai_model', 'unmatched_findings', 'capture_driver', 'error_message', 'completed_at',
     ];
 
     protected function casts(): array

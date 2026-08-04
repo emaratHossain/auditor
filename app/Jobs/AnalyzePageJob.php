@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Models\Audit;
 use App\Services\Ai\AuditSchema;
+use App\Services\Ai\SectionMatcher;
 use App\Services\Ai\VisionAnalyzer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 
 /**
@@ -37,10 +39,17 @@ class AnalyzePageJob implements ShouldQueue
             ));
         }
 
-        $sections = $audit->sections()->where('viewport', 'desktop')->get()->keyBy(fn ($s) => strtolower($s->section_name));
+        $sections = $audit->sections()->where('viewport', 'desktop')->get()->keyBy(fn ($s) => $s->section_name);
+        $matcher = new SectionMatcher($sections->keys()->all());
+        $unmatched = [];
 
         foreach ($result->sections as $section) {
-            $match = $sections->get(strtolower($section['section']));
+            $name = $matcher->match($section['section']);
+            $match = $name === null ? null : $sections->get($name);
+
+            if (! $match) {
+                $unmatched[] = $section['section'];
+            }
 
             $audit->findings()->create([
                 'screenshot_section_id' => $match?->id,
@@ -53,7 +62,22 @@ class AnalyzePageJob implements ShouldQueue
             ]);
         }
 
-        $audit->update(['token_cost' => $result->cost, 'ai_model' => $result->model]);
+        if ($unmatched !== []) {
+            // Not fatal — the rest of the audit is still worth having — but it is
+            // the one failure that otherwise produces an empty report in silence.
+            Log::warning('AI named sections that were never captured, so their findings cannot be evidenced.', [
+                'audit_id'  => $audit->id,
+                'model'     => $result->model,
+                'unmatched' => $unmatched,
+                'captured'  => $sections->keys()->all(),
+            ]);
+        }
+
+        $audit->update([
+            'token_cost'         => $result->cost,
+            'ai_model'           => $result->model,
+            'unmatched_findings' => count($unmatched),
+        ]);
     }
 
     /**
