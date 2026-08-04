@@ -35,3 +35,29 @@ yarn-error.log
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Local browser profile used for GA4 documentation capture — contains a Google session
+/storage/app/browser-profile
+
+# Laravel's own runtime state — regenerated on demand, never source
+/storage/app/private
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+/storage/logs
+
+# Audit output. Screenshots 1–5 and audit-3.* are committed demo fixtures and stay
+# tracked; everything a real run writes here is disposable.
+/storage/app/pdf
+/storage/app/public/screenshots
+
+# Local SQLite database — schema lives in database/migrations, data does not
+/database/*.sqlite
+/database/*.sqlite-journal
+/database/*.sqlite-shm
+/database/*.sqlite-wal
+
+# Browser-automation scratch output (Playwright MCP traces, one-off debug screenshots)
+/.playwright-mcp
+/prefill-form.png
