@@ -1,0 +1,37 @@
+tests/Feature/GeminiRewriterTest.php
+  s_dfcbf3f6b09e22::t_7333bbea10b6fd 1-118
+app/Providers/AppServiceProvider.php
+  s_dfcbf3f6b09e22::t_5821030d120493 14,17,26,29,33,35,41-42,44,48-66,68-69
+  s_dfcbf3f6b09e22::t_d2d6c509abd58c 67
+  s_dfcbf3f6b09e22::t_41c1266042463a 70-71
+tests/Feature/UnknownDriverThrowsTest.php
+  s_dfcbf3f6b09e22::t_b3550eb8913af0 1-79
+.env.example
+  s_dfcbf3f6b09e22::t_71e4ef27c46db3 69-70,72-73
+docs/features/f11-ai-rewrite.md
+  s_dfcbf3f6b09e22::t_cd2d58b68cde3f 60-75,78-81
+  s_dfcbf3f6b09e22::t_db9dac3a58edf9 100-101
+app/Services/Rewrite/GeminiCopyRewriter.php
+  s_dfcbf3f6b09e22::t_8ed0e857cce81a 1-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "ca88ad1c7da6faa9fabde710f5923c4d41e24c01",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_dfcbf3f6b09e22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e42c6ea9-11c2-4d3f-aedc-929975cc980d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
