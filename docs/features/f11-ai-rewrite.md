@@ -57,10 +57,28 @@ fails, the panel shows the stored variants and says plainly that the live call f
 This is not politeness about error states. Step 7 of the demo flow is a live model call
 in a venue you do not control.
 
+## Which model
+
+Three drivers — `stub`, `gemini`, `claude` — chosen by `AI_REWRITE_DRIVER`, which is a
+separate switch from `AI_DRIVER` so the expensive vision pass can stay on stub while this
+one is real.
+
+`GeminiCopyRewriter` exists so a deployment can run on one provider. Until it did, the
+container had only `'claude'` and a `default`, and `AI_REWRITE_DRIVER=gemini` fell through
+to the stub — canned copy served from a button that looked live, with nothing logged and
+nothing failed. Since `rewrite_driver` defaults to whatever `AI_DRIVER` is, simply going
+live on Gemini was enough to trigger it.
+
+**An unrecognised driver now throws, naming itself and listing the valid ones.** That
+applies to `AI_DRIVER` and `CAPTURE_DRIVER` too. A typo surfaces on the first request
+after a deploy instead of silently downgrading the product.
+
 ## Cost
 
-One text-only call, roughly a tenth of a cent, behind the same `AI_DRIVER` switch as the
-vision call. Stored on first use, so a second click on the same headline costs nothing.
+One text-only call, roughly a tenth of a cent. Stored on first use, so a second click on
+the same headline costs nothing. On a thinking model the thinking tokens are counted as
+output, the same as in F05 — a rewrite that spends 700 of them and 200 on the visible
+reply is billed for both.
 
 ## What "done" means
 
@@ -79,6 +97,8 @@ vision call. Stored on first use, so a second click on the same headline costs n
 |---|---|---|---|
 | `#136` | unit | A malformed model reply is rejected, not half-saved | `tests/Unit/Rewrite/RewriteSchemaTest.php` |
 | `#138` | feature | The endpoint returns the documented shape; a repeat call returns stored variants without a second model call; an unknown section returns 422 | `tests/Feature/RewriteEndpointTest.php` |
+| — | feature | The Gemini driver returns the versions the model wrote, counts thinking tokens, and turns a refusal or a non-JSON reply into a real error | `tests/Feature/GeminiRewriterTest.php` |
+| — | feature | An unrecognised driver name throws and lists the valid ones, for all three switches; every real driver still resolves | `tests/Feature/UnknownDriverThrowsTest.php` |
 
 ## Known gaps and debt
 
