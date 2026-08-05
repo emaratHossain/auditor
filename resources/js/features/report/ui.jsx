@@ -116,25 +116,137 @@ export function PriorityTag({ value }) {
 export function ScoreReadout({ score }) {
   const value = score ?? 0
   const sev = SEVERITY[band(score)]
+  const shown = useCountUp(value)
 
   return (
     <div role="img" aria-label={`Conversion Score ${score ?? 'not yet known'} out of 100`}>
       <p className={T.eyebrow}>Conversion Score</p>
 
-      <div className="mt-1 flex items-baseline gap-2">
-        <span className={`${T.figure} text-6xl font-semibold leading-none`}>{score ?? '—'}</span>
+      {/* The number the product is named for, at the size that says so. */}
+      <div className="mt-1 flex items-baseline gap-3">
+        <span
+          className={`${T.figure} score-figure font-semibold leading-[0.82] tracking-[-0.03em]`}
+          style={{ fontSize: 'clamp(64px, 11vw, 112px)', color: sev.bar }}
+        >
+          {score == null ? '—' : shown}
+        </span>
         <span className={`${T.figure} text-sm text-[var(--color-mist)]`}>/ 100</span>
       </div>
 
       {/* The scale it sits on, so the number means something on its own. */}
-      <div className="mt-3 h-1 w-44 rounded-full bg-[var(--color-raised)]">
+      <div className="mt-4 h-[6px] w-full max-w-[260px] overflow-hidden rounded-full bg-[var(--color-raised)]">
         <div
-          className="h-full rounded-full transition-[width] duration-700"
+          className="h-full rounded-full transition-[width] duration-[1200ms] ease-out"
           style={{ width: `${Math.max(2, value)}%`, background: sev.bar }}
         />
       </div>
     </div>
   )
+}
+
+/**
+ * Counts a number up on first paint.
+ *
+ * One second of movement on the one figure the whole screen is about. Anyone
+ * who has asked their system not to animate gets the number immediately.
+ */
+function useCountUp(target, ms = 900) {
+  const [n, setN] = React.useState(() =>
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? target : 0)
+
+  React.useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return setN(target)
+
+    let raf
+    const started = performance.now()
+    const tick = (now) => {
+      const p = Math.min(1, (now - started) / ms)
+      setN(Math.round(target * (1 - Math.pow(1 - p, 3))))
+      if (p < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+
+    return () => cancelAnimationFrame(raf)
+  }, [target, ms])
+
+  return n
+}
+
+/**
+ * The four stages, live, while the audit runs.
+ *
+ * This screen is on for one to two minutes — the longest anyone looks at this
+ * product in one go, and it used to be a pulsing bar that said nothing. The
+ * pipeline is real and named in the code, so showing it is not decoration: it
+ * is the difference between "it is thinking" and "it is opening your page,
+ * then looking at it, then joining that to your numbers".
+ */
+export function RunningPipeline({ stages, current, startedAt }) {
+  const index = stages.findIndex((s) => s.key === current)
+  const elapsed = useElapsed(startedAt)
+
+  return (
+    <div className={`${T.surface} p-6 sm:p-8`}>
+      <div className="flex items-baseline justify-between gap-4">
+        <p className={T.eyebrow}>Running</p>
+        <p className={`${T.figure} text-xs text-[var(--color-mist)]`}>{elapsed}</p>
+      </div>
+
+      <ol className="mt-6 space-y-0">
+        {stages.map((s, i) => {
+          const done = index > i
+          const live = index === i
+
+          return (
+            <li key={s.key} className="flex gap-4 pb-6 last:pb-0">
+              {/* The rail: filled behind you, drawn where you are, empty ahead. */}
+              <div className="relative flex w-4 shrink-0 flex-col items-center">
+                <span
+                  className={`mt-[6px] h-[9px] w-[9px] shrink-0 rounded-full ${live ? 'stage-live' : ''}`}
+                  style={{
+                    background: done || live ? 'var(--color-measured)' : 'var(--color-raised)',
+                    border: done || live ? 'none' : '1px solid var(--color-line)',
+                  }}
+                />
+                {i < stages.length - 1 && (
+                  <span
+                    className="mt-1 w-px flex-1"
+                    style={{ background: done ? 'var(--color-measured)' : 'var(--color-line)' }}
+                  />
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1 pb-1">
+                <p className={done || live ? T.body : `${T.body} text-[var(--color-mist)]`}>{s.label}</p>
+                {live && <p className={`mt-1 ${T.quiet}`}>{s.detail}</p>}
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+
+      <p className={`mt-2 ${T.quiet}`}>
+        One to two minutes on a real page. You can leave this open.
+      </p>
+    </div>
+  )
+}
+
+/** Wall-clock since the audit was queued, in mono, because it is measured. */
+function useElapsed(startedAt) {
+  const [now, setNow] = React.useState(() => Date.now())
+
+  React.useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+
+    return () => clearInterval(id)
+  }, [])
+
+  if (!startedAt) return ''
+
+  const seconds = Math.max(0, Math.round((now - new Date(startedAt).getTime()) / 1000))
+
+  return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
 }
 
 /**

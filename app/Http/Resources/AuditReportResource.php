@@ -19,6 +19,13 @@ class AuditReportResource extends JsonResource
         $metrics = $this->metrics;
         $findings = $this->findings->keyBy(fn ($f) => strtolower($f->section_name));
 
+        // How far down the page people actually get, section by section. The
+        // drop column draws its retention ribbon from this and from nothing
+        // else — where the number was never supplied, the ribbon is absent
+        // rather than guessed.
+        $reach = collect($metrics?->section_reach ?? [])
+            ->mapWithKeys(fn ($v, $k) => [strtolower($k) => (float) $v]);
+
         return [
             'id'     => $this->id,
             'status' => $this->status,
@@ -74,7 +81,7 @@ class AuditReportResource extends JsonResource
                 ['key' => 'mobile_bounce_rate', 'label' => 'Bounce rate on a phone',   'value' => $metrics->mobile_bounce_rate, 'unit' => '%', 'explain' => 'The same leaving-without-acting figure, but only for phones.'],
             ] : [],
 
-            'sections' => $this->sections->where('viewport', 'desktop')->values()->map(function ($section) use ($findings) {
+            'sections' => $this->sections->where('viewport', 'desktop')->values()->map(function ($section) use ($findings, $reach) {
                 $finding = $findings->get(strtolower($section->section_name));
 
                 return [
@@ -85,6 +92,9 @@ class AuditReportResource extends JsonResource
                     ),
                     'position_percent' => (int) round($section->depth() * 100),
                     'above_the_fold'   => $section->isAboveTheFold(),
+                    // Null, never a guess: the ribbon simply stops where the
+                    // measurement stops.
+                    'reach_percent'    => $reach->get(strtolower($section->section_name)),
                     // The section's own words, so the report can show them as
                     // text and offer to rewrite them — not only as a picture.
                     'copy'             => $section->copy,

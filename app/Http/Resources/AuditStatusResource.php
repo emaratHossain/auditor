@@ -18,6 +18,9 @@ class AuditStatusResource extends JsonResource
             'stage_label'   => $this->stageLabel(),
             'overall_score' => $this->overall_score,
             'error_message' => $this->error_message,
+            // The waiting screen counts up from here, so a long capture reads
+            // as work in progress rather than as a screen that has died.
+            'created_at'    => $this->created_at?->toIso8601String(),
         ];
     }
 }

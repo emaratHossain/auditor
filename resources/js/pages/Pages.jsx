@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '../api/client'
 import { Skeleton, EmptyState, ErrorState, ConfirmDialog } from '../features/report/ui'
 import MetricsForm from '../features/report/MetricsForm'
+import { SEVERITY, band } from '../features/report/theme'
 
 /** "Its 3 reports and their screenshots go too." */
 function whatGoesWithIt(count) {
@@ -55,10 +56,18 @@ export default function Pages() {
 
   return (
     <div className="space-y-10">
+      {/*
+        The opening shot. This screen has one job — get a URL — so the address
+        field is the largest thing on it, and the sentence above it says what
+        the product does in the words a visitor would use about their own page.
+      */}
       <section>
-        <h2 className="mb-1 text-lg font-semibold">Add a landing page</h2>
-        <p className="mb-4 text-sm text-[var(--color-mist)]">
-          Paste the address of a page you want looked at. You will be asked for its numbers when you run an audit.
+        <h2 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">
+          Paste a landing page. Find out where visitors leave, and why.
+        </h2>
+        <p className="mb-6 mt-2 max-w-2xl text-sm text-[var(--color-mist)]">
+          Every finding is tied to a real number and a real section of your page. You will be
+          asked for its numbers when you run the audit.
         </p>
 
         <form
@@ -118,13 +127,31 @@ export default function Pages() {
                   {page.latest_audit?.score != null ? (
                     <button
                       onClick={() => navigate(`/audits/${page.latest_audit.id}`)}
-                      className="rounded-full bg-[var(--color-raised)] px-3 py-1 text-sm font-semibold"
                       title="Open the last report"
+                      className="group flex items-center gap-3"
                     >
-                      {page.latest_audit.score}<span className="text-[var(--color-mist)]">/100</span>
+                      {/* The score on its ramp, so a list of pages is scannable
+                          by how bad they are rather than by name. */}
+                      <span className="hidden h-[6px] w-24 overflow-hidden rounded-full bg-[var(--color-raised)] sm:block">
+                        <span
+                          className="block h-full rounded-full"
+                          style={{
+                            width: `${Math.max(3, page.latest_audit.score)}%`,
+                            background: SEVERITY[band(page.latest_audit.score)].bar,
+                          }}
+                        />
+                      </span>
+                      <span
+                        className="font-mono tnum text-sm font-semibold group-hover:underline"
+                        style={{ color: SEVERITY[band(page.latest_audit.score)].bar }}
+                      >
+                        {page.latest_audit.score}<span className="text-[var(--color-mist)]">/100</span>
+                      </span>
                     </button>
                   ) : (
-                    <span className="text-sm text-[var(--color-mist)]">Never audited</span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-mist)]">
+                      Never audited
+                    </span>
                   )}
                   <button
                     onClick={() => setAuditingPage(page)}

@@ -2,11 +2,20 @@ import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import client from '../api/client'
-import { Skeleton, EmptyState, ErrorState, PriorityTag, ScoreReadout, CategoryRow, DepthTick } from '../features/report/ui'
+import { Skeleton, EmptyState, ErrorState, PriorityTag, ScoreReadout, CategoryRow, RunningPipeline } from '../features/report/ui'
 import RewritePanel from '../features/report/RewritePanel'
+import DropColumn, { useActiveSection } from '../features/report/DropColumn'
 import { T, SEVERITY, band } from '../features/report/theme'
 
 const RUNNING = ['pending', 'running']
+
+/** The pipeline, in the order it happens, said in words a reader recognises. */
+const STAGES = [
+  { key: 'capturing',   label: 'Opening your page and photographing it',  detail: 'Section by section, on a desktop and on a phone.' },
+  { key: 'analysing',   label: 'Looking at every section',                detail: 'One pass over all of them, with the measurements attached.' },
+  { key: 'correlating', label: 'Joining your numbers to what it saw',     detail: 'Five rules, each of which has to find real evidence.' },
+  { key: 'scoring',     label: 'Ranking the fixes and working the score', detail: 'By how many visitors it affects, and how much work it is.' },
+]
 
 export default function Report() {
   const { id } = useParams()
@@ -48,16 +57,11 @@ export default function Report() {
 
   if (!done) {
     return (
-      <div className={`${T.surface} p-8`}>
-        <p className={T.eyebrow}>Running</p>
-        <p className={`mt-2 ${T.title}`}>{status.data.stage_label ?? 'Getting started…'}</p>
-        <p className={`mt-1 ${T.quiet}`}>
-          This usually takes one to two minutes. You can leave this page open.
-        </p>
-        <div className="mt-5 h-[3px] overflow-hidden rounded-full bg-[var(--color-raised)]">
-          <div className="h-full w-1/3 animate-pulse rounded-full bg-[var(--color-measured)]" />
-        </div>
-      </div>
+      <RunningPipeline
+        stages={STAGES}
+        current={status.data.stage ?? 'capturing'}
+        startedAt={status.data.created_at}
+      />
     )
   }
 
@@ -66,6 +70,23 @@ export default function Report() {
 
   const r = report.data
   const top3 = r.recommendations.slice(0, 3)
+
+  return <Loaded id={id} r={r} top3={top3} showBreakdown={showBreakdown} setShowBreakdown={setShowBreakdown} />
+}
+
+function Loaded({ id, r, top3, showBreakdown, setShowBreakdown }) {
+  const activeName = useActiveSection(r.sections.map((s) => s.name))
+
+  const jumpTo = (name) => {
+    document.querySelector(`[data-section-name="${CSS.escape(name)}"]`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // The lowest-scoring section, which is what the headline sentence names. A
+  // section the model never scored is not a candidate for "worst".
+  const worst = r.sections
+    .filter((s) => s.ai_score != null)
+    .sort((a, b) => a.ai_score - b.ai_score)[0]
 
   return (
     <div className="space-y-10">
@@ -109,6 +130,26 @@ export default function Report() {
             </p>
           </div>
         </div>
+
+        {/*
+          One sentence saying what the number means, built from the section the
+          model scored worst. A score on its own is a grade; this is the finding.
+        */}
+        {worst && (
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--color-paper)]">
+            The weakest thing on this page is{' '}
+            <button
+              onClick={() => jumpTo(worst.name)}
+              className="font-medium underline decoration-[var(--color-line)] underline-offset-4 hover:decoration-[var(--color-paper)]"
+            >
+              {worst.name}
+            </button>
+            , <span className={T.figure}>{worst.position_percent}%</span> down the page
+            {worst.ai_score != null && (
+              <> — it scores <span className={T.figure} style={{ color: SEVERITY[band(worst.ai_score)].bar }}>{worst.ai_score}/100</span></>
+            )}.
+          </p>
+        )}
 
         {/* The numbers this whole report is built on. */}
         <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-[var(--color-line)] pt-5 sm:grid-cols-3">
@@ -180,13 +221,28 @@ export default function Report() {
           <span className={T.eyebrow}>depth ↓</span>
         </div>
 
-        <div>
-          {r.sections.map((s, i) => (
-            <article key={s.name} data-testid="section-card" className="flex gap-0 sm:gap-2">
-              <DepthTick percent={s.position_percent} delayMs={i * 90} />
+        {/*
+          The column and the reading column, side by side. The column is the
+          map: it stays put while you read, lights the section you are on, and
+          takes you to any other one.
+        */}
+        <div className="grid gap-5 sm:grid-cols-[132px_1fr]">
+          <div>
+            <DropColumn sections={r.sections} activeName={activeName} onJump={jumpTo} />
+          </div>
 
-              <div className={`${T.surface} mb-4 grid flex-1 gap-5 p-4 sm:grid-cols-[240px_1fr]`}>
-                <div>
+          <div className="min-w-0">
+          {r.sections.map((s) => (
+            <article
+              key={s.name}
+              data-testid="section-card"
+              data-section-name={s.name}
+              className="scroll-mt-6"
+            >
+              <div className={`${T.surface} ${s.name === activeName ? 'section-lit' : ''} mb-4 grid flex-1 gap-5 p-4 transition-colors sm:grid-cols-[240px_1fr]`}>
+                {/* Stays beside the words while you read a long list of
+                    problems, so the picture and the critique never separate. */}
+                <div className="self-start sm:sticky sm:top-6">
                   {s.screenshot_url
                     ? <img src={s.screenshot_url} alt={`${s.name} section`} className="w-full rounded border border-[var(--color-line)]" />
                     : <div className="rounded border border-[var(--color-line)] p-8 text-center text-xs text-[var(--color-mist)]">no picture</div>}
@@ -228,6 +284,7 @@ export default function Report() {
               </div>
             </article>
           ))}
+          </div>
         </div>
       </section>
 
