@@ -1,0 +1,217 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.jsx';
+
+/*
+|--------------------------------------------------------------------------
+| DropSense AI — an instrument, not a website
+|--------------------------------------------------------------------------
+| Two rules hold this together, and both encode meaning rather than taste:
+|
+| 1. COLOUR ONLY EVER MEANS SEVERITY OR MEASUREMENT. Chrome, buttons, links
+|    and headings are all neutral. If something on this screen is coloured,
+|    it is telling you how bad a problem is or how much to trust a number.
+|    That is why there is no brand accent: the palette is the data.
+|
+| 2. MONOSPACE MEANS MEASURED, SANS MEANS JUDGED. Every number that came off
+|    a real page or a real analytics figure is set in mono and tabular. Every
+|    sentence of opinion is set in sans. You can tell what the machine
+|    measured from what the model thinks without reading a word.
+|
+| No web fonts on purpose. The demo runs in a venue whose network cannot be
+| trusted, and a font that fails to load is a design that fails to load.
+*/
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+
+    /* Canvas — blue-shifted, so screenshots of real pages read as warm against it */
+    --color-ink: #0a0d13;
+    --color-slate: #131822;
+    --color-raised: #1a2130;
+    --color-line: #262f3f;
+
+    /* Text */
+    --color-mist: #8994a8;
+    --color-paper: #e6ebf2;
+
+    /* The severity ramp. The ONLY saturated colour on the screen. */
+    --color-sev-high: #ff5f52;
+    --color-sev-med: #f0a830;
+    --color-sev-low: #45b69c;
+
+    /* Measurement status — a separate signal from severity, deliberately cool */
+    --color-measured: #64c8e0;
+}
+
+html {
+    background: var(--color-ink);
+    color-scheme: dark;
+}
+
+body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Every number is tabular. Columns of figures that jitter are not an instrument. */
+.tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+}
+
+/* The one piece of motion on the whole screen: the depth spine draws itself
+   top to bottom on load, which is the movement the page is describing. */
+@keyframes spine-drop {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+}
+
+.spine-line {
+    transform-origin: top;
+    animation: spine-drop 700ms cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+/*
+| The drop column
+|
+| One orchestrated moment on load: the page's own bands drop into place top to
+| bottom, and the retention ribbon draws out beside them. It is the movement
+| the product is describing — visitors arriving at the top and falling away on
+| the way down — so it happens once, at the only place it means something.
+*/
+@keyframes band-in {
+    from { transform: scaleY(0); opacity: 0; }
+    to   { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes ribbon-out {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+.drop-band {
+    transform-origin: top;
+    animation: band-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    transition: background 180ms ease, transform 180ms ease;
+}
+
+.drop-band:hover {
+    transform: scaleX(1.18);
+}
+
+.ribbon {
+    transform-origin: left;
+    animation: ribbon-out 700ms 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    transition: background 180ms ease;
+}
+
+/* The column follows you down the report; it is the map, not an ornament.
+   On a phone there is no room beside the text, so it sits above it instead —
+   still the same object, still measured, just not following. */
+.drop-column {
+    /* On a phone the column stands on the left and reads out beside itself,
+       so it still looks like a page rather than a row of bars. */
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 14px;
+    height: 172px;
+}
+
+.drop-column > figcaption { grid-column: 1 / -1; }
+.drop-column > .drop-body { grid-column: 1; min-height: 0; }
+.drop-column > .drop-readout { grid-column: 2; align-self: end; }
+
+@media (min-width: 640px) {
+    .drop-column {
+        position: sticky;
+        top: 24px;
+        display: flex;
+        flex-direction: column;
+        height: min(62vh, 520px);
+    }
+
+    .drop-column > .drop-body { flex: 1; }
+
+    .drop-column > .drop-readout {
+        margin-top: 12px;
+        border-top: 1px solid var(--color-line);
+        padding-top: 8px;
+    }
+}
+
+
+/* The score, on arrival. */
+.score-figure {
+    font-variant-numeric: tabular-nums;
+}
+
+/* The stage the pipeline is on, breathing so you can tell it is not stuck. */
+@keyframes stage-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-measured) 55%, transparent); }
+    50%      { box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-measured) 0%, transparent); }
+}
+
+.stage-live {
+    animation: stage-pulse 1800ms ease-out infinite;
+}
+
+/* A section lights when the column says you are on it. */
+.section-lit {
+    border-color: color-mix(in srgb, var(--color-measured) 45%, var(--color-line));
+}
+
+/* Focus is always visible, on everything, without being asked twice. */
+:where(a, button, input, summary):focus-visible {
+    outline: 1px solid var(--color-measured);
+    outline-offset: 2px;
+}
+
+/* Anyone who asked for stillness gets stillness. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spine-line { animation: none; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-measured);
+    outline-offset: 2px;
+}
+
+/* Controls. Inputs hold measured values, so they are set in mono and tabular
+   like every other figure on the screen. */
+input,
+textarea,
+select {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+input::placeholder {
+    color: var(--color-mist);
+    opacity: 0.7;
+}
+
+summary {
+    color: var(--color-paper);
+}

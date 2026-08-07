@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  ============================================================================
+  FEATURE DASHBOARD TEMPLATE  —  fill in DATA ONLY, leave the CSS/JS structure.
+  1. Set the <title>.
+  2. Edit the MASTHEAD block in the HTML (eyebrow, h1, .sub, .meta-row tags).
+  3. Edit the data in <script>: CAUSE (fix runs only), STEPS, SHOTS, DOD, TRACK.
+     CAUSE = null and SHOTS = [] simply remove those sections; numbering re-stamps itself.
+  4. Save as docs/features/<slug>.dashboard.html and open it in a browser
+     (SendUserFile with display:"render" to surface it). NOT published anywhere.
+  Complete standalone document: inline CSS/JS, light+dark themes, no external assets.
+  ============================================================================
+-->
+<title>Landing Page Auditor V1 — Build Control Panel</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: #f6f2e9; --paper-2: #fffdf7;
+    --ink: #23262f; --ink-soft: #5a5e6b; --ink-faint: #8b8f9c;
+    --line: #ded6c4; --line-2: #ebe4d5;
+    --accent: #0f766e; --accent-soft: #d7ebe8;
+    --ok: #2f8f4e; --ok-soft: #dbeee0;
+    --warn: #b5771f; --warn-soft: #f4e6cc;
+    --crit: #c0392b; --crit-soft: #f3d9d5;
+    --shadow: 0 1px 2px rgba(35,38,47,.06), 0 8px 24px rgba(35,38,47,.06);
+    --stamp: rgba(15,118,110,.10);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Charter, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16181f; --paper-2: #1d2029;
+      --ink: #e9e7e0; --ink-soft: #a9adba; --ink-faint: #71757f;
+      --line: #2f333e; --line-2: #262a33;
+      --accent: #4fd1c5; --accent-soft: #16302e;
+      --ok: #58c47a; --ok-soft: #17301f;
+      --warn: #e0a94a; --warn-soft: #34281291;
+      --crit: #e8776a; --crit-soft: #351d1a;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+      --stamp: rgba(79,209,197,.09);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #f6f2e9; --paper-2: #fffdf7;
+    --ink: #23262f; --ink-soft: #5a5e6b; --ink-faint: #8b8f9c;
+    --line: #ded6c4; --line-2: #ebe4d5;
+    --accent: #0f766e; --accent-soft: #d7ebe8;
+    --ok: #2f8f4e; --ok-soft: #dbeee0;
+    --warn: #b5771f; --warn-soft: #f4e6cc;
+    --crit: #c0392b; --crit-soft: #f3d9d5;
+    --shadow: 0 1px 2px rgba(35,38,47,.06), 0 8px 24px rgba(35,38,47,.06);
+    --stamp: rgba(15,118,110,.10);
+  }
+  :root[data-theme="dark"] {
+    --paper: #16181f; --paper-2: #1d2029;
+    --ink: #e9e7e0; --ink-soft: #a9adba; --ink-faint: #71757f;
+    --line: #2f333e; --line-2: #262a33;
+    --accent: #4fd1c5; --accent-soft: #16302e;
+    --ok: #58c47a; --ok-soft: #17301f;
+    --warn: #e0a94a; --warn-soft: #34281291;
+    --crit: #e8776a; --crit-soft: #351d1a;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    --stamp: rgba(79,209,197,.09);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 22px 64px; }
+
+  .masthead { border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2); padding: 26px 28px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+  .masthead::after { content: "V1 PLAN"; position: absolute; right: 20px; top: 18px; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; color: var(--accent); border: 2px solid var(--accent); border-radius: 8px; padding: 8px 12px; transform: rotate(-9deg); opacity: .55; background: var(--stamp); }
+  .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 4vw, 38px); margin: 0 0 6px; letter-spacing: -.01em; text-wrap: balance; max-width: 22ch; }
+  .sub { color: var(--ink-soft); margin: 0; max-width: 62ch; font-size: 15.5px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); background: var(--paper); }
+  .tag.warnpill { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); background: var(--warn-soft); }
+
+  section { margin-top: 34px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; }
+  .sec-head h2 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 12px; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 1px 7px; }
+  .sec-sub { color: var(--ink-faint); font-size: 13.5px; margin: 2px 0 18px; }
+
+  .flow { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 14px; }
+  .step { flex: 1 0 155px; min-width: 155px; text-align: left; cursor: pointer; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); padding: 13px 13px 12px; position: relative; transition: transform .12s, border-color .12s, box-shadow .12s; font: inherit; color: inherit; }
+  .step:hover, .step:focus-visible { transform: translateY(-2px); border-color: var(--accent); box-shadow: var(--shadow); outline: none; }
+  .step[aria-expanded="true"] { border-color: var(--accent); box-shadow: var(--shadow); }
+  .step .num { font-family: var(--mono); font-size: 11px; color: var(--accent); display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 6px; background: var(--accent-soft); margin-bottom: 8px; }
+  .step h3 { font-size: 14px; margin: 0 0 3px; font-weight: 650; letter-spacing: -.005em; }
+  .step .who { font-size: 12px; color: var(--ink-soft); margin: 0; }
+  .step .arrow { position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--line); z-index: 2; }
+  .step:last-child .arrow { display: none; }
+  .detail { display: none; margin-top: 34px; border: 1px dashed var(--line); border-radius: 12px; background: var(--paper-2); padding: 16px 18px; }
+  .detail.open { display: block; }
+  .detail h4 { margin: 0 0 6px; font-size: 15px; font-family: var(--serif); }
+  .detail p { margin: 0 0 8px; color: var(--ink-soft); font-size: 14px; }
+  code, .file { font-family: var(--mono); font-size: 12.5px; }
+  .file { color: var(--accent); background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; }
+  .stamp-note { margin-top: 10px; font-size: 12.5px; color: var(--warn); background: var(--warn-soft); border-radius: 8px; padding: 8px 11px; border: 1px solid color-mix(in srgb, var(--warn) 30%, var(--line)); }
+
+  /* ---- root-cause block (bug/fix runs) ---- */
+  .cause { border: 1px solid var(--line); border-left: 3px solid var(--crit); border-radius: 14px; background: var(--paper-2); padding: 6px 22px 18px; box-shadow: var(--shadow); }
+  .cause-l { display: block; padding: 14px 0 0; border-top: 1px solid var(--line-2); }
+  .cause-l:first-child { border-top: none; }
+  .cause-k { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .cause-l p { margin: 0; font-size: 14.5px; color: var(--ink); }
+  .cause-l ol { margin: 0; padding-left: 20px; }
+  .cause-l ol li { font-size: 14.5px; color: var(--ink); margin-bottom: 6px; }
+
+  /* ---- screenshot evidence ---- */
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  figure.shot { margin: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); overflow: hidden; box-shadow: var(--shadow); }
+  figure.shot a { display: block; }
+  figure.shot img { display: block; width: 100%; height: auto; background: var(--paper); border-bottom: 1px solid var(--line-2); }
+  figure.shot figcaption { padding: 12px 14px 14px; }
+  .shot .kind { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; display: inline-block; margin-bottom: 7px; }
+  .shot .kind.bad { color: #fff; background: var(--crit); }
+  .shot .kind.good { color: var(--ok); background: var(--ok-soft); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); }
+  .shot .kind.info { color: var(--accent); background: var(--accent-soft); }
+  .shot .t { font-size: 13.5px; font-weight: 640; margin: 0 0 4px; }
+  .shot .d { font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+  .shot .missing { padding: 26px 14px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--warn); background: var(--warn-soft); border-bottom: 1px solid var(--line-2); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 780px) { .cols { grid-template-columns: 1fr; } .masthead::after { display: none; } }
+  .panel { border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2); padding: 20px 20px 8px; box-shadow: var(--shadow); }
+
+  .check { display: flex; gap: 11px; padding: 11px 2px; border-top: 1px solid var(--line-2); align-items: flex-start; }
+  .check:first-of-type { border-top: none; }
+  .box { flex: 0 0 auto; width: 19px; height: 19px; border-radius: 6px; margin-top: 1px; border: 1.5px solid var(--ink-faint); display: grid; place-items: center; transition: background .12s, border-color .12s; cursor: pointer; }
+  .box svg { width: 12px; height: 12px; opacity: 0; transition: opacity .12s; }
+  .check.done .box { background: var(--ok); border-color: var(--ok); }
+  .check.done .box svg { opacity: 1; }
+  .check .txt { font-size: 14px; flex: 1; min-width: 0; }
+  .check .title { cursor: pointer; display: block; }
+  .check .txt b { font-weight: 640; }
+  .check.done .txt b { text-decoration: line-through; text-decoration-color: var(--ink-faint); color: var(--ink-soft); }
+  .check .eg { display: block; color: var(--ink-faint); font-size: 12.5px; margin-top: 2px; font-family: var(--mono); }
+  .expander { margin-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); border: none; border-radius: 6px; padding: 3px 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .expander .chev { transition: transform .15s; }
+  .check.expanded .expander .chev { transform: rotate(90deg); }
+  .subtests { list-style: none; margin: 9px 0 2px; padding: 0; display: none; }
+  .check.expanded .subtests { display: block; }
+  .subtests li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px dashed var(--line-2); }
+  .subtests li:first-child { border-top: none; }
+  .subtests .tname { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); word-break: break-word; }
+  .subtests .tref { font-family: var(--mono); font-size: 12px; color: var(--accent); flex: 0 0 auto; }
+
+  .track-group { margin-bottom: 6px; }
+  .track-group h5 { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin: 14px 0 8px; display: flex; align-items: center; gap: 8px; }
+  .track-group h5::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
+  .card { display: flex; gap: 11px; align-items: flex-start; padding: 11px 12px; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); border-left-width: 3px; }
+  .card.p-critical { border-left-color: var(--crit); }
+  .card.p-high { border-left-color: var(--warn); }
+  .card.p-medium { border-left-color: var(--accent); }
+  .card .id { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); flex: 0 0 auto; padding-top: 1px; }
+  .card .body { flex: 1; }
+  .card .body .t { font-size: 13.5px; font-weight: 600; margin: 0 0 3px; }
+  .card .body .d { font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+  .pri { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; flex: 0 0 auto; align-self: center; }
+  .pri.critical { color: #fff; background: var(--crit); }
+  .pri.high { color: var(--warn); background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
+  .pri.medium { color: var(--accent); background: var(--accent-soft); }
+
+  .progress { font-size: 12.5px; color: var(--ink-faint); font-family: var(--mono); margin: 2px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tasklink { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 3px 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .tasklink:hover { text-decoration: underline; }
+  .card .id.tasklink { align-self: center; }
+  .card .id.plain { text-decoration: none; }
+  .foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 12.5px; font-family: var(--mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 9px; height: 9px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ========= MASTHEAD: edit these five lines ========= -->
+  <header class="masthead">
+    <p class="eyebrow">Build Control Panel · 7 days · demo Sunday</p>
+    <h1>AI Landing Page UX Auditor — V1</h1>
+    <p class="sub">Paste a landing page address, type in seven numbers, and get back a ranked list of fixes
+      where every single item names a real metric, a real number, and a real section of the page.</p>
+    <div class="meta-row">
+      <span class="tag">11 features · 56 cards</span>
+      <span class="tag">Laravel 12 + React 19</span>
+      <span class="tag">1 AI call · ~$0.055 per audit</span>
+      <span class="tag warnpill">⚠ no login — do not deploy publicly</span>
+      <span class="tag warnpill">⚠ not in git yet</span>
+    </div>
+  </header>
+
+  <!-- Root cause — auto-removed unless CAUSE is set (fix/bug runs only) -->
+  <section id="cause-sec">
+    <div class="sec-head"><span class="n"></span><h2>What's going wrong</h2></div>
+    <p class="sec-sub">The problem, why it happens, and what to do about it — in plain words.</p>
+    <div class="cause" id="cause"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n"></span><h2>How it flows</h2></div>
+    <p class="sec-sub">Click any step to see, in plain words, what's happening.</p>
+    <div class="flow" id="flow"></div>
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <!-- Screenshots — auto-removed unless SHOTS has entries -->
+  <section id="shots-sec">
+    <div class="sec-head"><span class="n"></span><h2>What it looks like</h2></div>
+    <p class="sec-sub">Real screens, each with what to look at. Click any image to open it full size.</p>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <div class="cols">
+    <section>
+      <div class="sec-head"><span class="n"></span><h2>What "done" means</h2></div>
+      <p class="sec-sub">The feature is successful when every line is true. Tick as you verify — saved in your browser.</p>
+      <div class="panel"><p class="progress" id="progress"></p><div id="checklist"></div></div>
+    </section>
+    <section>
+      <div class="sec-head"><span class="n"></span><h2>What's left &amp; what's owed</h2></div>
+      <p class="sec-sub">Live from the kanban board — pending build, test gaps, and technical debt.</p>
+      <div class="panel" id="tracker"></div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span class="legend">
+      <span><span class="dot" style="background:var(--crit)"></span>critical</span>
+      <span><span class="dot" style="background:var(--warn)"></span>high</span>
+      <span><span class="dot" style="background:var(--accent)"></span>medium</span>
+    </span>
+    <span>Source of truth: <code>kanban/tasks/</code> · docs/features/f00…f10.md · spec: docs/superpowers/specs/2026-08-02-landing-page-auditor-v1-design.md</span>
+  </div>
+</div>
+
+<script>
+/* ======================= EDIT ONLY THE CONFIG + DATA BELOW ======================
+   REPO_ABS  — absolute path to the repo (the repo's `pwd`); powers vscode:// task links.
+   DOD_TASK  — the single QA kanban card holding the DoD checklist ({id, file} or null).
+   CAUSE  — FIX RUNS ONLY. {sym, why, fix:[…]} — leave `null` for plan/explain runs and
+            the whole section disappears. Plain English; `why` may cite <span class='file'>.
+   STEPS  — the flow, left→right. PLAIN ENGLISH: `t` = self-explaining name of what happens
+            ("We send it"), not a class/layer name ("Persist"). `who` = plain actor ("Postmark").
+            `h` = one jargon-free sentence shown first on click. `d`/`f` carry the file:line.
+            `note` (optional) shows a highlighted caveat.
+   SHOTS  — screenshots. `src` is relative to this file (evidence/<slug>-*.png), `kind` is
+            "bad" | "good" | "info", `t` names the screen, `d` says what to look at.
+            Leave `[]` and the section disappears.
+   DOD    — the Definition of Done / test areas. `eg` is a concrete example;
+            `tests` (optional) makes the item expandable to its test methods.
+   TRACK  — kanban cards grouped; pri is "critical" | "high" | "medium".
+            each item's `file` (optional, repo-relative) becomes a vscode:// open-in-editor link.
+   Wrap file:line refs in <span class='file'>…</span> and code in <code>…</code>.
+   Section numbers (01, 02, …) are stamped automatically over whatever sections remain.
+================================================================================ */
+const REPO_ABS = "/Users/globalarraytics/Projects/auditor";
+const DOD_TASK = { id:"#122", file:"kanban/tasks/122-qa-verify-landing-page-auditor-v1.md" };
+
+const CAUSE = null;  // plan run — nothing is built yet, so there is no cause to prove.
+
+const STEPS = [
+  { n:1, t:"Someone adds a landing page", who:"a marketer", h:"A person pastes the web address of the page they want looked at.",
+    d:"Name and web address are saved. The address is checked on the server, so a typo comes straight back with the error under the right field. <span class='file'>F01 · #81 #85</span>",
+    f:"app/Http/Controllers/PageController.php · resources/js/pages/Pages.jsx" },
+
+  { n:2, t:"They type in seven numbers", who:"a marketer", h:"The visitor numbers come from a short form, not from a connected account.",
+    d:"Three are required, four are optional. Every field carries a plain-English note saying what the number means. <span class='file'>F02 · #82 #86</span>",
+    f:"app/Http/Requests/StoreAuditRequest.php · resources/js/features/audits/MetricsForm.jsx",
+    note:"A blank field switches off the rules that need it. It must NEVER become a guessed number — that is the rule that keeps the whole tool honest." },
+
+  { n:3, t:"We photograph the page", who:"a robot browser", h:"A browser with nobody driving it opens the page and takes pictures of each part.",
+    d:"Up to six sections on a laptop screen plus one full-page phone shot. Cookie banners are hidden and fonts are waited for first, because a photograph of a cookie wall teaches the AI nothing. Each section's position on the page is recorded — the buried-section rule is built entirely on it. <span class='file'>F04 · #88 #89 #90</span>",
+    f:"scripts/capture.mjs · app/Jobs/CaptureScreenshotsJob.php",
+    note:"Every picture is shrunk to 1568px WebP before it goes anywhere. A full-size image can cost roughly three times as many image tokens, and judging button contrast does not need the extra pixels." },
+
+  { n:4, t:"The AI looks at every section", who:"one request, not thirteen", h:"Every picture is sent in a single request, each with its own numbers attached.",
+    d:"The model scores each section 0-100 and lists what is wrong, why it costs conversions, what to change, and how bad it is. The reply must match an agreed shape or it is retried once and then failed cleanly — never half-saved. <span class='file'>F05 · #91 #92</span>",
+    f:"app/Jobs/AnalyzePageJob.php · app/Services/Ai/VisionAnalyzer.php",
+    note:"The original plan sent 13 requests per audit (~$0.22). Sending one costs about $0.055 AND gives the model the whole-page view the extra request was there to buy." },
+
+  { n:5, t:"We join the numbers to the pictures", who:"four plain rules", h:"This is the product. Everything before it is data collection; everything after it is presentation.",
+    d:"Four rules in ordinary code — no AI, no cost. 'Seen but not clicked', 'buried below the scroll', 'the phone is the leak', 'no proof above the fold'. Anything that cannot name a metric, a number AND a section is thrown away, not shown with a caveat. <span class='file'>F06 · #93 #94 #95 #96 #97</span>",
+    f:"app/Services/Correlation/CorrelationService.php · app/Services/Correlation/Rules/",
+    note:"The evidence guarantee lives in ONE method with its own test, so it cannot be quietly bypassed later. It is why a judge can point at any line on screen and it will name a real number." },
+
+  { n:6, t:"We rank the fixes and give a score", who:"arithmetic", h:"Each fix gets a priority worked out from a formula, so two people reading the same audit agree.",
+    d:"Priority is (how many visitors reach it × how bad it is × how sure we are) ÷ how much work it takes, bucketed into High, Medium and Low. Six weighted categories roll into one score out of 100. No second AI call — the text already exists from step 4. <span class='file'>F07 F08 · #98 #99 #100</span>",
+    f:"app/Services/PriorityScorer.php · app/Services/HealthScorer.php · config/scoring.php",
+    note:"The accessibility slice of the score is an AI estimate, not a real accessibility audit. It is labelled as such in the app — see #116." },
+
+  { n:7, t:"The report appears on screen", who:"the marketer, two minutes later", h:"One screen: the score, the three fixes that matter most, then the pictures beside what is wrong with them.",
+    d:"The whole report arrives in one request of about 40 KB. Splitting it into ten tidy endpoints feels cleaner and makes the screen visibly slower. No number appears without a sentence saying what it means. <span class='file'>F09 F10 · #101 #102 #103 #104</span>",
+    f:"app/Http/Resources/AuditReportResource.php · resources/js/pages/Report.jsx" },
+];
+
+const SHOTS = [];  // plan run — nothing is built yet, so there is nothing to photograph.
+
+const DOD = [
+  { t:"The repo has history", eg:"git log shows commits from day 1, not one dump on day 7 · #78" },
+
+  { t:"A page can be added", eg:"paste a URL → it appears; paste 'not-a-url' → error under the input · #81 #85",
+    tests:[ { n:"a valid page is created and listed", f:"AuditEndpointsTest.php" },
+            { n:"an invalid URL returns 422 with a field error", f:"AuditEndpointsTest.php" },
+            { n:"an empty URL shows an inline error, not just a toast", f:"unhappy-path.spec.ts" } ] },
+
+  { t:"Blank metrics never become guesses", eg:"run with only 3 fields → report says 'not measured', SeenButNotClicked stays silent · #82 #86",
+    tests:[ { n:"only the three required fields are needed", f:"AuditEndpointsTest.php" },
+            { n:"a blank click rate makes the rule silent, not assumed", f:"SeenButNotClickedRuleTest.php" },
+            { n:"every optional field blank still produces a report", f:"unhappy-path.spec.ts" } ] },
+
+  { t:"Nobody waits on a spinner", eg:"clicking Run audit returns in under a second with status pending · #83",
+    tests:[ { n:"starting an audit returns 201 pending and queues the chain", f:"AuditEndpointsTest.php" } ] },
+
+  { t:"The progress bar tells the truth", eg:"it reads 'taking pictures', then 'the AI is looking' — matching the stage actually running · #87",
+    tests:[ { n:"polling a running audit returns its current stage", f:"AuditEndpointsTest.php" } ] },
+
+  { t:"No audit is ever stuck on running", eg:"kill the worker mid-audit → within the timeout it reads failed, with a readable message and a Try again button · #84 #103",
+    tests:[ { n:"an unreachable URL fails readably and offers a retry", f:"unhappy-path.spec.ts" } ] },
+
+  { t:"Every section is photographed", eg:"up to 6 named sections on desktop plus one full-page phone shot, each with its position recorded · #88 #89",
+    tests:[ { n:"section cards show real screenshots beside their findings", f:"audit-flow.spec.ts" } ] },
+
+  { t:"Images are shrunk before they cost money", eg:"every stored screenshot is WebP with a long edge of 1568px or less · #90" },
+
+  { t:"Exactly one AI request per audit", eg:"the log shows a single vision call, and token_cost on the audit is populated · #92" },
+
+  { t:"The AI says something specific", eg:"every section scores 0-100 with at least one problem naming an actual element — not 'improve your design' · #92" },
+
+  { t:"A malformed AI reply is rejected, not half-saved", eg:"a reply missing a severity field retries once, then fails cleanly, writing no findings rows · #92 #109",
+    tests:[ { n:"a well-formed reply validates", f:"AuditSchemaTest.php" },
+            { n:"missing fields, bad scores and non-JSON are all rejected", f:"AuditSchemaTest.php" } ] },
+
+  { t:"Every insight can prove itself", eg:"pick any insight at random — it names a metric, a number and a section. None is a generic design tip · #93 #107",
+    tests:[ { n:"an insight missing the number is discarded, not downgraded", f:"CorrelationServiceTest.php" },
+            { n:"an insight missing the section name is discarded", f:"CorrelationServiceTest.php" },
+            { n:"a run where nothing is provable returns an empty list", f:"CorrelationServiceTest.php" } ] },
+
+  { t:"The four rules fire correctly and stay quiet without data", eg:"80% reach + 2% click rate fires SeenButNotClicked; a blank click rate makes it silent · #94 #95 #96 #97 #106",
+    tests:[ { n:"80% reach with a 2% click rate fires", f:"SeenButNotClickedRuleTest.php" },
+            { n:"80% reach with a 25% click rate does not", f:"SeenButNotClickedRuleTest.php" },
+            { n:"a section below the scroll point fires DropOffBeforeSection", f:"DropOffBeforeSectionRuleTest.php" },
+            { n:"bad phone bounce WITHOUT a mobile finding does not fire MobileGap", f:"MobileGapRuleTest.php" },
+            { n:"a testimonial above the fold suppresses TrustGapEarly", f:"TrustGapEarlyRuleTest.php" } ] },
+
+  { t:"The ranking is defensible", eg:"a small problem on a section 90% reach outranks a big one on a section 5% reach · #98 #108",
+    tests:[ { n:"traffic share dominates raw severity", f:"PriorityScorerTest.php" },
+            { n:"missing reach falls back to 1.0, not 0", f:"PriorityScorerTest.php" },
+            { n:"exactly three buckets, never a fourth", f:"PriorityScorerTest.php" } ] },
+
+  { t:"Each fix has all five parts", eg:"problem · evidence with a number · suggested fix · impact as a RANGE · High/Medium/Low · #99" },
+
+  { t:"The score shows its working", eg:"clicking the number lists six categories and weights, with accessibility labelled an AI estimate · #100 #116",
+    tests:[ { n:"the six weights sum to 100", f:"HealthScorerTest.php" },
+            { n:"the total is the weighted average, rounded", f:"HealthScorerTest.php" },
+            { n:"a category with no data does not silently score zero", f:"HealthScorerTest.php" } ] },
+
+  { t:"Someone untrained gets it in two minutes", eg:"show the report to a person who has never seen the tool — they name the top fix, unprompted · #102" },
+
+  { t:"No blank white area anywhere", eg:"loading, empty and error states all render — checked once at 390px wide · #103",
+    tests:[ { n:"the full demo path renders at 390px", f:"audit-flow.spec.ts" } ] },
+
+  { t:"The PDF is sendable", eg:"the download shows score, top fixes and screenshots, and looks identical on another machine · #104" },
+
+  { t:"The demo cannot fail on the network", eg:"the seeded example audit opens and renders identically to a live one · #105" },
+
+  { t:"The tests pass", eg:"php artisan test green and npx playwright test green · #106-#112" },
+
+  { t:"You have run it on real pages", eg:"at least four real landing pages audited end to end, output read as a judge would read it · day 6" },
+];
+
+const TRACK = [
+  { group:"Day 1 — foundations", items:[
+    { id:"#78", pri:"critical", t:"Put the repo under version control and scaffold Laravel 12", d:"The project is NOT a git repo yet. Do this before writing a line of code.", file:"kanban/tasks/078-put-the-repo-under-version-control-and-scaffold.md" },
+    { id:"#79", pri:"high", t:"Scaffold the React app and wire it to the API", d:"Includes the catch-all route so refreshing on /audits/42 does not 404 — the classic first bug.", file:"kanban/tasks/079-scaffold-the-react-app-and-wire-it-to-the-api.md" },
+    { id:"#80", pri:"high", t:"Install Playwright and a queue worker you can watch", d:"Chromium needs about 2 GB on the worker machine.", file:"kanban/tasks/080-install-playwright-and-a-queue-worker-you-can.md" },
+    { id:"#81", pri:"high", t:"Store a landing page: table, model, endpoint", d:"Thin controller: FormRequest → service → Resource. Never return the model.", file:"kanban/tasks/081-store-a-landing-page-table-model-endpoint.md" },
+    { id:"#85", pri:"high", t:"Pages screen: list your pages and add a new one", d:"Read the server's 422 body; do not re-implement validation in the browser.", file:"kanban/tasks/085-pages-screen-list-your-pages-and-add-a-new-one.md" },
+    { id:"#82", pri:"high", t:"Store the seven metrics the user types in", d:"Only three fields required. Blanks stay blank — never a guess.", file:"kanban/tasks/082-store-the-seven-metrics-the-user-types-in.md" },
+    { id:"#86", pri:"high", t:"Metrics form behind the Run audit button", d:"Every field carries a plain-English note saying what the number means.", file:"kanban/tasks/086-metrics-form-behind-the-run-audit-button.md" },
+    { id:"#83", pri:"critical", t:"Audits table and the four-stage chain", d:"One Bus::chain. Returns 201 pending immediately — nobody waits on a spinner.", file:"kanban/tasks/083-audits-table-and-the-four-stage-chain.md" },
+    { id:"#87", pri:"high", t:"Progress bar: React asks if it is finished yet", d:"Poll every 5s while running; stop on completed or failed.", file:"kanban/tasks/087-progress-bar-react-asks-if-it-is-finished-yet.md" },
+    { id:"#84", pri:"critical", t:"No audit may be stuck on running forever", d:"Timeouts, a catch() on the chain, a readable message and a retry button.", file:"kanban/tasks/084-no-audit-may-be-stuck-on-running-forever.md" },
+  ]},
+
+  { group:"Day 2-3 — pictures and the AI", items:[
+    { id:"#88", pri:"critical", t:"Write the robot browser script that photographs a page", d:"Three levels of section detection, capped at six. Hide cookie banners first.", file:"kanban/tasks/088-write-the-robot-browser-script-that-photographs-a.md" },
+    { id:"#89", pri:"high", t:"Let Laravel drive the robot browser and read the result", d:"Symfony Process. Record each section's position honestly — a rule depends on it.", file:"kanban/tasks/089-let-laravel-drive-the-robot-browser-and-read-the.md" },
+    { id:"#90", pri:"high", t:"Shrink the images before they cost you money", d:"1568px WebP. Roughly a 3x swing on the largest cost line in the product.", file:"kanban/tasks/090-shrink-the-images-before-they-cost-you-money.md" },
+    { id:"#91", pri:"critical", t:"One prompt, one schema, two swappable AI drivers", d:"Gemini free tier for the build week, Claude for the demo. AI_DRIVER in .env.", file:"kanban/tasks/091-one-prompt-one-schema-two-swappable-ai-drivers.md" },
+    { id:"#92", pri:"critical", t:"Send one AI call per audit, not thirteen", d:"~4x cheaper AND gives the model the whole-page view. Validate the reply or fail cleanly.", file:"kanban/tasks/092-send-one-ai-call-per-audit-not-thirteen.md" },
+  ]},
+
+  { group:"Day 4 — the product itself", items:[
+    { id:"#93", pri:"critical", t:"The evidence guarantee", d:"No metric, number and section name → discarded. One method, one test, cannot be bypassed.", file:"kanban/tasks/093-the-evidence-guarantee-throw-away-any-insight-that.md" },
+    { id:"#94", pri:"critical", t:"Rule: people see the button and do not click it", d:"The most common landing-page failure. Needs the click rate; silent without it.", file:"kanban/tasks/094-rule-people-see-the-button-and-do-not-click-it.md" },
+    { id:"#95", pri:"critical", t:"Rule: this section is below where people stop scrolling", d:"Built on the measured position from capture, not a guess.", file:"kanban/tasks/095-rule-this-section-is-below-where-people-stop.md" },
+    { id:"#96", pri:"critical", t:"Rule: the phone is where you are losing people", d:"Needs BOTH a bad phone bounce rate and a phone-specific AI finding.", file:"kanban/tasks/096-rule-the-phone-is-where-you-are-losing-people.md" },
+    { id:"#97", pri:"high", t:"Rule: visitors leave before they believe you", d:"Replaces the plan's rage-click rule, which needed data V1 does not collect.", file:"kanban/tasks/097-rule-visitors-leave-before-they-believe-you.md" },
+    { id:"#98", pri:"high", t:"Work out which fix is worth doing first", d:"(reach x severity x confidence) / effort → High, Medium, Low. Three buckets only.", file:"kanban/tasks/098-work-out-which-fix-is-worth-doing-first.md" },
+    { id:"#99", pri:"high", t:"Write each fix in the same five parts, every time", d:"Impact is always a RANGE. A precise prediction is not honest.", file:"kanban/tasks/099-write-each-fix-in-the-same-five-parts-every-time.md" },
+    { id:"#100", pri:"medium", t:"One number for the whole page, and show your working", d:"Six weights in config, visible in the app. Label accessibility as an estimate.", file:"kanban/tasks/100-one-number-for-the-whole-page-and-show-your.md" },
+  ]},
+
+  { group:"Day 5-6 — the screen and the demo", items:[
+    { id:"#101", pri:"critical", t:"Return the whole report in one response", d:"~40 KB, one endpoint. Ten tidy endpoints would be visibly slower.", file:"kanban/tasks/101-return-the-whole-report-in-one-response.md" },
+    { id:"#102", pri:"critical", t:"Report screen: the screen the whole demo lives on", d:"Score, top three fixes, picture beside findings. No number without an explanation.", file:"kanban/tasks/102-report-screen-the-screen-the-whole-demo-lives-on.md" },
+    { id:"#103", pri:"high", t:"Never show a blank white screen", d:"Loading, empty and error states — checked once at 390px wide.", file:"kanban/tasks/103-never-show-a-blank-white-screen.md" },
+    { id:"#105", pri:"high", t:"Seed one realistic example audit for the demo", d:"A guaranteed-working audit, so the demo never depends on a live capture.", file:"kanban/tasks/105-seed-one-realistic-example-audit-for-the-demo.md" },
+    { id:"#104", pri:"medium", t:"PDF the user can email to a client", d:"Blade print template via Browsershot. Never render the React page.", file:"kanban/tasks/104-pdf-the-user-can-email-to-a-client.md" },
+  ]},
+
+  { group:"Test gaps — unit and feature", items:[
+    { id:"#106", pri:"critical", t:"Test: the four correlation rules", d:"The rules ARE the product. Pure functions, so there is no excuse not to test them.", file:"kanban/tasks/106-test-the-four-correlation-rules.md" },
+    { id:"#107", pri:"critical", t:"Test: an insight with no evidence never reaches the user", d:"Its own test, so the honesty rule cannot be quietly bypassed later.", file:"kanban/tasks/107-test-an-insight-with-no-evidence-never-reaches-the.md" },
+    { id:"#108", pri:"high", t:"Test: priority ranking and the health score", d:"Pure arithmetic — wrong in a way nobody notices if untested.", file:"kanban/tasks/108-test-priority-ranking-and-the-health-score.md" },
+    { id:"#109", pri:"high", t:"Test: a malformed AI reply is rejected, not half-saved", d:"A vision model will eventually return something off-shape. Fail cleanly.", file:"kanban/tasks/109-test-a-malformed-ai-reply-is-rejected-not-half.md" },
+    { id:"#110", pri:"high", t:"Test: the endpoints React depends on", d:"The seam between the two halves. Shape changes break the front end silently.", file:"kanban/tasks/110-test-the-endpoints-react-depends-on.md" },
+  ]},
+
+  { group:"Test gaps — end to end", items:[
+    { id:"#111", pri:"high", t:"Test: paste a URL, get a report", d:"The demo path itself. If this passes, Sunday works.", file:"kanban/tasks/111-test-paste-a-url-get-a-report.md" },
+    { id:"#112", pri:"high", t:"Test: the app behaves when things go wrong", d:"The unhappy path is what breaks in front of an audience.", file:"kanban/tasks/112-test-the-app-behaves-when-things-go-wrong.md" },
+  ]},
+
+  { group:"Technical debt — carried knowingly", items:[
+    { id:"#113", pri:"critical", t:"Anyone who can reach the app can see and audit every page", d:"No login, no user scoping. Deliberate hackathon cut — do NOT deploy V1 publicly.", file:"kanban/tasks/113-anyone-who-can-reach-the-app-can-see-and-audit.md" },
+    { id:"#116", pri:"high", t:"The accessibility score is a guess wearing a number", d:"An AI estimate, not an audit. Label it now; run real checks later.", file:"kanban/tasks/116-the-accessibility-score-is-a-guess-wearing-a.md" },
+    { id:"#114", pri:"high", t:"Screenshots pile up on local disk with nothing deleting them", d:"No lifecycle rule, and they may contain customer data.", file:"kanban/tasks/114-screenshots-pile-up-on-local-disk-with-nothing.md" },
+    { id:"#115", pri:"high", t:"Nothing stops someone burning the AI budget", d:"No rate limit, no hard spend ceiling. Twelve clicks is twelve AI calls.", file:"kanban/tasks/115-nothing-stops-someone-burning-the-ai-budget-by.md" },
+  ]},
+
+  { group:"Deferred to V2 — decided, not forgotten", items:[
+    { id:"#117", pri:"medium", t:"Pull the numbers from Google Analytics instead of a form", d:"~2 days, mostly service-account setup. Keep the form as the fallback.", file:"kanban/tasks/117-v2-pull-the-numbers-from-google-analytics-instead.md" },
+    { id:"#118", pri:"medium", t:"Microsoft Clarity, and the rage-click rule it unlocks", d:"Confirm what its API really returns on a real account before building on it.", file:"kanban/tasks/118-v2-microsoft-clarity-and-the-rage-click-rule-it.md" },
+    { id:"#119", pri:"medium", t:"Show whether the fixes actually worked", d:"The score's real job is comparison, and V1 can only ever show one audit.", file:"kanban/tasks/119-v2-show-whether-the-fixes-actually-worked.md" },
+    { id:"#120", pri:"medium", t:"Run every week without anyone pressing a button", d:"The plan's set-and-forget promise. Invisible in a live demo.", file:"kanban/tasks/120-v2-run-every-week-without-anyone-pressing-a-button.md" },
+    { id:"#121", pri:"medium", t:"The two screens the plan had and V1 does not", d:"Analytics and Priority tasks. Build them after real users see the report.", file:"kanban/tasks/121-v2-the-two-screens-the-plan-had-and-v1-does-not.md" },
+  ]},
+];
+
+/* ======================= structure below — do not edit ======================= */
+const causeSec = document.getElementById('cause-sec');
+if (CAUSE) {
+  document.getElementById('cause').innerHTML =
+      `<div class="cause-l"><span class="cause-k">What you see</span><p>${CAUSE.sym}</p></div>`
+    + `<div class="cause-l"><span class="cause-k">Why it happens</span><p>${CAUSE.why}</p></div>`
+    + `<div class="cause-l"><span class="cause-k">What to do</span><ol>${(CAUSE.fix||[]).map(f=>`<li>${f}</li>`).join('')}</ol></div>`;
+} else { causeSec.remove(); }
+
+const shotsSec = document.getElementById('shots-sec');
+if (SHOTS.length) {
+  const shots = document.getElementById('shots');
+  SHOTS.forEach(s => {
+    const fig = document.createElement('figure');
+    fig.className = 'shot';
+    fig.innerHTML = `<a href="${s.src}" target="_blank" rel="noopener"><img src="${s.src}" alt="${s.t}"></a>`
+      + `<figcaption><span class="kind ${s.kind||'info'}">${s.kind||'info'}</span>`
+      + `<p class="t">${s.t}</p><p class="d">${s.d}</p></figcaption>`;
+    const img = fig.querySelector('img');
+    img.onerror = () => {
+      const miss = document.createElement('p');
+      miss.className = 'missing';
+      miss.textContent = 'screenshot not found: ' + s.src;
+      fig.replaceChild(miss, fig.firstElementChild);
+    };
+    shots.appendChild(fig);
+  });
+} else { shotsSec.remove(); }
+
+document.querySelectorAll('.sec-head .n').forEach((n,i) => { n.textContent = String(i+1).padStart(2,'0'); });
+
+const CHEV = '<svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const flow = document.getElementById('flow');
+const detail = document.getElementById('detail');
+let openStep = null;
+STEPS.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'step'; b.setAttribute('aria-expanded','false');
+  b.innerHTML = `<span class="num">${s.n}</span><h3>${s.t}</h3><p class="who">${s.who}</p>${CHEV}`;
+  b.onclick = () => {
+    if (openStep === s.n) { detail.classList.remove('open'); b.setAttribute('aria-expanded','false'); openStep=null; return; }
+    document.querySelectorAll('.step').forEach(x=>x.setAttribute('aria-expanded','false'));
+    b.setAttribute('aria-expanded','true'); openStep = s.n;
+    detail.className = 'detail open';
+    detail.innerHTML = `<h4>${s.n}. ${s.h}</h4><p>${s.d}</p><p><span class="file">${s.f}</span></p>${s.note?`<div class="stamp-note">⚠ ${s.note}</div>`:''}`;
+  };
+  flow.appendChild(b);
+});
+
+const CHECK_SVG = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2l2.6 2.6L10 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const KEY = 'feat-dod-' + (document.title || 'x').replace(/\W+/g,'-').toLowerCase();
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){}
+const list = document.getElementById('checklist');
+const prog = document.getElementById('progress');
+const vscodeHref = (file) => `vscode://file${REPO_ABS}/${file}`;
+const dodLinkHtml = (DOD_TASK && DOD_TASK.file)
+  ? `<a class="tasklink" href="${vscodeHref(DOD_TASK.file)}" title="Open ${DOD_TASK.file} in your editor">◆ tracked as ${DOD_TASK.id} ↗</a>` : '';
+function paint(){ prog.innerHTML = `<span>${DOD.filter((_,i)=>state[i]).length} / ${DOD.length} verified</span>${dodLinkHtml}`; }
+const CHEV_SM = '<svg class="chev" width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+DOD.forEach((d,i) => {
+  const el = document.createElement('div');
+  el.className = 'check' + (state[i] ? ' done' : '');
+  const tests = d.tests || [];
+  const sub = tests.length
+    ? `<button class="expander" type="button">${CHEV_SM}${tests.length} test${tests.length>1?'s':''}</button>`
+      + `<ul class="subtests">${tests.map(t=>`<li><span class="tname">${t.n}</span><span class="tref">${t.f}</span></li>`).join('')}</ul>`
+    : '';
+  el.innerHTML = `<span class="box">${CHECK_SVG}</span><div class="txt"><span class="title"><b>${d.t}</b><span class="eg">${d.eg}</span></span>${sub}</div>`;
+  const toggleDone = () => { state[i] = !state[i]; el.classList.toggle('done'); try{localStorage.setItem(KEY, JSON.stringify(state));}catch(e){} paint(); };
+  el.querySelector('.box').onclick = toggleDone;
+  el.querySelector('.title').onclick = toggleDone;
+  const exp = el.querySelector('.expander');
+  if (exp) exp.onclick = (e) => { e.stopPropagation(); el.classList.toggle('expanded'); };
+  list.appendChild(el);
+});
+paint();
+
+const tracker = document.getElementById('tracker');
+TRACK.forEach(g => {
+  const wrap = document.createElement('div'); wrap.className='track-group';
+  wrap.innerHTML = `<h5>${g.group}</h5>`;
+  g.items.forEach(it => {
+    const c = document.createElement('div'); c.className = `card p-${it.pri}`;
+    const idHtml = it.file
+      ? `<a class="id tasklink" href="${vscodeHref(it.file)}" title="Open ${it.file} in your editor">${it.id} ↗</a>`
+      : `<span class="id">${it.id}</span>`;
+    c.innerHTML = `${idHtml}<div class="body"><p class="t">${it.t}</p><p class="d">${it.d}</p></div><span class="pri ${it.pri}">${it.pri}</span>`;
+    wrap.appendChild(c);
+  });
+  tracker.appendChild(wrap);
+});
+</script>
+</body>
+</html>
