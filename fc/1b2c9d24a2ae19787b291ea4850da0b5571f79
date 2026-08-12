@@ -1,0 +1,24 @@
+Dockerfile
+  s_873cca3983968e::t_831a69ac66606b 19-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "fc1b2c9d24a2ae19787b291ea4850da0b5571f79",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_873cca3983968e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2008fba7-dd1f-4f8e-89ce-67658152ade0",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
