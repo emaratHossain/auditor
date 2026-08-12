@@ -25,10 +25,35 @@ class Audit extends Model
      * no amount of waiting will change that. RUNNING means a stage started and
      * went quiet, which deserves far more rope: a real capture with Lighthouse
      * measured 72-121 seconds on live pages.
+     *
+     * These are the defaults for a worker started by hand, which picks a job up
+     * in under a second. A cron-started worker has a gap between runs and needs
+     * a longer PENDING — override it in config/audits.php rather than here.
      */
     public const PENDING_TIMEOUT_SECONDS = 45;
 
     public const RUNNING_TIMEOUT_SECONDS = 600;
+
+    /**
+     * A nonsensical timeout falls back to the default rather than being obeyed.
+     * `AUDIT_PENDING_TIMEOUT=` left empty in a hand-edited .env casts to 0, and
+     * obeying that would fail every audit a second after it was queued — the
+     * exact breakage the setting exists to prevent, caused by setting it.
+     */
+    private function pendingTimeout(): int
+    {
+        return self::positiveOr(config('audits.stall.pending_seconds'), self::PENDING_TIMEOUT_SECONDS);
+    }
+
+    private function runningTimeout(): int
+    {
+        return self::positiveOr(config('audits.stall.running_seconds'), self::RUNNING_TIMEOUT_SECONDS);
+    }
+
+    private static function positiveOr(mixed $value, int $default): int
+    {
+        return is_numeric($value) && (int) $value > 0 ? (int) $value : $default;
+    }
 
     /** What the progress bar says, in the order they happen. */
     public const STAGES = [
@@ -96,12 +121,12 @@ class Audit extends Model
 
         $idleFor = $this->updated_at?->diffInSeconds(now()) ?? 0;
 
-        if ($this->status === self::STATUS_PENDING && $idleFor > self::PENDING_TIMEOUT_SECONDS) {
+        if ($this->status === self::STATUS_PENDING && $idleFor > $this->pendingTimeout()) {
             return 'This audit was queued but nothing picked it up, which almost always means no queue worker is running. '
                 .'Start one with: php artisan queue:work';
         }
 
-        if ($this->status === self::STATUS_RUNNING && $idleFor > self::RUNNING_TIMEOUT_SECONDS) {
+        if ($this->status === self::STATUS_RUNNING && $idleFor > $this->runningTimeout()) {
             return 'This audit started and then stopped responding partway through'
                 .($this->stageLabel() ? ' — it was on "'.$this->stageLabel().'"' : '')
                 .'. Try again, and if it keeps happening check that the page is reachable from this machine.';

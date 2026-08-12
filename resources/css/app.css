@@ -8,22 +8,34 @@
 
 /*
 |--------------------------------------------------------------------------
-| DropSense AI — an instrument, not a website
+| DropSense AI — a genie holding an instrument
 |--------------------------------------------------------------------------
-| Two rules hold this together, and both encode meaning rather than taste:
+| Three rules hold this together, and all three encode meaning rather than
+| taste:
 |
-| 1. COLOUR ONLY EVER MEANS SEVERITY OR MEASUREMENT. Chrome, buttons, links
-|    and headings are all neutral. If something on this screen is coloured,
-|    it is telling you how bad a problem is or how much to trust a number.
-|    That is why there is no brand accent: the palette is the data.
+| 1. COLOUR ONLY EVER MEANS SEVERITY OR MEASUREMENT. If something in the DATA
+|    is coloured, it is telling you how bad a problem is or how much to trust
+|    a number. The palette is the data.
 |
 | 2. MONOSPACE MEANS MEASURED, SANS MEANS JUDGED. Every number that came off
 |    a real page or a real analytics figure is set in mono and tabular. Every
 |    sentence of opinion is set in sans. You can tell what the machine
 |    measured from what the model thinks without reading a word.
 |
+| 3. VIOLET IS THE GENIE, AND THE GENIE NEVER TOUCHES THE DATA. The lamp, the
+|    summoning, the wish numerals and the chrome are violet. No finding, score,
+|    bar or metric ever is. That is what keeps rule 1 true while the product
+|    still has a character: you can always tell the helper from the evidence,
+|    because they never share a colour.
+|
+|    Violet specifically, not the gold you would expect from a lamp. Gold sits
+|    on top of --color-sev-med, so a golden genie would mean "medium severity"
+|    everywhere it appeared. Violet is the one hue far from the whole red/amber/
+|    green ramp AND from the cyan of --color-measured.
+|
 | No web fonts on purpose. The demo runs in a venue whose network cannot be
-| trusted, and a font that fails to load is a design that fails to load.
+| trusted, and a font that fails to load is a design that fails to load. The
+| lamp is inline SVG for the same reason.
 */
 
 @theme {
@@ -47,6 +59,11 @@
 
     /* Measurement status — a separate signal from severity, deliberately cool */
     --color-measured: #64c8e0;
+
+    /* The genie. Chrome only — see rule 3. */
+    --color-genie: #a78bfa;
+    --color-genie-deep: #6d28d9;
+    --color-genie-dim: #4c1d95;
 }
 
 html {
@@ -59,6 +76,69 @@ body {
     color: var(--color-paper);
     -webkit-font-smoothing: antialiased;
 }
+
+/*
+| The lamp
+|
+| Everything the genie does is one gesture in three parts: the lamp glows, the
+| smoke climbs, the answer arrives. Each part below is one of those, and none
+| of them run on a screen that is showing findings — by then the genie has done
+| its job and should be out of the way of the reading.
+*/
+
+/* The lamp is warm because a lamp is warm, and it is the one place the genie
+   is allowed near amber — there is no severity on this screen to confuse it
+   with. It breathes rather than blinks: something waiting, not something
+   demanding. */
+@keyframes lamp-breathe {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+.lamp-glow {
+    animation: lamp-breathe 3200ms ease-in-out infinite;
+}
+
+/* Smoke off the spout. Three wisps at three speeds, because smoke that moves
+   at one speed reads as a loading bar wearing a costume.
+
+   The distances are in SVG user units, not CSS pixels: these transforms apply
+   inside a 32-unit viewBox, so the travel scales with the lamp instead of
+   throwing the smoke clean off the 22px header mark. */
+@keyframes wisp {
+    0%   { opacity: 0;    transform: translateY(1.5px) scaleX(0.7); }
+    20%  { opacity: 0.9; }
+    100% { opacity: 0;    transform: translateY(-8px)  scaleX(1.4); }
+}
+
+.wisp {
+    transform-origin: bottom center;
+    animation: wisp 3600ms ease-out infinite;
+}
+
+.wisp-2 { animation-duration: 4400ms; animation-delay: 700ms; }
+.wisp-3 { animation-duration: 3000ms; animation-delay: 1500ms; }
+
+/* The answer arriving: up out of the lamp, resolving as it comes. Used once,
+   on the score, which is the thing that was actually summoned. */
+@keyframes genie-emerge {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); filter: blur(6px); }
+    to   { opacity: 1; transform: none;                          filter: blur(0); }
+}
+
+.genie-emerge {
+    animation: genie-emerge 780ms cubic-bezier(0.16, 0.84, 0.28, 1) both;
+}
+
+/* The three wishes land one after another, so they read as a granting rather
+   than as a list that was always there. */
+.wish-in {
+    animation: genie-emerge 560ms cubic-bezier(0.16, 0.84, 0.28, 1) both;
+}
+
+.wish-in:nth-child(1) { animation-delay: 120ms; }
+.wish-in:nth-child(2) { animation-delay: 240ms; }
+.wish-in:nth-child(3) { animation-delay: 360ms; }
 
 /* Every number is tabular. Columns of figures that jitter are not an instrument. */
 .tnum {
@@ -181,6 +261,17 @@ body {
         animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
     }
+
+    /*
+    | The genie holds still rather than disappearing.
+    |
+    | The blanket rule above collapses every animation to its final frame, and
+    | the smoke's final frame is opacity 0 — so without this the lamp sits there
+    | with nothing coming out of it, which reads as broken rather than as calm.
+    | Stillness means a lit lamp and resting smoke, not an unlit one.
+    */
+    .lamp-glow { opacity: 0.9 !important; transform: none !important; }
+    .wisp      { opacity: 0.45 !important; transform: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

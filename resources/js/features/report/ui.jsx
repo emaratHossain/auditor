@@ -1,5 +1,6 @@
 import React from 'react'
 import { T, SEVERITY, band } from './theme'
+import { Lamp, Summoning } from './Genie'
 
 /** No screen may show a blank area. These three are why. */
 export function Skeleton({ lines = 3 }) {
@@ -15,6 +16,12 @@ export function Skeleton({ lines = 3 }) {
 export function EmptyState({ title, children }) {
   return (
     <div className="rounded-lg border border-dashed border-[var(--color-line)] p-8 text-center">
+      {/* An unlit lamp: there is nothing here yet, and something could be. An
+          empty state is the one moment a mascot is genuinely useful, because
+          the alternative is an empty box apologising. */}
+      <div className="mb-3 flex justify-center opacity-60">
+        <Lamp size={32} />
+      </div>
       <p className="font-medium text-[var(--color-paper)]">{title}</p>
       <div className={`mt-2 ${T.quiet}`}>{children}</div>
     </div>
@@ -119,7 +126,9 @@ export function ScoreReadout({ score }) {
   const shown = useCountUp(value)
 
   return (
-    <div role="img" aria-label={`Conversion Score ${score ?? 'not yet known'} out of 100`}>
+    // It rises out of the lamp once, on arrival. The colour of the numeral is
+    // still severity and nothing else — the genie brought it, it does not own it.
+    <div className="genie-emerge" role="img" aria-label={`Conversion Score ${score ?? 'not yet known'} out of 100`}>
       <p className={T.eyebrow}>Conversion Score</p>
 
       {/* The number the product is named for, at the size that says so. */}
@@ -190,6 +199,18 @@ export function RunningPipeline({ stages, current, startedAt }) {
       <div className="flex items-baseline justify-between gap-4">
         <p className={T.eyebrow}>Running</p>
         <p className={`${T.figure} text-xs text-[var(--color-mist)]`}>{elapsed}</p>
+      </div>
+
+      {/* The one place the character gets real space, because this is the one
+          screen with nothing to read yet. The stage rail below stays exactly as
+          measured as it was — the lamp says "working", the rail says what on. */}
+      <div className="my-7 border-y border-[var(--color-genie)]/20 py-7">
+        <Summoning>
+          <p className={`mt-1 max-w-sm ${T.quiet}`}>
+            Reading your page the way a visitor does, so the fixes come back
+            with evidence attached.
+          </p>
+        </Summoning>
       </div>
 
       <ol className="mt-6 space-y-0">

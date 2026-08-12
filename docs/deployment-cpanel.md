@@ -96,6 +96,12 @@ DB_PASSWORD=your-password-here
 
 SESSION_DRIVER=database
 QUEUE_CONNECTION=database
+
+# The worker here is started by cron, not by hand, so there is a short gap
+# between one worker exiting and the next starting. Below that gap the app
+# reports a healthy deployment as broken. See step 7.
+AUDIT_PENDING_TIMEOUT=120
+
 CACHE_STORE=database
 FILESYSTEM_DISK=local
 BROADCAST_CONNECTION=log
@@ -135,16 +141,31 @@ Audits run in the background. **Without this they sit on "pending" forever.**
 
 *Advanced → Cron Jobs → Add New Cron Job*
 
-**Common Settings:** Once Per Minute (`* * * * *`)
+**Common Settings:** Every 5 Minutes (`*/5 * * * *`)
 
 **Command:**
 
 ```
-/usr/local/bin/php /home/USER/dropsense/artisan queue:work --stop-when-empty --tries=1 --timeout=310 --max-time=290 >> /home/USER/dropsense/storage/logs/queue.log 2>&1
+/usr/local/bin/php /home/USER/dropsense/artisan queue:work --tries=1 --timeout=300 --max-time=290 --sleep=3 >> /home/USER/dropsense/storage/logs/queue.log 2>&1
 ```
 
 Replace `USER`. If it does not run, try `/usr/local/bin/ea-php83` instead of
 `/usr/local/bin/php` — *MultiPHP Manager* shows which version you are on.
+
+**There is no `--stop-when-empty` here, and that is the whole trick.** With it, the
+worker sees an empty queue, exits in under a second, and nothing is listening for the
+next five minutes — so an audit started at 12:01 waits until 12:05 before anything
+happens. Without it the worker stays alive polling the jobs table until `--max-time`
+retires it at 290s, ten seconds before the next cron starts a fresh one. A worker is
+alive roughly 97% of the time and audits start within about ten seconds.
+
+`--max-time` is checked between jobs, so a worker that is mid-audit at 290s finishes
+that audit before exiting. The next cron may then start a second worker alongside it.
+That is intended — it is what keeps the coverage gap at ten seconds — and the workers
+take different jobs rather than the same one.
+
+If your host's minimum cron interval is longer than 5 minutes, raise `--max-time` to
+match it (interval in seconds, minus 10) and raise `AUDIT_PENDING_TIMEOUT` below to suit.
 
 Clear the **Email** box at the top of the Cron Jobs page, or you get a message every minute.
 
@@ -152,11 +173,13 @@ Clear the **Email** box at the top of the Cron Jobs page, or you get a message e
 
 Visit `https://dropsense.yourdomain.com` — the DropSense UI should load.
 
-Add a landing page → **Run audit** → fill in the numbers. Within a minute the cron picks
-it up and you get a Conversion Score with ranked fixes, marked as simulated.
+Add a landing page → **Run audit** → fill in the numbers. A worker is normally already
+running, so the audit starts within about ten seconds and you get a Conversion Score
+with ranked fixes, marked as simulated. The one slow case is the first audit after you
+add the cron job, which waits for the next five-minute tick.
 
-Want something to show immediately? Add this as a **second cron job**, set to *Once Per
-Minute*, let it run once, then **delete it**:
+Want something to show immediately? Add this as a **second cron job**, set to *Every 5
+Minutes*, let it run once, then **delete it**:
 
 ```
 /usr/local/bin/php /home/USER/dropsense/artisan db:seed --class=DemoAuditSeeder --force
@@ -166,7 +189,7 @@ Minute*, let it run once, then **delete it**:
 
 ## Running any command without a terminal
 
-The trick above works for anything. Add a cron job, set **Once Per Minute**, wait, then
+The trick above works for anything. Add a cron job, set **Every 5 Minutes**, wait, then
 delete it. Send output somewhere you can read:
 
 ```
@@ -186,6 +209,7 @@ cache is painful to clear. The app runs fine without it.
 | Symptom | Fix |
 |---|---|
 | Audit stuck on "pending" | Cron not running (step 7). Check `storage/logs/queue.log` exists in File Manager. |
+| Audits fail after ~45s saying no worker is running | `AUDIT_PENDING_TIMEOUT` missing from `.env` (step 5). The cron worker is fine; the app is giving up before it starts. |
 | 500 on every page | `storage` + `bootstrap/cache` → 775. Check `APP_KEY` is in `.env`. |
 | Blank page, no styling | `public/build/` missing — re-extract the zip. |
 | Site shows a file listing | Document root missing `/public` (step 2). |

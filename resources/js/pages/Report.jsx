@@ -5,11 +5,18 @@ import client from '../api/client'
 import { Skeleton, EmptyState, ErrorState, PriorityTag, ScoreReadout, CategoryRow, RunningPipeline } from '../features/report/ui'
 import RewritePanel from '../features/report/RewritePanel'
 import DropColumn, { useActiveSection } from '../features/report/DropColumn'
+import { WishNumeral } from '../features/report/Genie'
 import { T, SEVERITY, band } from '../features/report/theme'
 
 const RUNNING = ['pending', 'running']
 
-/** The pipeline, in the order it happens, said in words a reader recognises. */
+/**
+ * The pipeline, in the order it happens, said in words a reader recognises.
+ *
+ * These stay literal on purpose. The lamp above them carries the character;
+ * if the stage names went theatrical too, someone watching a slow audit would
+ * have no plain statement anywhere on screen of what the machine is doing.
+ */
 const STAGES = [
   { key: 'capturing',   label: 'Opening your page and photographing it',  detail: 'Section by section, on a desktop and on a phone.' },
   { key: 'analysing',   label: 'Looking at every section',                detail: 'One pass over all of them, with the measurements attached.' },
@@ -194,14 +201,28 @@ function Loaded({ id, r, top3, showBreakdown, setShowBreakdown }) {
         </div>
 
         <div className="mt-6 border-t border-[var(--color-line)] pt-5">
-          <h2 className={`${T.eyebrow} mb-3`}>Fix these first</h2>
+          {/*
+            The heading stays plain. Someone scanning this page for what to do
+            next should not have to decode a metaphor to find it, so the wish
+            reading lives in the numerals and the eyebrow beside it — visible if
+            you are enjoying it, invisible if you are working.
+          */}
+          <div className="mb-3 flex items-baseline justify-between gap-3">
+            <h2 className={T.eyebrow}>Fix these first</h2>
+            {top3.length > 0 && (
+              <span className={`${T.eyebrow} ${T.genieText}`}>
+                {top3.length === 3 ? 'your three wishes' : `your ${top3.length === 1 ? 'one wish' : 'two wishes'}`}
+              </span>
+            )}
+          </div>
+
           {top3.length === 0 ? (
             <EmptyState title="Nothing could be proven on this page">
               Every finding needs a number and a section to stand on. Add the optional metrics and run it again.
             </EmptyState>
           ) : (
             <ol className="space-y-4">
-              {top3.map((rec, i) => <Fix key={rec.id} rec={rec} rank={i + 1} />)}
+              {top3.map((rec, i) => <Fix key={rec.id} rec={rec} rank={i + 1} wish />)}
             </ol>
           )}
         </div>
@@ -306,13 +327,27 @@ function Loaded({ id, r, top3, showBreakdown, setShowBreakdown }) {
   )
 }
 
-function Fix({ rec, rank }) {
+/**
+ * One fix. `wish` is only ever true for the top three, where the numeral is a
+ * violet ring rather than an ordinal — the same row, dressed for the occasion.
+ * The left border stays severity in both cases, because that is the one thing
+ * on the row that is evidence rather than presentation.
+ */
+function Fix({ rec, rank, wish = false }) {
   return (
-    <li className={`${T.surface} p-4`} style={{ borderLeftWidth: '2px', borderLeftColor: SEVERITY[rec.priority]?.bar }}>
+    <li
+      className={`${T.surface} p-4 ${wish ? 'wish-in' : ''}`}
+      style={{ borderLeftWidth: '2px', borderLeftColor: SEVERITY[rec.priority]?.bar }}
+    >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="font-medium text-[var(--color-paper)]">
-          <span className={`${T.figure} mr-2 text-[var(--color-mist)]`}>{String(rank).padStart(2, '0')}</span>
-          {rec.title}
+        {/* items-start, not items-center: a title that wraps to four lines on a
+            phone would otherwise float the numeral to the middle of the block,
+            away from the line it numbers. */}
+        <p className="flex items-start gap-2.5 font-medium text-[var(--color-paper)]">
+          {wish
+            ? <WishNumeral n={rank} />
+            : <span className={`${T.figure} text-[var(--color-mist)]`}>{String(rank).padStart(2, '0')}</span>}
+          <span className="min-w-0">{rec.title}</span>
         </p>
         <PriorityTag value={rec.priority} />
       </div>

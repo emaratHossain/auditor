@@ -16,10 +16,17 @@ class BrandingTest extends TestCase
 
     public function test_the_react_shell_says_dropsense_ai(): void
     {
-        $shell = file_get_contents(resource_path('js/app.jsx'));
+        // The name lives in the wordmark rather than the shell, so it travels
+        // with the component that draws it — the same reason the Conversion
+        // Score label lives in the score readout below.
+        $shell    = file_get_contents(resource_path('js/app.jsx'));
+        $wordmark = file_get_contents(resource_path('js/features/report/Genie.jsx'));
 
-        $this->assertStringContainsString('DropSense AI', $shell);
+        $this->assertStringContainsString('DropSense AI', $wordmark);
+        $this->assertStringContainsString('Wordmark', $shell);
+
         $this->assertStringNotContainsString('Landing Page Auditor', $shell);
+        $this->assertStringNotContainsString('Landing Page Auditor', $wordmark);
     }
 
     public function test_the_score_is_called_the_conversion_score_in_the_ui(): void

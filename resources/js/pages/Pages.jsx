@@ -4,7 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '../api/client'
 import { Skeleton, EmptyState, ErrorState, ConfirmDialog } from '../features/report/ui'
 import MetricsForm from '../features/report/MetricsForm'
-import { SEVERITY, band } from '../features/report/theme'
+import { T, SEVERITY, band } from '../features/report/theme'
+import { Lamp } from '../features/report/Genie'
 
 /** "Its 3 reports and their screenshots go too." */
 function whatGoesWithIt(count) {
@@ -61,14 +62,29 @@ export default function Pages() {
         field is the largest thing on it, and the sentence above it says what
         the product does in the words a visitor would use about their own page.
       */}
-      <section>
-        <h2 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">
-          Paste a landing page. Find out where visitors leave, and why.
-        </h2>
-        <p className="mb-6 mt-2 max-w-2xl text-sm text-[var(--color-mist)]">
-          Every finding is tied to a real number and a real section of your page. You will be
-          asked for its numbers when you run the audit.
-        </p>
+      <section className={`${T.geniePanel} p-6 sm:p-8`}>
+        <div className="flex items-start gap-4">
+          <div className="mt-1 hidden shrink-0 sm:block">
+            <Lamp size={48} smoking />
+          </div>
+
+          <div className="min-w-0">
+            <p className={`${T.eyebrow} ${T.genieText} mb-2`}>Three wishes</p>
+            <h2 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">
+              Paste a landing page. Find out where visitors leave, and why.
+            </h2>
+            {/*
+              The genie's one promise, and the honest limit on it in the same
+              breath. A wish-granting metaphor invites the reader to expect
+              magic, so the sentence that sets it up is also the sentence that
+              says the fixes are evidence rather than conjuring.
+            */}
+            <p className="mb-6 mt-2 max-w-2xl text-sm text-[var(--color-mist)]">
+              Every finding is tied to a real number and a real section of your page. You will be
+              asked for its numbers when you run the audit.
+            </p>
+          </div>
+        </div>
 
         <form
           className="grid gap-3 sm:grid-cols-[1fr_2fr_auto]"
@@ -95,7 +111,7 @@ export default function Pages() {
           <button
             type="submit"
             disabled={addPage.isPending}
-            className="rounded-md bg-[var(--color-raised)] px-4 py-2 text-sm font-medium text-[var(--color-paper)] hover:border-[var(--color-mist)] disabled:opacity-50"
+            className={T.buttonLamp}
           >
             {addPage.isPending ? 'Adding…' : 'Add page'}
           </button>
@@ -153,9 +169,12 @@ export default function Pages() {
                       Never audited
                     </span>
                   )}
+                  {/* The one action the product exists for, and the only violet
+                      button in the list — so on a screen of neutral chrome the
+                      thing to press is never in question. */}
                   <button
                     onClick={() => setAuditingPage(page)}
-                    className="rounded-md border border-[var(--color-line)] px-3 py-1.5 text-sm font-medium hover:bg-[var(--color-raised)]"
+                    className={T.buttonLampRow}
                   >
                     Run audit
                   </button>

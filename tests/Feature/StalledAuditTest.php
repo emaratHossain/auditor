@@ -95,4 +95,53 @@ class StalledAuditTest extends TestCase
 
         $this->assertSame(Audit::STATUS_FAILED, $audit->fresh()->status);
     }
+
+    /**
+     * A cron-started worker cannot pick a job up in 45 seconds — there is a gap
+     * between one worker exiting and the next starting. Hosts that cap cron at
+     * five-minute intervals raise this, and a deployment that is working must
+     * not be reported as broken. See docs/deployment-cpanel.md, step 7.
+     */
+    public function test_a_longer_pending_timeout_gives_a_cron_worker_time_to_start(): void
+    {
+        config(['audits.stall.pending_seconds' => 120]);
+
+        // Long past the 45s default, well inside the configured 120s.
+        $audit = $this->audit(Audit::STATUS_PENDING, null, 90);
+
+        $this->getJson("/api/audits/{$audit->id}")
+            ->assertOk()
+            ->assertJsonPath('data.status', Audit::STATUS_PENDING);
+
+        $this->assertSame(Audit::STATUS_PENDING, $audit->fresh()->status);
+    }
+
+    /**
+     * `AUDIT_PENDING_TIMEOUT=` left empty in a hand-edited .env casts to 0.
+     * Obeying that would fail every audit a second after it was queued, which
+     * is the breakage the setting exists to prevent.
+     */
+    public function test_an_empty_timeout_setting_falls_back_instead_of_failing_everything(): void
+    {
+        config(['audits.stall.pending_seconds' => 0]);
+
+        $audit = $this->audit(Audit::STATUS_PENDING, null, 5);
+
+        $this->getJson("/api/audits/{$audit->id}")
+            ->assertOk()
+            ->assertJsonPath('data.status', Audit::STATUS_PENDING);
+    }
+
+    /** Raising it must postpone the message, never remove it. */
+    public function test_a_raised_pending_timeout_still_eventually_reports_a_missing_worker(): void
+    {
+        config(['audits.stall.pending_seconds' => 120]);
+
+        $audit = $this->audit(Audit::STATUS_PENDING, null, 150);
+
+        $response = $this->getJson("/api/audits/{$audit->id}")->assertOk();
+
+        $this->assertSame(Audit::STATUS_FAILED, $response->json('data.status'));
+        $this->assertStringContainsString('queue:work', $response->json('data.error_message'));
+    }
 }

@@ -6,7 +6,9 @@ import { test, expect } from '@playwright/test'
 test('paste a URL, fill in the numbers, read the report', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page.getByRole('heading', { name: 'Add a landing page' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Paste a landing page. Find out where visitors leave, and why.' }),
+  ).toBeVisible()
 
   const name = `Spring campaign ${Date.now()}`
   await page.getByPlaceholder('Name, e.g. Spring campaign').fill(name)
