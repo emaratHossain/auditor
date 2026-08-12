@@ -16,11 +16,13 @@ COPY --from=node:22-bookworm-slim /usr/local /usr/local
 
 COPY . .
 
+# Set the browser folder BEFORE installing, or Playwright downloads to
+# /root/.cache/ms-playwright and then looks for the browser in /ms-playwright.
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
 RUN composer install
 RUN npm ci
 RUN npx playwright install --with-deps chromium
-
-ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 # Docker uses this port to run the server 
 EXPOSE 9000
