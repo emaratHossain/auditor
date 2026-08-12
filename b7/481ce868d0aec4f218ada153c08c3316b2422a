@@ -1,0 +1,106 @@
+resources/js/features/report/ui.jsx
+  s_d3f2102cb471df::t_e4f8cb32d908fa 19-24
+  s_d3f2102cb471df::t_fc7f22cfb8f0db 3
+  s_d3f2102cb471df::t_a73742c6f65d5e 129-131
+  s_d3f2102cb471df::t_f16405d0215ea0 204-215
+.env.example
+  s_d3f2102cb471df::t_79042b712e22c1 40-44
+resources/css/app.css
+  s_d3f2102cb471df::t_87150263b8b47a 11,13-14,16-18,25-35,37-38
+  s_d3f2102cb471df::t_14eaa81a8e614e 80-102,108,112-142
+  s_d3f2102cb471df::t_40465c3a0d4c56 264-274
+  s_d3f2102cb471df::t_28ef749abdb9d1 103-107,109-111
+  s_d3f2102cb471df::t_44dac2a5bf2e70 62-66
+resources/js/features/report/Genie.jsx
+  s_d3f2102cb471df::t_112175ce59e998 36-37,39,42,47-48,50,53,55-64,67,69,72,76,78,80,82,84,88,90
+  s_d3f2102cb471df::t_e831bb5d7c5ec0 99-102
+  s_d3f2102cb471df::t_59396ccacf6e8a 1-35,38,40-41,43-46,49,51-52,54,65-66,68,70-71,73-75,77,79,81,83,85-87,89,91-98,103-135,137-158
+  s_d3f2102cb471df::t_cc4c8bcc1745f8 136
+tests/Feature/StalledAuditTest.php
+  s_d3f2102cb471df::t_056b6336aa30d8 98-118,135-146
+  s_d3f2102cb471df::t_a21cf175ee1a35 119-134
+tests/Feature/BrandingTest.php
+  s_d3f2102cb471df::t_a94df1024c0e50 19-26,29
+resources/js/features/report/theme.js
+  s_d3f2102cb471df::t_d0a683afe7a101 12-15
+  s_d3f2102cb471df::t_77c7897a350965 30-39,43-48
+  s_d3f2102cb471df::t_822bbe18ba0689 40-42
+Dockerfile
+  h_2d5a554200463e 1-26
+resources/js/pages/Report.jsx
+  s_d3f2102cb471df::t_87543e928b84ab 330-336,338-341,347-349
+  s_d3f2102cb471df::t_9fab4a0dffbace 8
+  s_d3f2102cb471df::t_c6ae74df30a694 13-19
+  s_d3f2102cb471df::t_807c9b068fd09a 343-346,350
+  s_d3f2102cb471df::t_c1de01fe861963 204-218,225
+tests/e2e/audit-flow.spec.js
+  s_bd8ef111872987::t_d26bfab8265628 9-11
+.gitignore
+  s_6a1981aae3f3d1::t_e5f27a4b880f73 64-70,72-77,79-81
+  h_2d5a554200463e 78
+docker-compose.yml
+  h_2d5a554200463e 1-78
+resources/js/app.jsx
+  s_d3f2102cb471df::t_6b63232da81e92 7
+  s_d3f2102cb471df::t_a4427c68e18f5d 16-18,23
+resources/js/pages/Pages.jsx
+  s_d3f2102cb471df::t_df50fa0dd96823 177
+  s_d3f2102cb471df::t_a5ba313f2fb9aa 65-87
+  s_d3f2102cb471df::t_338dfe2c20bb60 114
+  s_d3f2102cb471df::t_857c8a2abcdef2 172-174
+  s_d3f2102cb471df::t_28bd01c4bccc15 7-8
+.dockerignore
+  s_6a1981aae3f3d1::t_b2724989b02ad6 1-92
+docs/deployment-cpanel.md
+  s_d3f2102cb471df::t_e3486c93e3de9d 192
+  s_d3f2102cb471df::t_c5497c5bffd7b5 176-179,181-182
+  s_d3f2102cb471df::t_88bdd972463713 99-104
+  s_d3f2102cb471df::t_cc4e59059c5299 212
+  s_d3f2102cb471df::t_887d1f5c3b2fec 144,149,155-168
+  s_d3f2102cb471df::t_e9afd9627d68b0 169
+app/Models/Audit.php
+  s_d3f2102cb471df::t_713457b0100bd9 28-31,43-44,46-49,56
+  s_d3f2102cb471df::t_b1ba228d476e87 37-42,45,50-55
+  s_d3f2102cb471df::t_75803df32c6e02 124
+  s_d3f2102cb471df::t_70b81b4c5fb609 129
+  s_d3f2102cb471df::t_4254d04e10eb59 57
+nginx/default.conf
+  h_2d5a554200463e 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b7481ce868d0aec4f218ada153c08c3316b2422a",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_6a1981aae3f3d1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcfe28ab-1991-41e1-b615-928c4d18b791",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    },
+    "s_bd8ef111872987": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dd9280a1-2316-4c2a-9986-94e7d16d96a6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    },
+    "s_d3f2102cb471df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4f689e8-971f-4f1b-942a-ba49eb047b17",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
