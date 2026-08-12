@@ -1,0 +1,24 @@
+docker-compose.yml
+  s_44576fb944c270::t_0df442a0bf04a3 78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5f45832484fa192ed4ddc1f9bf1426ede35f2549",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_44576fb944c270": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "26c4b044-1811-4d47-bca1-9db9ebc43a7b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
