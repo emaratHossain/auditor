@@ -39,13 +39,23 @@ Thumbs.db
 # Local browser profile used for GA4 documentation capture — contains a Google session
 /storage/app/browser-profile
 
-# Laravel's own runtime state — regenerated on demand, never source
-/storage/app/private
-/storage/framework/cache
-/storage/framework/sessions
+# Laravel's own runtime state — regenerated on demand, never source.
+# The empty folders stay tracked via .gitkeep, because Laravel needs them to exist:
+# config view.compiled is realpath(storage/framework/views), and realpath() returns
+# false on a missing folder, which makes `artisan view:clear` fail.
+/storage/app/private/*
+!/storage/app/private/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/data
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
 /storage/framework/testing
-/storage/framework/views
-/storage/logs
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
 
 # Audit output. Screenshots 1–5 and audit-3.* are committed demo fixtures and stay
 # tracked; everything a real run writes here is disposable.
