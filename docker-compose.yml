@@ -3,7 +3,7 @@ services:
     image: nginx:alpine # I
     container_name: auditor-nginx
     ports:
-      - "8080:80"
+      - "8088:80"
     volumes:
       - .:/var/www/app
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
