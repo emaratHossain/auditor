@@ -1,0 +1,14 @@
+nginx/default.conf
+  h_2d5a554200463e 17-21,28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0898fbb89951b609f5786669be798084ef1a7110",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
