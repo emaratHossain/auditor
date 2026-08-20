@@ -11,6 +11,7 @@ services:
       - app
   
   app:
+    image: badhon424/auditor:1.0
     build:
       context: .
     
