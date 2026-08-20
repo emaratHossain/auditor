@@ -1,0 +1,14 @@
+docker-compose.yml
+  h_2d5a554200463e 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4cc3a887e9939f5c7e598700c0308d28ddf5b763",
+  "prompts": {},
+  "humans": {
+    "h_2d5a554200463e": {
+      "author": "emaratHossain <167071621+emaratHossain@users.noreply.github.com>"
+    }
+  }
+}
